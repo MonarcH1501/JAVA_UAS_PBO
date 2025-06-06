@@ -4,7 +4,7 @@
  */
 package POS;
 
-import Kasir.MenuUtama;
+import Kasir.View.MenuView;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -271,7 +271,7 @@ public class Login extends javax.swing.JFrame {
         }
         // LOGIN USER
         else if (notFound == 1 && Password.equals(passDb)) {
-            MenuUtama menuUtama = new MenuUtama();
+            MenuView menuUtama = new MenuView();
             menuUtama.setVisible(true);
             menuUtama.pack();
             menuUtama.setLocationRelativeTo(null);
