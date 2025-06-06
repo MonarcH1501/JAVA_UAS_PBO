@@ -5,7 +5,7 @@
  */
 package Kasir.View;
 
-import POS.Login;
+import Login.View.Login;
 import javax.swing.JInternalFrame;
 
 public class MenuView extends javax.swing.JFrame {
@@ -13,7 +13,7 @@ public class MenuView extends javax.swing.JFrame {
     public MenuView() {
         initComponents();
         setTitle("App Penjualan");
-        setExtendedState(MAXIMIZED_BOTH);
+        this.setExtendedState(MenuView.MAXIMIZED_BOTH);
     }
 
     @SuppressWarnings("unchecked")
