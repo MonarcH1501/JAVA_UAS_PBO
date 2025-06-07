@@ -6,12 +6,16 @@ package Login.View;
 
 import Admin.View.Home;
 import Kasir.View.MenuView;
+import Login.Controller.LoginDAO;
+import Login.Model.Login_Model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.sql.SQLException;
 
 
 /**
@@ -234,59 +238,61 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-    // System.out.println("Sign up btn clicked");
-    String User, Password, query, fname = null,  passDb = null, name = null;
-    String SUrl, SUser, SPass;
-    SUrl = "jdbc:mysql://localhost:3306/uas_oop";
-        SUser = "root";
-        SPass = "";
-    int notFound = 0;
-    try{
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
-        Statement st = con.createStatement();
-        if("".equals(user.getText())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Username is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if ("".equals(password.getText())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Password is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else  {
-        User = user.getText();
-        Password = password.getText();
-        query = "SELECT * FROM login WHERE username = '"+User+"'";
-        ResultSet rs = st.executeQuery(query);
-        while(rs.next()) {
-            passDb = rs.getString("passwords");
-            fname = rs.getString("full_name"); 
-            notFound = 1;
-        }
-        // LOGIN ADMIN
-        if(notFound == 1 && fname.equals("Admin") && Password.equals(passDb)) {
-            Home HomeFrame = new Home();
-            HomeFrame.setName(User);
-            HomeFrame.setVisible(true);
-            HomeFrame.pack();
-            HomeFrame.setLocationRelativeTo(null);
-            this.dispose();
-        }
-        // LOGIN USER
-        else if (notFound == 1 && Password.equals(passDb)) {
-            MenuView menuUtama = new MenuView();
-            menuUtama.setVisible(true);
-            menuUtama.pack();
-            menuUtama.setLocationRelativeTo(null);
-            this.dispose();
-        }
-        else {
-            JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        password.setText("");
-        }
-    } catch (Exception e) {
-        System.out.println("Error!" + e.getMessage());
+    String username = user.getText();
+    String password = this.password.getText();
+    
+    // Validasi input kosong
+    if (username.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+    if (password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+      try {
+        LoginDAO loginDAO = new LoginDAO();
+        List<Login_Model> result = loginDAO.getLogin(username);
+
+        if (!result.isEmpty()) {
+            Login_Model userDb = result.get(0); // Ambil hasil pertama
+
+            if (password.equals(userDb.getPass())) {
+                // LOGIN BERHASIL
+                if ("Admin".equalsIgnoreCase(userDb.getRole())) {
+                    // Buka halaman admin
+                    Home homeFrame = new Home();
+                    homeFrame.setName(userDb.getUsername());
+                    homeFrame.setVisible(true);
+                    homeFrame.pack();
+                    homeFrame.setLocationRelativeTo(null);
+                    homeFrame.setExtendedState(Home.MAXIMIZED_BOTH);
+                    this.dispose(); // Tutup form login
+                } else {
+                    // Buka halaman user
+                    MenuView menuUtama = new MenuView();
+                    menuUtama.setVisible(true);
+                    menuUtama.pack();
+                    menuUtama.setLocationRelativeTo(null);
+                    menuUtama.setExtendedState(MenuView.MAXIMIZED_BOTH);
+                    this.dispose(); // Tutup form login
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Password salah!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "User tidak ditemukan!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Kosongkan password field
+        this.password.setText("");
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Kesalahan database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+    
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -314,17 +320,47 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
-
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

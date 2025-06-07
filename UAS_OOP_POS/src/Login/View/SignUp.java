@@ -4,6 +4,8 @@
  */
 package Login.View;
 import Admin.View.*;
+import Login.Controller.LoginDAO;
+import Login.Model.Login_Model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,6 +13,7 @@ import java.sql.Statement;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
+import java.sql.SQLException;
 /**
  *
  * @author Ryan F
@@ -250,42 +253,46 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_fnameActionPerformed
 
     private void SignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpBtnActionPerformed
-    // System.out.println("Sign up btn clicked");
-    String fullName, user, Password, query;
-    String SUrl, SUser, SPass;
-    SUrl = "jdbc:mysql://localhost:3306/uas_oop";
-        SUser = "root";
-        SPass = "";
-    try{
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
-        Statement st = con.createStatement();
-        if("".equals(fname.getText())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Full Name is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if ("".equals(userAddress.getText())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Username is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else if ("".equals(pass.getText())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Password is require", "Error",
-                    JOptionPane.ERROR_MESSAGE); 
-        } else  {
-        fullName = fname.getText();
-        user = userAddress.getText();
-        Password = pass.getText();
-      
-        
-        query = "INSERT INTO login(full_name, username, passwords)" +
-                "VALUE('"+fullName+"','"+user+"','"+Password+"')";
-        st.execute(query);
-        fname.setText("");
-        userAddress.setText("");
-        pass.setText("");
-        showMessageDialog(null, "Account has been Created Successfully!");
-        }
-    } catch (Exception e) {
-        System.out.println("Error!" + e.getMessage());
+      String fullName = fname.getText().trim();
+    String username = userAddress.getText().trim();
+    String password = pass.getText().trim();
+
+    // Validasi input
+    if (fullName.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Full Name tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+    if (username.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        // Buat objek Login
+        Login_Model newUser = new Login_Model(0, "", username, password, fullName); // id dan role bisa default dulu
+
+        // Gunakan DAO untuk insert
+        LoginDAO loginDAO = new LoginDAO();
+        int result = loginDAO.insertUser(newUser);
+
+        if (result > 0) {
+            JOptionPane.showMessageDialog(this, "Akun berhasil dibuat!");
+            fname.setText("");
+            userAddress.setText("");
+            pass.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal membuat akun.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+    
     }//GEN-LAST:event_SignUpBtnActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -329,6 +336,30 @@ public class SignUp extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

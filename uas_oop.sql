@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 24, 2025 at 10:14 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Jun 07, 2025 at 03:40 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,20 +28,21 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `login` (
-  `id_user` int(11) NOT NULL,
-  `username` varchar(50) DEFAULT NULL,
-  `passwords` varchar(50) DEFAULT NULL,
-  `full_name` varchar(100) DEFAULT NULL
+  `id_user` int NOT NULL,
+  `id_role` int NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `passwords` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `full_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`id_user`, `username`, `passwords`, `full_name`) VALUES
-(1, 'Admin', '123', 'Admin'),
-(2, 'Steven', '123', 'Steven Edmund Pratama'),
-(3, 'Steven', '123', 'steven Edmund Pratama');
+INSERT INTO `login` (`id_user`, `id_role`, `username`, `passwords`, `full_name`) VALUES
+(1, 1, 'Admin', '123', 'Admin'),
+(2, 2, 'Steven', '123', 'Steven Edmund Pratama'),
+(4, 2, 'Ryan', '123', 'Ryan F');
 
 -- --------------------------------------------------------
 
@@ -50,11 +51,11 @@ INSERT INTO `login` (`id_user`, `username`, `passwords`, `full_name`) VALUES
 --
 
 CREATE TABLE `pembelian` (
-  `id_purchase` int(11) NOT NULL,
-  `id_supplier` int(11) NOT NULL,
-  `id_product` int(11) NOT NULL,
+  `id_purchase` int NOT NULL,
+  `id_supplier` int NOT NULL,
+  `id_product` int NOT NULL,
   `purchase_date` date NOT NULL,
-  `purchase_qty` int(11) NOT NULL,
+  `purchase_qty` int NOT NULL,
   `total_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -63,14 +64,14 @@ CREATE TABLE `pembelian` (
 --
 
 INSERT INTO `pembelian` (`id_purchase`, `id_supplier`, `id_product`, `purchase_date`, `purchase_qty`, `total_price`) VALUES
-(1, 1, 4, '2024-01-07', 50, 0.00),
-(2, 1, 5, '2024-01-07', 10, 0.00),
-(3, 1, 6, '2024-01-07', 15, 0.00),
-(4, 2, 7, '2024-01-08', 30, 0.00),
-(5, 2, 7, '2024-01-10', 50, 0.00),
-(6, 2, 4, '2024-01-10', 50, 0.00),
-(7, 2, 4, '2024-01-10', 50, 0.00),
-(8, 1, 11, '2025-01-23', 50, 50000.00);
+(1, 1, 4, '2024-01-07', 50, '0.00'),
+(2, 1, 5, '2024-01-07', 10, '0.00'),
+(3, 1, 6, '2024-01-07', 15, '0.00'),
+(4, 2, 7, '2024-01-08', 30, '0.00'),
+(5, 2, 7, '2024-01-10', 50, '0.00'),
+(6, 2, 4, '2024-01-10', 50, '0.00'),
+(7, 2, 4, '2024-01-10', 50, '0.00'),
+(8, 1, 11, '2025-01-23', 50, '50000.00');
 
 -- --------------------------------------------------------
 
@@ -79,7 +80,7 @@ INSERT INTO `pembelian` (`id_purchase`, `id_supplier`, `id_product`, `purchase_d
 --
 
 CREATE TABLE `penjualan` (
-  `id_sale` int(11) NOT NULL,
+  `id_sale` int NOT NULL,
   `sale_date` date NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `tax` decimal(10,2) NOT NULL,
@@ -91,27 +92,27 @@ CREATE TABLE `penjualan` (
 --
 
 INSERT INTO `penjualan` (`id_sale`, `sale_date`, `discount`, `tax`, `sale_total_price`) VALUES
-(1, '2024-01-08', 20000.00, 5000.00, 0.00),
-(2, '2024-01-08', 15000.00, 4000.00, 0.00),
-(3, '2024-01-08', 25000.00, 5000.00, 0.00),
-(4, '2025-01-19', 0.00, 0.00, 1350000.00),
-(5, '2025-01-20', 0.00, 0.00, 125000.00),
-(6, '2025-01-20', 0.00, 0.00, 220000.00),
-(7, '2025-01-20', 0.00, 0.00, 29000.00),
-(8, '2025-01-20', 0.00, 0.00, 125000.00),
-(9, '2025-01-23', 0.00, 0.00, 0.00),
-(10, '2025-01-23', 0.00, 0.00, 12500.00),
-(11, '2025-01-23', 0.00, 0.00, 22500.00),
-(12, '2025-01-23', 0.00, 0.00, 0.00),
-(13, '2025-01-23', 0.00, 0.00, 150000.00),
-(14, '2025-01-23', 0.00, 0.00, 125000.00),
-(15, '2025-01-23', 0.00, 0.00, 600000.00),
-(16, '2025-01-23', 0.00, 0.00, 240000.00),
-(17, '2025-01-23', 0.00, 0.00, 2000000.00),
-(18, '2025-01-23', 0.00, 0.00, 550000.00),
-(19, '2025-01-23', 0.00, 0.00, 1250000.00),
-(20, '2025-01-23', 0.00, 0.00, 220000.00),
-(21, '2025-01-23', 0.00, 0.00, 216000.00);
+(1, '2024-01-08', '20000.00', '5000.00', '0.00'),
+(2, '2024-01-08', '15000.00', '4000.00', '0.00'),
+(3, '2024-01-08', '25000.00', '5000.00', '0.00'),
+(4, '2025-01-19', '0.00', '0.00', '1350000.00'),
+(5, '2025-01-20', '0.00', '0.00', '125000.00'),
+(6, '2025-01-20', '0.00', '0.00', '220000.00'),
+(7, '2025-01-20', '0.00', '0.00', '29000.00'),
+(8, '2025-01-20', '0.00', '0.00', '125000.00'),
+(9, '2025-01-23', '0.00', '0.00', '0.00'),
+(10, '2025-01-23', '0.00', '0.00', '12500.00'),
+(11, '2025-01-23', '0.00', '0.00', '22500.00'),
+(12, '2025-01-23', '0.00', '0.00', '0.00'),
+(13, '2025-01-23', '0.00', '0.00', '150000.00'),
+(14, '2025-01-23', '0.00', '0.00', '125000.00'),
+(15, '2025-01-23', '0.00', '0.00', '600000.00'),
+(16, '2025-01-23', '0.00', '0.00', '240000.00'),
+(17, '2025-01-23', '0.00', '0.00', '2000000.00'),
+(18, '2025-01-23', '0.00', '0.00', '550000.00'),
+(19, '2025-01-23', '0.00', '0.00', '1250000.00'),
+(20, '2025-01-23', '0.00', '0.00', '220000.00'),
+(21, '2025-01-23', '0.00', '0.00', '216000.00');
 
 -- --------------------------------------------------------
 
@@ -120,13 +121,13 @@ INSERT INTO `penjualan` (`id_sale`, `sale_date`, `discount`, `tax`, `sale_total_
 --
 
 CREATE TABLE `product` (
-  `id_product` int(11) NOT NULL,
-  `id_supplier` int(11) NOT NULL,
-  `product_code` varchar(50) NOT NULL,
-  `product_name` varchar(50) NOT NULL,
+  `id_product` int NOT NULL,
+  `id_supplier` int NOT NULL,
+  `product_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `product_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `price_buy` decimal(10,2) NOT NULL,
   `price_sell` decimal(10,2) NOT NULL,
-  `product_unit` varchar(50) NOT NULL
+  `product_unit` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -134,14 +135,33 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id_product`, `id_supplier`, `product_code`, `product_name`, `price_buy`, `price_sell`, `product_unit`) VALUES
-(4, 1, '23110003', 'Susu Diarycrown', 21000.00, 25000.00, 'pcs'),
-(5, 1, '23110004', 'Blue9 600ml', 35000.00, 40000.00, 'dus'),
-(6, 1, '23110005', 'Nestle 600ml', 39000.00, 44000.00, 'dus'),
-(7, 2, '23110006', 'Passy 600ml', 32000.00, 36000.00, 'dus'),
-(8, 2, '23110007', 'Aqua 600ml', 35000.00, 40000.00, 'dus'),
-(9, 1, '23110008', 'Mie Indomie Kaldu', 40000.00, 44000.00, 'dus'),
-(10, 2, '23110009', 'Passy 300ml', 25000.00, 29000.00, 'dus'),
-(11, 2, '23110010', 'Susu Dancow', 50000.00, 55000.00, 'pcs');
+(4, 1, '23110003', 'Susu Diarycrown', '21000.00', '25000.00', 'pcs'),
+(5, 1, '23110004', 'Blue9 600ml', '35000.00', '40000.00', 'dus'),
+(6, 1, '23110005', 'Nestle 600ml', '39000.00', '44000.00', 'dus'),
+(7, 2, '23110006', 'Passy 600ml', '32000.00', '36000.00', 'dus'),
+(8, 2, '23110007', 'Aqua 600ml', '35000.00', '40000.00', 'dus'),
+(9, 1, '23110008', 'Mie Indomie Kaldu', '40000.00', '44000.00', 'dus'),
+(10, 2, '23110009', 'Passy 300ml', '25000.00', '29000.00', 'dus'),
+(11, 2, '23110010', 'Susu Dancow', '50000.00', '55000.00', 'pcs');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role`
+--
+
+CREATE TABLE `role` (
+  `id_role` int NOT NULL,
+  `role` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `role`
+--
+
+INSERT INTO `role` (`id_role`, `role`) VALUES
+(1, 'admin'),
+(2, 'user');
 
 -- --------------------------------------------------------
 
@@ -150,10 +170,10 @@ INSERT INTO `product` (`id_product`, `id_supplier`, `product_code`, `product_nam
 --
 
 CREATE TABLE `sale_details` (
-  `id_sale_detail` int(11) NOT NULL,
-  `id_sale` int(11) NOT NULL,
-  `id_product` int(11) NOT NULL,
-  `sale_qty` int(11) NOT NULL,
+  `id_sale_detail` int NOT NULL,
+  `id_sale` int NOT NULL,
+  `id_product` int NOT NULL,
+  `sale_qty` int NOT NULL,
   `sale_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -162,24 +182,24 @@ CREATE TABLE `sale_details` (
 --
 
 INSERT INTO `sale_details` (`id_sale_detail`, `id_sale`, `id_product`, `sale_qty`, `sale_price`) VALUES
-(1, 4, 4, 54, 25000.00),
-(2, 5, 4, 5, 25000.00),
-(3, 6, 9, 5, 44000.00),
-(4, 7, 10, 1, 29000.00),
-(5, 8, 4, 5, 25000.00),
-(6, 9, 4, 5, 0.00),
-(7, 10, 6, 5, 2500.00),
-(8, 11, 5, 5, 4500.00),
-(9, 12, 5, 5, 0.00),
-(10, 13, 4, 6, 25000.00),
-(11, 14, 4, 5, 25000.00),
-(12, 15, 5, 15, 40000.00),
-(13, 16, 8, 6, 40000.00),
-(14, 17, 5, 50, 40000.00),
-(15, 18, 11, 10, 55000.00),
-(16, 19, 4, 50, 25000.00),
-(17, 20, 6, 5, 44000.00),
-(18, 21, 7, 6, 36000.00);
+(1, 4, 4, 54, '25000.00'),
+(2, 5, 4, 5, '25000.00'),
+(3, 6, 9, 5, '44000.00'),
+(4, 7, 10, 1, '29000.00'),
+(5, 8, 4, 5, '25000.00'),
+(6, 9, 4, 5, '0.00'),
+(7, 10, 6, 5, '2500.00'),
+(8, 11, 5, 5, '4500.00'),
+(9, 12, 5, 5, '0.00'),
+(10, 13, 4, 6, '25000.00'),
+(11, 14, 4, 5, '25000.00'),
+(12, 15, 5, 15, '40000.00'),
+(13, 16, 8, 6, '40000.00'),
+(14, 17, 5, 50, '40000.00'),
+(15, 18, 11, 10, '55000.00'),
+(16, 19, 4, 50, '25000.00'),
+(17, 20, 6, 5, '44000.00'),
+(18, 21, 7, 6, '36000.00');
 
 -- --------------------------------------------------------
 
@@ -188,9 +208,9 @@ INSERT INTO `sale_details` (`id_sale_detail`, `id_sale`, `id_product`, `sale_qty
 --
 
 CREATE TABLE `stock` (
-  `id_stock` int(11) NOT NULL,
-  `id_product` int(11) NOT NULL,
-  `stok_rusak` int(11) DEFAULT 0
+  `id_stock` int NOT NULL,
+  `id_product` int NOT NULL,
+  `stok_rusak` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -222,11 +242,11 @@ INSERT INTO `stock` (`id_stock`, `id_product`, `stok_rusak`) VALUES
 --
 
 CREATE TABLE `supplier` (
-  `id_supplier` int(11) NOT NULL,
-  `supp_code` varchar(50) NOT NULL,
-  `supp_name` varchar(100) NOT NULL,
-  `contact` varchar(50) NOT NULL,
-  `address` text NOT NULL
+  `id_supplier` int NOT NULL,
+  `supp_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `supp_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `contact` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `address` text COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -245,7 +265,8 @@ INSERT INTO `supplier` (`id_supplier`, `supp_code`, `supp_name`, `contact`, `add
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `id_role` (`id_role`);
 
 --
 -- Indexes for table `pembelian`
@@ -267,6 +288,12 @@ ALTER TABLE `penjualan`
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id_product`),
   ADD KEY `id_supplier` (`id_supplier`);
+
+--
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id_role`) USING BTREE;
 
 --
 -- Indexes for table `sale_details`
@@ -297,47 +324,59 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pembelian`
 --
 ALTER TABLE `pembelian`
-  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_purchase` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `penjualan`
 --
 ALTER TABLE `penjualan`
-  MODIFY `id_sale` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_sale` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_product` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `id_role` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sale_details`
 --
 ALTER TABLE `sale_details`
-  MODIFY `id_sale_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_sale_detail` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_stock` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `id_supplier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_supplier` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `login`
+--
+ALTER TABLE `login`
+  ADD CONSTRAINT `FK_login_role` FOREIGN KEY (`id_role`) REFERENCES `role` (`id_role`);
 
 --
 -- Constraints for table `pembelian`
