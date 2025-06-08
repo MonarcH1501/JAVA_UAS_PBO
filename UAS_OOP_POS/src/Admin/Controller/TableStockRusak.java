@@ -27,7 +27,7 @@ public class TableStockRusak {
         
         tb.setColumnIdentifiers(new Object[] {
             "ID STOCK",
-            "PRODUK",
+            "TANGGAL",
             "STOCK RUSAK",
         });
         
@@ -39,7 +39,7 @@ public class TableStockRusak {
             for(StockRusak s : stockRusak) {
                 tb.addRow(new Object[] {
                     s.getId_stock(),
-                    s.getId_product() + " - " + s.getProduct_code() + " - " + s.getProduct_name() + " - " + s.getProduct_unit(),
+                    s.getTanggal(),
                     s.getStockRusak(),
                 });
             }

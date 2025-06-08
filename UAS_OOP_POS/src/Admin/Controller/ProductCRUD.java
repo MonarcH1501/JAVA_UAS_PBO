@@ -134,20 +134,20 @@ public boolean resetProductStock(int productId) throws SQLException {
 
     public List<StockRusak> getStockRusak() throws SQLException {
         List<StockRusak> stockRusak = new ArrayList<>();
-        String queryUpdateStock = "SELECT s.id_stock AS id_stock, s.id_product AS id_product, pr.product_code AS product_code, pr.product_name AS product_name, pr.product_unit AS product_unit, s.stok_rusak AS stok_rusak FROM stock s JOIN product pr ON s.id_product = pr.id_product";
-        
+        String queryUpdateStock = "SELECT s.id_stock AS id_stock, s.id_product AS id_product, pr.product_code AS product_code, pr.product_name AS product_name, pr.product_unit AS product_unit, s.stok_rusak AS stok_rusak, s.tanggal AS tanggal FROM stock s JOIN product pr ON s.id_product = pr.id_product";
         try(PreparedStatement ps = c.prepareStatement(queryUpdateStock); 
             ResultSet rs = ps.executeQuery();) {
             while(rs.next()) {
-                int iS = rs.getInt("id_stock");
-                int iP = rs.getInt("id_product");
-                String pC = rs.getString("product_code");
-                String pN = rs.getString("product_name");
-                String pU = rs.getString("product_unit");
-                int sR = rs.getInt("stok_rusak");
-                
-                stockRusak.add(StockRusak.forDisplay(iS, iP, pC, pN, pU, sR));
-            }
+            int iS = rs.getInt("id_stock");
+            int iP = rs.getInt("id_product");
+            String pC = rs.getString("product_code");
+            String pN = rs.getString("product_name");
+            String pU = rs.getString("product_unit");
+            int sR = rs.getInt("stok_rusak");
+            Date tanggal = rs.getDate("tanggal");
+
+            stockRusak.add(StockRusak.forDisplayWithTanggal(iS, iP, pC, pN, pU, sR, tanggal));
+}
         }
         return stockRusak;
     }
@@ -168,10 +168,11 @@ public boolean resetProductStock(int productId) throws SQLException {
     }
     
     public int inputStokRusak(StockRusak stockRusak) throws SQLException {
-        String insertStokQuery = "INSERT INTO stock (id_product, stok_rusak) VALUES (?, ?)";
+        String insertStokQuery = "INSERT INTO stock (id_product, tanggal,  stok_rusak) VALUES (?, ?, ?)";
         try(PreparedStatement ps = c.prepareStatement(insertStokQuery)) {
             ps.setInt(1, stockRusak.getId_product());
-            ps.setInt(2, stockRusak.getStockRusak());
+            ps.setDate(2, new java.sql.Date(stockRusak.getTanggal().getTime()));
+            ps.setInt(3, stockRusak.getStockRusak());
             
             int affectedRows = ps.executeUpdate();
             return affectedRows;
@@ -180,10 +181,11 @@ public boolean resetProductStock(int productId) throws SQLException {
     
     // Untuk Update Stock Rusak
     public int updateStokRusak(StockRusak stockRusak) throws SQLException {
-        String updateStokQuery = "UPDATE stock SET stok_rusak = ? WHERE id_stock = ?";
+        String updateStokQuery = "UPDATE stock SET tanggal = ?, stok_rusak = ? WHERE id_stock = ?";
         try(PreparedStatement ps = c.prepareStatement(updateStokQuery)) {
-            ps.setInt(1, stockRusak.getStockRusak());
-            ps.setInt(2, stockRusak.getId_stock());
+            ps.setDate(1, new java.sql.Date(stockRusak.getTanggal().getTime()));
+            ps.setInt(2, stockRusak.getStockRusak());
+            ps.setInt(3, stockRusak.getId_stock());
             
             int affectedRows = ps.executeUpdate();
             return affectedRows;
