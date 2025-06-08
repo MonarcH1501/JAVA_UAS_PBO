@@ -158,8 +158,6 @@ public class PenjualanView extends javax.swing.JFrame {
 
         jLabel5.setText("Tanggal");
 
-        txTanggal.setEnabled(false);
-
         jLabel6.setText("ID Barang");
 
         jLabel7.setText("Nama Barang");
