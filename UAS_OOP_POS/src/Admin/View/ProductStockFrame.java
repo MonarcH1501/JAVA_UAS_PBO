@@ -26,7 +26,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
     private TableStock tableStock;
     private TableStockSearch tableStockSearch;
     private int selectedProductId = -1;
-    private String namaproduct, satuanproduct = "";
+    private String namaproduct, satuanproduct, totalstock = "";
     
     public ProductStockFrame() {
         initComponents();
@@ -323,6 +323,9 @@ public class ProductStockFrame extends javax.swing.JPanel {
             String productInfo = productStockTable.getValueAt(selectedRow, 1).toString();
             namaproduct = productStockTable.getValueAt(selectedRow, 1).toString();
             satuanproduct = productStockTable.getValueAt(selectedRow, 2).toString();
+            int totalawal = Integer.parseInt(productStockTable.getValueAt(selectedRow, 3).toString());
+            int totaljual = Integer.parseInt(productStockTable.getValueAt(selectedRow, 4).toString());
+            totalstock = String.valueOf(totalawal - totaljual);
             txt_product.setText(productInfo);
         }
     }//GEN-LAST:event_productStockTableMouseClicked
@@ -371,7 +374,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
         return;
     } else {
         try {
-        ListStockRusak frame = new ListStockRusak(namaproduct, satuanproduct);
+        ListStockRusak frame = new ListStockRusak(namaproduct, satuanproduct, totalstock);
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {

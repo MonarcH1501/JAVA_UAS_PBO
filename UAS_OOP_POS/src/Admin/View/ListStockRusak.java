@@ -22,6 +22,7 @@ private int selectedId;
 private ProductCRUD productDB;
 private DefaultTableModel tableModel;
 private ProductStockFrame ProductStock;
+private int total, totalStockRusak;
 
     public ListStockRusak() throws SQLException {
         initComponents();
@@ -30,12 +31,13 @@ private ProductStockFrame ProductStock;
         LoadTableStockRusak();
     }
     
-    public ListStockRusak(String nama, String satuan) throws SQLException {
+    public ListStockRusak(String nama, String satuan, String total) throws SQLException {
         initComponents();
         productDB = new ProductCRUD();
         tableModel = (DefaultTableModel) tabel_stockrusak.getModel();
         txtfield_product.setText(nama);
         txtfield_satuan.setText(satuan);
+        this.total = Integer.parseInt(total);
         LoadTableStockRusak();
     }
     
@@ -71,6 +73,8 @@ private ProductStockFrame ProductStock;
         btn_update = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jdate_tanggal = new com.toedter.calendar.JDateChooser();
+        jLabel8 = new javax.swing.JLabel();
+        txtfield_totalstockrusak = new javax.swing.JTextField();
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Stock :");
@@ -88,6 +92,12 @@ private ProductStockFrame ProductStock;
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Stock :");
+
+        txtfield_stock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfield_stockActionPerformed(evt);
+            }
+        });
 
         tabel_stockrusak.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,6 +135,15 @@ private ProductStockFrame ProductStock;
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Tanggal :");
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("Total Stock Rusak :");
+
+        txtfield_totalstockrusak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfield_totalstockrusakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,26 +157,32 @@ private ProductStockFrame ProductStock;
                         .addGap(18, 18, 18)
                         .addComponent(txtfield_product, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtfield_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtfield_satuan, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                                .addGap(11, 11, 11)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtfield_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtfield_satuan, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel8)
+                                .addGap(26, 26, 26)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jdate_tanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                                 .addComponent(txtfield_stockrusak))
                             .addComponent(btn_update, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))))
+                            .addComponent(jLabel6)
+                            .addComponent(txtfield_totalstockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -176,7 +201,9 @@ private ProductStockFrame ProductStock;
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtfield_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtfield_stock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtfield_totalstockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,6 +231,7 @@ private ProductStockFrame ProductStock;
           
         tableModel.setRowCount(0); // Kosongkan tabel
         tableModel.setColumnIdentifiers(new Object[]{"ID STOCK", "TANGGAL", "STOCK RUSAK"});
+        totalStockRusak = 0;
 
         try {
             for (StockRusak s : productDB.getStockRusak()) {
@@ -212,7 +240,13 @@ private ProductStockFrame ProductStock;
                         s.getTanggal(),
                         s.getStock_rusak()
                 });
+                totalStockRusak += s.getStock_rusak();
             }
+            txtfield_totalstockrusak.setText(String.valueOf(totalStockRusak));
+            System.out.println(total);
+            System.out.println(totalStockRusak);
+            int sisaStock = total - totalStockRusak;
+            txtfield_stock.setText(String.valueOf(sisaStock));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -276,6 +310,14 @@ private ProductStockFrame ProductStock;
         }
     }//GEN-LAST:event_btn_updateActionPerformed
 
+    private void txtfield_stockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_stockActionPerformed
+    
+    }//GEN-LAST:event_txtfield_stockActionPerformed
+
+    private void txtfield_totalstockrusakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_totalstockrusakActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtfield_totalstockrusakActionPerformed
+
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -322,6 +364,7 @@ private ProductStockFrame ProductStock;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
     private com.toedter.calendar.JDateChooser jdate_tanggal;
@@ -330,5 +373,6 @@ private ProductStockFrame ProductStock;
     private javax.swing.JTextField txtfield_satuan;
     private javax.swing.JTextField txtfield_stock;
     private javax.swing.JTextField txtfield_stockrusak;
+    private javax.swing.JTextField txtfield_totalstockrusak;
     // End of variables declaration//GEN-END:variables
 }
