@@ -39,6 +39,10 @@ private int total, totalStockRusak;
         txtfield_satuan.setText(satuan);
         this.total = Integer.parseInt(total);
         LoadTableStockRusak();
+        txtfield_product.setEditable(false);
+        txtfield_satuan.setEditable(false);
+        txtfield_stock.setEditable(false);
+        txtfield_totalstockrusak.setEditable(false);
     }
     
     public ListStockRusak(ProductStockFrame productStockFrame) throws SQLException {
