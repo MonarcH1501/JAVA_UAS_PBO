@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="800" pageHeight="842" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="643f1cb7-3240-457b-835b-e79b3780c424">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT 
+    p.product_code,
+    p.product_name,
+    p.product_unit,
+    COALESCE(pb.total_purchase_qty, 0) AS purchase_qty,
+    COALESCE(sd.total_sale_qty, 0) AS sale_qty,
+    COALESCE(s.total_stok_rusak, 0) AS stok_rusak,  -- Perhatikan nama kolom di sini
+    COALESCE(pb.total_purchase_qty, 0) - COALESCE(sd.total_sale_qty, 0) - COALESCE(s.total_stok_rusak, 0) AS total
+FROM 
+    product p
+LEFT JOIN (
+    SELECT id_product, SUM(purchase_qty) AS total_purchase_qty 
+    FROM pembelian 
+    GROUP BY id_product
+) pb ON p.id_product = pb.id_product
+LEFT JOIN (
+    SELECT id_product, SUM(sale_qty) AS total_sale_qty 
+    FROM sale_details 
+    GROUP BY id_product
+) sd ON p.id_product = sd.id_product 
+LEFT JOIN (
+    SELECT id_product, SUM(stok_rusak) AS total_stok_rusak  -- Diperbaiki: total_stok_rusak (bukan total_stock_rusak)
+    FROM stock 
+    GROUP BY id_product
+) s ON p.id_product = s.id_product
+ORDER BY p.product_code;]]>
+	</queryString>
+	<field name="product_code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="product_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="product_unit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="purchase_qty" class="java.math.BigDecimal"/>
+	<field name="sale_qty" class="java.math.BigDecimal"/>
+	<field name="stok_rusak" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="210" y="15" width="363" height="40" uuid="742e6b1c-48a8-45e7-b5c3-e62392a0801f"/>
+				<textElement>
+					<font size="28" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[OPNAME STOCK BARANG]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="7" width="165" height="20" uuid="de1a1081-1bf2-44d7-9160-7b905e66ead3"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Stock Barang]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="24" width="77" height="20" uuid="63937e18-8608-4c6e-910a-2ba9166b9309"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Produk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="24" width="77" height="20" uuid="0d3a8ba4-d0a0-4ad5-983e-9625d9c3600e"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama produk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="24" width="42" height="20" uuid="278bbd61-e0bf-4913-8363-f02dedc4f1b3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="374" y="24" width="63" height="20" uuid="5aae2c24-293e-482b-944b-816cddd99585"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock Beli]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="473" y="24" width="79" height="20" uuid="125d6194-b71e-4253-b836-138157d422c2"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock Terjual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="584" y="24" width="79" height="20" uuid="bf7613aa-6843-41b9-ad7f-1964bb8681b4"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stock Rusak]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="705" y="24" width="31" height="20" uuid="d47d8a92-aae8-444a-9f43-54ae14e6b0b7"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="14" y="10" width="98" height="20" uuid="b9b47f55-063f-4daf-bc14-e2a570a0d8a5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="143" y="10" width="101" height="20" uuid="61080f5a-4dbc-458f-a284-efac1f44bdf4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="10" width="55" height="20" uuid="5889adde-cefc-4d4c-bfbc-e130784a90f1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_unit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="10" width="55" height="20" uuid="d3a6f07b-144e-42f4-9ff9-784f41150b09"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{purchase_qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="10" width="79" height="20" uuid="95fb254c-a409-49be-951f-fa6053c4e50f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sale_qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="584" y="10" width="79" height="20" uuid="09d02123-fff1-4f2f-a5a9-e83af4765d51"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stok_rusak}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="705" y="10" width="43" height="20" uuid="d4c53c1e-b972-44a1-9998-f5914e8e201d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="18" width="760" height="1" uuid="1b7e5554-28d1-4b5c-97f3-853a31729c4d"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="625" y="14" width="80" height="20" uuid="9e675729-7d41-4578-a8dd-bf680b5e71cf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="708" y="14" width="40" height="20" uuid="3e3b85e1-8a0c-48a7-90c7-8070e3616964"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

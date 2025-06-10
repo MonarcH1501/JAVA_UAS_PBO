@@ -7,10 +7,12 @@ import Admin.Controller.TableStockSearch;
 import Admin.Controller.TableStock;
 import Admin.Model.StockRusak;
 import Admin.Controller.ProductCRUD;
+import Assets.DBConnection;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.Date;
@@ -18,6 +20,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author user
@@ -153,6 +163,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
         productStockTable = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jdate_tgl = new com.toedter.calendar.JDateChooser();
+        btn_report = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1280, 700));
 
@@ -227,6 +238,19 @@ public class ProductStockFrame extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel5.setText("Tanggal Input :");
 
+        btn_report.setBackground(new java.awt.Color(255, 51, 51));
+        btn_report.setText("REPORT");
+        btn_report.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_reportMouseClicked(evt);
+            }
+        });
+        btn_report.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_reportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -263,7 +287,9 @@ public class ProductStockFrame extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(filterCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(filterCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_report))
                         .addGap(21, 21, 21)))
                 .addContainerGap())
         );
@@ -273,13 +299,17 @@ public class ProductStockFrame extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(9, 9, 9)
+                            .addComponent(jLabel3))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txt_product, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel3))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_product, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addGap(14, 14, 14)
+                        .addComponent(btn_report, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,8 +323,8 @@ public class ProductStockFrame extends javax.swing.JPanel {
                             .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(filterCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
                 .addGap(37, 37, 37))
         );
 
@@ -311,7 +341,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -395,9 +425,36 @@ public class ProductStockFrame extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_stokRusakActionPerformed
 
+    private void btn_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_reportActionPerformed
+
+    private void btn_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportMouseClicked
+    try {
+        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Documents\\NetBeansProjects\\report\\src\\Data\\Report.jrxml");
+         String sql = "SELECT orders.order_id, products.sku_number, products.name, order_products.quantity, order_products.price FROM order_products LEFT JOIN products ON order_products.product_id = products.id LEFT JOIN orders ON order_products.order_id = orders.order_id";
+         JRDesignQuery newQuery = new JRDesignQuery();
+         newQuery.setText(sql);
+         jd.setQuery(newQuery);
+         JasperReport js = JasperCompileManager.compileReport(jd);
+         
+        // Koneksi database
+        Connection conn = DBConnection.getConnection();
+        JOptionPane.showMessageDialog(null, "Connected!");
+
+        JasperPrint jp = JasperFillManager.fillReport(js, null, conn);
+        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
+         
+     } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form tambah data.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btn_reportMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_report;
     private javax.swing.JButton btn_view;
     private javax.swing.JComboBox<String> filterCombo;
     private javax.swing.JLabel jLabel1;
