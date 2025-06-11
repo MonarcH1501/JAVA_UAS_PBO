@@ -1,7 +1,7 @@
 package Kasir.Controller;
 
 import Kasir.View.PenjualanView;
-import Kasir.View.HistoryView;
+import Kasir.View.HistoryPenjualan;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
@@ -25,7 +25,7 @@ public class MenuController {
     }
 
     public void openHistoryWindow() {
-        HistoryView a = new HistoryView();
+        HistoryPenjualan a = new HistoryPenjualan();
         JInternalFrame internalframe = new JInternalFrame("History Penjualan", false, true, true);
         internalframe.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         internalframe.setContentPane(a.getContentPane());
