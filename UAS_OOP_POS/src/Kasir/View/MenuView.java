@@ -27,6 +27,7 @@ public class MenuView extends javax.swing.JFrame {
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu6 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
+        jDayChooser1 = new com.toedter.calendar.JDayChooser();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         logoutbtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -166,6 +167,7 @@ public class MenuView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDayChooser jDayChooser1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

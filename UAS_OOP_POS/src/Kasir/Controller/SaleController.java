@@ -9,32 +9,34 @@ import java.util.List;
 public class SaleController {
 
     public String generateTransactionNo() throws SQLException {
-        Connection c = DBConnection.getConnection();
-        Statement s = c.createStatement();
-        ResultSet r = s.executeQuery("SELECT id_sale FROM penjualan ORDER BY id_sale DESC LIMIT 1");
+    Connection c = DBConnection.getConnection();
+    Statement s = c.createStatement();
+    ResultSet r = s.executeQuery("SELECT id_sale FROM penjualan ORDER BY id_sale DESC LIMIT 1");
 
-        String transactionNo;
-        if (r.next()) {
-            int idSale = r.getInt("id_sale") + 1;
-            transactionNo = String.format("TR%04d", idSale);
-        } else {
-            transactionNo = "TR0001";
-        }
-
-        r.close();
-        s.close();
-        return transactionNo;
+    String transactionNo;
+    if (r.next()) {
+        int idSale = r.getInt("id_sale") + 1;
+        transactionNo = "TR-" + idSale;
+    } else {
+        transactionNo = "TR-1";
     }
+
+    r.close();
+    s.close();
+    return transactionNo;
+}
 
     public void saveSale(Sale sale) throws Exception {
         Connection c = DBConnection.getConnection();
-        String sql = "INSERT INTO penjualan (sale_date, discount, tax, sale_total_price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO penjualan (sale_date, discount, tax,sale_total_price, total_bayar,kembalian) VALUES (?, ?, ?, ?,?,?)";
         PreparedStatement pst = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         pst.setDate(1, new java.sql.Date(sale.getDate().getTime()));
-        pst.setDouble(2, 0);
-        pst.setDouble(3, 0);
+        pst.setDouble(2, sale.getDiscount());
+        pst.setDouble(3, sale.getTax());
         pst.setDouble(4, sale.getTotalPrice());
+        pst.setDouble(5, sale.gettotalPay());
+        pst.setDouble(6, sale.getkembalian());
         pst.executeUpdate();
 
         ResultSet rs = pst.getGeneratedKeys();

@@ -1,63 +1,122 @@
 package Kasir.Controller;
 
 import Assets.DBConnection;
+import Kasir.Model.Sale;
 import Kasir.Model.SaleDetail;
-
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryController {
 
-    public List<SaleDetail> loadAllSales() throws SQLException {
-        List<SaleDetail> list = new ArrayList<>();
-        String sql = "SELECT sd.id_product, p.product_name, sd.sale_qty, sd.sale_price " +
-                     "FROM sale_details sd " +
-                     "LEFT JOIN product p ON sd.id_product = p.id_product";
+    public List<Sale> loadAllSales() throws SQLException {
+        List<Sale> list = new ArrayList<>();
+        String sql = "SELECT id_sale, sale_date, discount, tax , sale_total_price, total_bayar FROM penjualan";
 
         try (Connection c = DBConnection.getConnection();
              Statement stmt = c.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                list.add(new SaleDetail(
-                        rs.getInt("id_product"),
-                        rs.getString("product_name"),
-                        rs.getDouble("sale_qty"),
-                        rs.getDouble("sale_price")
-                ));
+                String id = rs.getString("id_sale");
+                Date date = rs.getDate("sale_date");
+                double discount =rs.getDouble("discount");
+                double tax =rs.getDouble("tax");
+                double totalPrice = rs.getDouble("sale_total_price");
+                double totalBayar = rs.getDouble("total_bayar");
+
+                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0, null);
+                list.add(sale);
             }
         }
 
         return list;
     }
 
-    public List<SaleDetail> searchSales(String keyword) throws SQLException {
-        List<SaleDetail> list = new ArrayList<>();
-        String sql = "SELECT sd.id_product, p.product_name, sd.sale_qty, sd.sale_price " +
-                     "FROM sale_details sd " +
-                     "LEFT JOIN product p ON sd.id_product = p.id_product " +
-                     "WHERE sd.id_sale LIKE ? OR p.product_name LIKE ?";
+    public List<Sale> searchSales(String keyword) throws SQLException {
+        List<Sale> list = new ArrayList<>();
+        String sql = "SELECT id_sale, sale_date, sale_total_price, total_bayar FROM penjualan " +
+                     "WHERE id_sale LIKE ?";
 
         try (Connection c = DBConnection.getConnection();
              PreparedStatement pst = c.prepareStatement(sql)) {
 
-            String search = "%" + keyword + "%";
-            pst.setString(1, search);
-            pst.setString(2, search);
+            pst.setString(1, "%" + keyword + "%");
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    list.add(new SaleDetail(
-                            rs.getInt("id_product"),
-                            rs.getString("product_name"),
-                            rs.getDouble("sale_qty"),
-                            rs.getDouble("sale_price")
-                    ));
+                    String id = rs.getString("id_sale");
+                    Date date = rs.getDate("sale_date");
+                    double totalPrice = rs.getDouble("sale_total_price");
+                    double totalBayar = rs.getDouble("total_bayar");
+
+                    Sale sale = new Sale(id, date, totalPrice, 0, 0, totalBayar, 0, null);
+                    list.add(sale);
                 }
             }
         }
 
         return list;
     }
+    
+     public List<SaleDetail> getSaleDetailByTransactionId(int idSale) throws SQLException {
+        List<SaleDetail> list = new ArrayList<>();
+        String sql = """
+            SELECT sd.id_sale, sd.id_product, p.product_name, sd.sale_qty, sd.sale_price
+              FROM sale_details sd
+              JOIN product p ON sd.id_product = p.id_product
+             WHERE sd.id_sale = ?
+            """;
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement pst = c.prepareStatement(sql)) {
+            pst.setInt(1, idSale);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new SaleDetail(
+                        rs.getInt("id_sale"),
+                        rs.getInt("id_product"),
+                        rs.getString("product_name"),
+                        rs.getDouble("sale_qty"),
+                        rs.getDouble("sale_price")
+                    ));
+                }
+            }
+        }
+        return list;
+    }
+     
+     public Sale getSaleById(int idSale) throws SQLException {
+    Sale sale = null;
+    String sql = """
+        SELECT id_sale, sale_date, sale_total_price, discount, tax, total_bayar, kembalian
+        FROM penjualan
+        WHERE id_sale = ?
+    """;
+
+    try (Connection c = DBConnection.getConnection();
+         PreparedStatement pst = c.prepareStatement(sql)) {
+        pst.setInt(1, idSale);
+
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                String id = rs.getString("id_sale");
+                Date date = rs.getDate("sale_date");
+                double totalPrice = rs.getDouble("sale_total_price");
+                double discount = rs.getDouble("discount");
+                double tax = rs.getDouble("tax");
+                double totalBayar = rs.getDouble("total_bayar");
+                double kembalian = rs.getDouble("kembalian");
+
+                List<SaleDetail> detailList = getSaleDetailByTransactionId(idSale);
+
+                sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, kembalian, detailList);
+            }
+        }
+    }
+
+    return sale;
+}
+
 }
