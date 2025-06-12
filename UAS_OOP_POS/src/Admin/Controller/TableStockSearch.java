@@ -28,6 +28,7 @@ public class TableStockSearch {
         tb.setColumnIdentifiers(new Object[] {
             "ID PRODUK",
             "PRODUK",
+            "SATUAN",
             "STOK AWAL",
             "TOTAL STOK JUAL",
             "TOTAL STOK RUSAK",
@@ -42,9 +43,11 @@ public class TableStockSearch {
             for(Product p : productStock) {
                 tb.addRow(new Object [] {
                     p.getId_product(),
-                    p.getProduct_code() + " - " + p.getProduct_name() + " - " + p.getProduct_unit() + " - " + p.getId_supplier() + "(" + p.getSupp_name() + ")",
+                    p.getProduct_name(),
+                    p.getProduct_unit(),
                     p.getPurchase_qty(),
                     p.getSale_qty(),
+                    p.getStok_rusak(),
                     p.getTotal_stok(),
                 });
             } 

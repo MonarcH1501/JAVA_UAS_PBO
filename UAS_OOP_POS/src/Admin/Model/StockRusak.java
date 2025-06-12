@@ -4,6 +4,8 @@
  */
 package Admin.Model;
 
+import java.util.Date;
+
 /**
  *
  * @author user
@@ -12,6 +14,7 @@ public class StockRusak {
     private int id_stock;
     private int id_product;
     private int stock_rusak;
+    private Date tanggal;
     private String product_code;
     private String product_name;
     private String product_unit;
@@ -19,10 +22,11 @@ public class StockRusak {
     public StockRusak() {}
     
     // Add Stock Rusak
-    public static StockRusak forAdd(int id_product, int stock_rusak) {
+    public static StockRusak forAdd(int id_product, int stock_rusak, Date tanggal) {
         StockRusak stockRusak = new StockRusak();
         stockRusak.id_product = id_product;
         stockRusak.stock_rusak = stock_rusak;
+        stockRusak.tanggal = tanggal;
         return stockRusak;
     }
     
@@ -38,13 +42,38 @@ public class StockRusak {
         return stockRusak;
     }
     
+    public static StockRusak forDisplayWithTanggal(int id_stock, int id_product, String product_code, String product_name, String product_unit, int stock_rusak, Date tanggal) {
+    StockRusak stockRusak = forDisplay(id_stock, id_product, product_code, product_name, product_unit, stock_rusak);
+    stockRusak.setTanggal(tanggal); // Set tanggal
+    return stockRusak;
+}
+    
     // Update Stock Rusak
-    public static StockRusak forUpdate(int id_stock, int stock_rusak) {
+    public static StockRusak forUpdate(int id_stock, Date tanggal, int stock_rusak) {
         StockRusak stockRusak = new StockRusak();
+        stockRusak.tanggal = tanggal;
         stockRusak.id_stock = id_stock;
         stockRusak.stock_rusak = stock_rusak;
         return stockRusak;
     }
+
+    public int getStock_rusak() {
+        return stock_rusak;
+    }
+
+    public void setStock_rusak(int stock_rusak) {
+        this.stock_rusak = stock_rusak;
+    }
+
+    public Date getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(Date tanggal) {
+        this.tanggal = tanggal;
+    }
+    
+    
     
     public int getId_stock() { return id_stock; } 
     public void setId_Stock(int id_stock) { this.id_stock = id_stock; }
