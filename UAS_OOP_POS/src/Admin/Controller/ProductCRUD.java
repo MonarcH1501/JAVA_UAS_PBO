@@ -132,25 +132,37 @@ public boolean resetProductStock(int productId) throws SQLException {
     }
 }
 
-    public List<StockRusak> getStockRusak() throws SQLException {
-        List<StockRusak> stockRusak = new ArrayList<>();
-        String queryUpdateStock = "SELECT s.id_stock AS id_stock, s.id_product AS id_product, pr.product_code AS product_code, pr.product_name AS product_name, pr.product_unit AS product_unit, s.stok_rusak AS stok_rusak, s.tanggal AS tanggal FROM stock s JOIN product pr ON s.id_product = pr.id_product";
-        try(PreparedStatement ps = c.prepareStatement(queryUpdateStock); 
-            ResultSet rs = ps.executeQuery();) {
-            while(rs.next()) {
-            int iS = rs.getInt("id_stock");
-            int iP = rs.getInt("id_product");
-            String pC = rs.getString("product_code");
-            String pN = rs.getString("product_name");
-            String pU = rs.getString("product_unit");
-            int sR = rs.getInt("stok_rusak");
-            Date tanggal = rs.getDate("tanggal");
+    public List<StockRusak> getStockRusak(int id) throws SQLException {
+    List<StockRusak> stockRusak = new ArrayList<>();
+    String queryUpdateStock = 
+        "SELECT s.id_stock AS id_stock, s.id_product AS id_product, " +
+        "pr.product_code AS product_code, pr.product_name AS product_name, " +
+        "pr.product_unit AS product_unit, s.stok_rusak AS stok_rusak, " +
+        "s.tanggal AS tanggal " +
+        "FROM stock s " +
+        "JOIN product pr ON s.id_product = pr.id_product " +
+        "WHERE s.id_product = ?";
 
-            stockRusak.add(StockRusak.forDisplayWithTanggal(iS, iP, pC, pN, pU, sR, tanggal));
-}
+    try (PreparedStatement ps = c.prepareStatement(queryUpdateStock)) {
+        ps.setInt(1, id);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int iS = rs.getInt("id_stock");
+                int iP = rs.getInt("id_product");
+                String pC = rs.getString("product_code");
+                String pN = rs.getString("product_name");
+                String pU = rs.getString("product_unit");
+                int sR = rs.getInt("stok_rusak");
+                Date tanggal = rs.getDate("tanggal");
+
+                stockRusak.add(StockRusak.forDisplayWithTanggal(iS, iP, pC, pN, pU, sR, tanggal));
+            }
         }
-        return stockRusak;
     }
+
+    return stockRusak;
+}
+
     
     public List<String> getSupplierList() throws SQLException {
         List<String> supplierList = new ArrayList<>();

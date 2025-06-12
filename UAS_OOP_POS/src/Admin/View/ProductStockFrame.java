@@ -406,7 +406,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
         return;
     } else {
         try {
-        ListStockRusak frame = new ListStockRusak(namaproduct, satuanproduct, totalstock);
+        ListStockRusak frame = new ListStockRusak(selectedProductId, namaproduct, satuanproduct, totalstock);
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {

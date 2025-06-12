@@ -49,7 +49,7 @@ public class ReportModalView extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jcalendar_year = new com.toedter.calendar.JYearChooser();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cb_filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Admin.View;
-import Admin.Controller.TableStockRusak;
+
 import Admin.Model.StockRusak;
 import Admin.Controller.ProductCRUD;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ private int selectedId;
 private ProductCRUD productDB;
 private DefaultTableModel tableModel;
 private ProductStockFrame ProductStock;
-private int total, totalStockRusak;
+private int total, totalStockRusak, id;
 
     public ListStockRusak() throws SQLException {
         initComponents();
@@ -31,13 +31,14 @@ private int total, totalStockRusak;
         LoadTableStockRusak();
     }
     
-    public ListStockRusak(String nama, String satuan, String total) throws SQLException {
+    public ListStockRusak(int id, String nama, String satuan, String total) throws SQLException {
         initComponents();
         productDB = new ProductCRUD();
         tableModel = (DefaultTableModel) tabel_stockrusak.getModel();
         txtfield_product.setText(nama);
         txtfield_satuan.setText(satuan);
         this.total = Integer.parseInt(total);
+        this.id = id;
         LoadTableStockRusak();
         txtfield_product.setEditable(false);
         txtfield_satuan.setEditable(false);
@@ -238,7 +239,7 @@ private int total, totalStockRusak;
         totalStockRusak = 0;
 
         try {
-            for (StockRusak s : productDB.getStockRusak()) {
+            for (StockRusak s : productDB.getStockRusak(id)) {
                 tableModel.addRow(new Object[]{
                         s.getId_stock(),
                         s.getTanggal(),
