@@ -1,26 +1,29 @@
 package Kasir.View;
 
 import Kasir.Controller.HistoryController;
-import Kasir.Model.SaleDetail;
+import Kasir.Model.Sale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class HistoryView extends javax.swing.JFrame {
+public class HistoryPenjualan extends javax.swing.JFrame {
 
     private final HistoryController controller;
-
-    public HistoryView() {
+    private String selectedTransactionId = null;
+    private List<Sale> salesList;
+    public HistoryPenjualan() {
         initComponents();
+        btn_viewbyid.setVisible(false);  // Tombol disembunyikan saat awal
         controller = new HistoryController();
-        loadData();  
+        loadData();
     }
 
     private void loadData() {
         try {
-            List<SaleDetail> list = controller.loadAllSales();
-            populateTable(list);
+            salesList = controller.loadAllSales();
+            populateTable(salesList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
         }
@@ -29,26 +32,28 @@ public class HistoryView extends javax.swing.JFrame {
     private void cariData() {
         try {
             String keyword = jTextField1.getText();
-            List<SaleDetail> list = controller.searchSales(keyword);
-            populateTable(list);
+            salesList = controller.searchSales(keyword); // simpan di field
+        populateTable(salesList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error searching data: " + e.getMessage());
         }
     }
 
-    private void populateTable(List<SaleDetail> sales) {
+    private void populateTable(List<Sale> sales) {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Product ID");
-        model.addColumn("Product Name");
-        model.addColumn("Quantity");
-        model.addColumn("Price");
+        model.addColumn("ID Transaksi");
+        model.addColumn("Tanggal");
+        model.addColumn("Total Harga");
+        model.addColumn("Total Bayar");
 
-        for (SaleDetail s : sales) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        for (Sale s : sales) {
             model.addRow(new Object[]{
-                s.getProductId(),
-                s.getProductName(),
-                s.getQuantity(),
-                s.getPrice()
+                s.getTransactionNo(),
+                sdf.format(s.getDate()),
+                s.getTotalPrice(),
+                s.getTotalPay()
             });
         }
 
@@ -67,8 +72,10 @@ public class HistoryView extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btn_viewbyid = new javax.swing.JButton();
+        btn_report = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setText("Cari Data");
 
@@ -123,18 +130,37 @@ public class HistoryView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btn_viewbyid.setText("VIew");
+        btn_viewbyid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_viewbyidActionPerformed(evt);
+            }
+        });
+
+        btn_report.setText("Report");
+        btn_report.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_reportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(40, 40, 40)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addComponent(jScrollPane1)
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_report, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(40, 40, 40)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_viewbyid, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,38 +169,61 @@ public class HistoryView extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_report, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(btn_viewbyid)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 78, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
         cariData();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        // TODO add your handling code here:
-        cariData();
+     cariData();
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        int i = jTable1.getSelectedRow();
-        if (i == -1) return;
+         int i = jTable1.getSelectedRow();
+    if (i == -1) return;
 
-        int productId = (int) jTable1.getValueAt(i, 0);
-        String productName = (String) jTable1.getValueAt(i, 1);
-        double qty = (double) jTable1.getValueAt(i, 2);
-        double price = (double) jTable1.getValueAt(i, 3);
-
-        // Contoh: bisa tampilkan detail di message box
-        JOptionPane.showMessageDialog(this,
-            "Product: " + productName + "\nQty: " + qty + "\nPrice: " + price);
+    selectedTransactionId = (String) jTable1.getValueAt(i, 0); // Ambil kolom ID Transaksi
+    btn_viewbyid.setVisible(true); 
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btn_viewbyidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_viewbyidActionPerformed
+         if (selectedTransactionId != null) {
+        try {
+            int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow != -1) {
+                Sale selectedSale = salesList.get(selectedRow); // Ambil data asli
+
+                new DetailTransaksiView(
+                    Integer.parseInt(selectedSale.getTransactionNo()),
+                    new SimpleDateFormat("dd-MM-yyyy").format(selectedSale.getDate()),
+                    selectedSale.getDiscount(),
+                    selectedSale.getTax(),
+                        selectedSale.getTotalPrice()
+                ).setVisible(true);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal membuka detail transaksi: " + e.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Silakan pilih transaksi terlebih dahulu.");
+    }
+      
+    }//GEN-LAST:event_btn_viewbyidActionPerformed
+
+    private void btn_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reportActionPerformed
+       new ReportModalView().setVisible(true);
+    }//GEN-LAST:event_btn_reportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,26 +242,30 @@ public class HistoryView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HistoryView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HistoryPenjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HistoryView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HistoryPenjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HistoryView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HistoryPenjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HistoryView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HistoryPenjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HistoryView().setVisible(true);
+                new HistoryPenjualan().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_report;
+    private javax.swing.JButton btn_viewbyid;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
