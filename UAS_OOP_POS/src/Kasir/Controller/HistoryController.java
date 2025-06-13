@@ -26,7 +26,7 @@ public class HistoryController {
                 double totalPrice = rs.getDouble("sale_total_price");
                 double totalBayar = rs.getDouble("total_bayar");
 
-                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0, null);
+                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0,0, null);
                 list.add(sale);
             }
         }
@@ -51,7 +51,7 @@ public class HistoryController {
                     double totalPrice = rs.getDouble("sale_total_price");
                     double totalBayar = rs.getDouble("total_bayar");
 
-                    Sale sale = new Sale(id, date, totalPrice, 0, 0, totalBayar, 0, null);
+                    Sale sale = new Sale(id, date, totalPrice, 0, 0, totalBayar, 0, 0,null);
                     list.add(sale);
                 }
             }
@@ -90,7 +90,7 @@ public class HistoryController {
      public Sale getSaleById(int idSale) throws SQLException {
     Sale sale = null;
     String sql = """
-        SELECT id_sale, sale_date, sale_total_price, discount, tax, total_bayar, kembalian
+        SELECT id_sale, sale_date, sale_total_price, discount, tax, total_bayar, kembalian,total_sale_produk
         FROM penjualan
         WHERE id_sale = ?
     """;
@@ -108,15 +108,61 @@ public class HistoryController {
                 double tax = rs.getDouble("tax");
                 double totalBayar = rs.getDouble("total_bayar");
                 double kembalian = rs.getDouble("kembalian");
+                double Totalawal = rs.getDouble("total_sale_produk");
 
                 List<SaleDetail> detailList = getSaleDetailByTransactionId(idSale);
 
-                sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, kembalian, detailList);
+                sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, kembalian, Totalawal, detailList);
             }
         }
     }
 
     return sale;
 }
+     
+     public List<Sale> getFilteredSales(String filter, int month, int year) throws SQLException {
+    List<Sale> list = new ArrayList<>();
+
+    String sql = switch (filter) {
+        case "Bulan" -> """
+            SELECT id_sale, sale_date, discount, tax, sale_total_price, total_bayar 
+              FROM penjualan 
+             WHERE MONTH(sale_date) = ? AND YEAR(sale_date) = ?
+            """;
+        case "Tahun" -> """
+            SELECT id_sale, sale_date, discount, tax, sale_total_price, total_bayar 
+              FROM penjualan 
+             WHERE YEAR(sale_date) = ?
+            """;
+        default -> throw new IllegalArgumentException("Filter tidak valid: " + filter);
+    };
+
+    try (Connection c = DBConnection.getConnection();
+         PreparedStatement pst = c.prepareStatement(sql)) {
+        if ("Bulan".equals(filter)) {
+            pst.setInt(1, month);
+            pst.setInt(2, year);
+        } else if ("Tahun".equals(filter)) {
+            pst.setInt(1, year);
+        }
+
+        try (ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                String id = rs.getString("id_sale");
+                Date date = rs.getDate("sale_date");
+                double discount = rs.getDouble("discount");
+                double tax = rs.getDouble("tax");
+                double totalPrice = rs.getDouble("sale_total_price");
+                double totalBayar = rs.getDouble("total_bayar");
+
+                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0, 0,null);
+                list.add(sale);
+            }
+        }
+    }
+
+    return list;
+}
+
 
 }

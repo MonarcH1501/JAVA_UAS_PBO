@@ -11,9 +11,10 @@ public class Sale {
     private double tax;
     private double totalPay;
     private double kembalian;
+    private double totalAwal;
     private List<SaleDetail> saleDetails;
 
-    public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,double totalPay, double kembalian,List<SaleDetail> saleDetails) {
+    public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,double totalPay, double kembalian,double totalAwal,List<SaleDetail> saleDetails) {
         this.transactionNo = transactionNo;
         this.date = date;
         this.totalPrice = totalPrice;
@@ -22,6 +23,7 @@ public class Sale {
         this.saleDetails = saleDetails;
         this.totalPay = totalPay;
         this.kembalian = kembalian;
+        this.totalAwal = totalAwal;
     }
 
     public double getTotalPay() {
@@ -39,6 +41,14 @@ public class Sale {
     public void setKembalian(double kembalian) {
         this.kembalian = kembalian;
     }
+    
+    public double getTotalAwal() {
+    return totalAwal;
+}
+
+public void setTotalAwal(double totalAwal) {
+    this.totalAwal = totalAwal;
+}
 
     
     
