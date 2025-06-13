@@ -28,7 +28,7 @@ public class SaleController {
 
     public void saveSale(Sale sale) throws Exception {
         Connection c = DBConnection.getConnection();
-        String sql = "INSERT INTO penjualan (sale_date, discount, tax,sale_total_price, total_bayar,kembalian,total_sale_produk) VALUES (?, ?, ?, ?,?,?,?)";
+        String sql = "INSERT INTO penjualan (sale_date, discount, tax,sale_total_price, total_bayar,kembalian,total_price_produk) VALUES (?, ?, ?, ?,?,?,?)";
         PreparedStatement pst = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         pst.setDate(1, new java.sql.Date(sale.getDate().getTime()));

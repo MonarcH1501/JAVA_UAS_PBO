@@ -12,7 +12,7 @@ public class HistoryController {
 
     public List<Sale> loadAllSales() throws SQLException {
         List<Sale> list = new ArrayList<>();
-        String sql = "SELECT id_sale, sale_date, discount, tax , sale_total_price, total_bayar FROM penjualan";
+        String sql = "SELECT id_sale, sale_date, discount, tax , sale_total_price, total_bayar,kembalian,total_price_produk FROM penjualan";
 
         try (Connection c = DBConnection.getConnection();
              Statement stmt = c.createStatement();
@@ -25,8 +25,10 @@ public class HistoryController {
                 double tax =rs.getDouble("tax");
                 double totalPrice = rs.getDouble("sale_total_price");
                 double totalBayar = rs.getDouble("total_bayar");
+                double kembalian = rs.getDouble("kembalian");
+                double Totalawal = rs.getDouble("total_price_produk");
 
-                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0,0, null);
+                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, kembalian,Totalawal, null);
                 list.add(sale);
             }
         }
@@ -108,7 +110,7 @@ public class HistoryController {
                 double tax = rs.getDouble("tax");
                 double totalBayar = rs.getDouble("total_bayar");
                 double kembalian = rs.getDouble("kembalian");
-                double Totalawal = rs.getDouble("total_sale_produk");
+                double Totalawal = rs.getDouble("total_price_produk");
 
                 List<SaleDetail> detailList = getSaleDetailByTransactionId(idSale);
 
