@@ -15,7 +15,6 @@ public class HistoryPenjualan extends javax.swing.JFrame {
     private List<Sale> salesList;
     public HistoryPenjualan() {
         initComponents();
-        btn_viewbyid.setVisible(false);  // Tombol disembunyikan saat awal
         controller = new HistoryController();
         loadData();
     }
@@ -194,7 +193,6 @@ public class HistoryPenjualan extends javax.swing.JFrame {
     if (i == -1) return;
 
     selectedTransactionId = (String) jTable1.getValueAt(i, 0); // Ambil kolom ID Transaksi
-    btn_viewbyid.setVisible(true); 
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btn_viewbyidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_viewbyidActionPerformed
@@ -209,7 +207,10 @@ public class HistoryPenjualan extends javax.swing.JFrame {
                     new SimpleDateFormat("dd-MM-yyyy").format(selectedSale.getDate()),
                     selectedSale.getDiscount(),
                     selectedSale.getTax(),
-                        selectedSale.getTotalPrice()
+                    selectedSale.getTotalPrice(),
+                     selectedSale.getkembalian(),
+                     selectedSale.getTotalAwal()
+                        
                 ).setVisible(true);
             }
         } catch (Exception e) {
