@@ -7,7 +7,7 @@
 	<queryString>
 		<![CDATA[SELECT 
     sd.id_sale,
-    j.sale_date,
+    DATE_FORMAT(j.sale_date, '%e %M %Y') AS sale_date_formatted,
     j.sale_total_price,
     COALESCE(j.discount, 0) AS discount,
     COALESCE(j.tax, 0) AS tax,
@@ -26,14 +26,13 @@ FROM
 JOIN 
     product p ON sd.id_product = p.id_product
 JOIN 
-    penjualan j ON sd.id_sale = j.id_sale]]>
+    penjualan j ON sd.id_sale = j.id_sale;
+]]>
 	</queryString>
 	<field name="id_sale" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="sale_date" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="sale_date_formatted" class="java.lang.String"/>
 	<field name="sale_total_price" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -112,9 +111,9 @@ Berikut adalah rincian pembelian Anda:]]></text>
 				<textFieldExpression><![CDATA["Transaksi = TR-" + $F{id_sale}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="180" y="11" width="180" height="20" uuid="b54e5ed7-6e13-4f35-8b6f-5cbf3361a79e"/>
+				<reportElement x="121" y="11" width="239" height="20" uuid="b54e5ed7-6e13-4f35-8b6f-5cbf3361a79e"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Tanggal Pembelian = " + $F{sale_date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tanggal Pembelian = " + $F{sale_date_formatted}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="39" width="100" height="20" uuid="af5291ee-0c70-4fd0-be49-da75a090f7f4"/>

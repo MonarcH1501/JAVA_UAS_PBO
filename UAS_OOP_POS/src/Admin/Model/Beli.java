@@ -2,6 +2,7 @@
 package Admin.Model;
 
 import Admin.Controller.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Beli {
@@ -11,12 +12,12 @@ public class Beli {
     private Date date;
     private int qty;
     private String unit;
-    private float totalPrice;
+    private BigDecimal totalPrice;
     private int id_supp;
     private int id_product;
 
     // Menampilkan Data di Table
-public Beli (int a, String b, String c, Date d, int f, String g, float h){
+public Beli (int a, String b, String c, Date d, int f, String g, BigDecimal h){
     this.id = a;
     this.product = b;
     this.supplier = c;
@@ -26,7 +27,7 @@ public Beli (int a, String b, String c, Date d, int f, String g, float h){
     this.totalPrice = h;
 }
     // Menambahkan Data di Table
-public Beli (int a, String b, String c, Date d, int f, float h) {
+public Beli (int a, String b, String c, Date d, int f, BigDecimal h) {
     this.id = a;
     this.product = b;
     this.supplier = c;
@@ -101,11 +102,11 @@ public Beli (int a, String b, String c, Date d, int f, float h) {
         this.unit = unit;
     }
 
-    public float getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(float totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

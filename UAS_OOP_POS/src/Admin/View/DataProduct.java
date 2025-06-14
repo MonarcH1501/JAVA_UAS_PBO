@@ -524,32 +524,35 @@ public class DataProduct extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
-        int selectedRow = productTable.getSelectedRow();
-        if(selectedRow != -1) {
-            // Mengambil Nilai Data dari baris yang diplih
-            selectedProductId = Integer.parseInt(productTable.getValueAt(selectedRow, 0).toString());
-            String supplierId = productTable.getValueAt(selectedRow, 1).toString();
-            String productCode = productTable.getValueAt(selectedRow, 2).toString();
-            String productName = productTable.getValueAt(selectedRow, 3).toString();
-            String priceBuy = productTable.getValueAt(selectedRow, 4).toString();
-            String priceSell = productTable.getValueAt(selectedRow, 5).toString();
-            String productUnit = productTable.getValueAt(selectedRow, 6).toString();
-            
-            // Memasukkan nilai ke dalam field input
-            txt_productCode.setText(productCode);
-            txt_productName.setText(productName);
-            txt_priceBuy.setText(priceBuy);
-            txt_priceSell.setText(priceSell);
-            txt_productUnit.setText(productUnit);
-            
-            // Set Nilai supplierCombo
-            for(int i = 0; i < supplierCombo.getItemCount(); i++) {
-                if(supplierCombo.getItemAt(i).startsWith(supplierId + " - ")) {
-                    supplierCombo.setSelectedIndex(i);
-                    break;
-                }
+         int selectedRow = productTable.getSelectedRow();
+    if(selectedRow != -1) {
+        // Ambil nilai kolom dari tabel
+        selectedProductId = Integer.parseInt(productTable.getValueAt(selectedRow, 0).toString());
+        String supplierName = productTable.getValueAt(selectedRow, 1).toString();  // supplierName, bukan ID
+        String productCode = productTable.getValueAt(selectedRow, 2).toString();
+        String productName = productTable.getValueAt(selectedRow, 3).toString();
+        
+        // Format harga bisa mengandung titik/koma/Rp, jadi dibersihkan dulu
+        String priceBuyStr = productTable.getValueAt(selectedRow, 4).toString().replaceAll("[^\\d]", "");
+        String priceSellStr = productTable.getValueAt(selectedRow, 5).toString().replaceAll("[^\\d]", "");
+        
+        String productUnit = productTable.getValueAt(selectedRow, 6).toString();
+
+        // Masukkan ke input field
+        txt_productCode.setText(productCode);
+        txt_productName.setText(productName);
+        txt_priceBuy.setText(priceBuyStr);
+        txt_priceSell.setText(priceSellStr);
+        txt_productUnit.setText(productUnit);
+
+        // Set supplierCombo berdasarkan nama supplier
+        for(int i = 0; i < supplierCombo.getItemCount(); i++) {
+            if(supplierCombo.getItemAt(i).equalsIgnoreCase(supplierName)) {
+                supplierCombo.setSelectedIndex(i);
+                break;
             }
         }
+    }
     }//GEN-LAST:event_productTableMouseClicked
 
     private void btn_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetActionPerformed

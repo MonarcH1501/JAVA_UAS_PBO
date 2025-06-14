@@ -4,6 +4,7 @@ import Admin.Model.Beli;
 import Admin.Model.comboBox;
 import Assets.DBConnection;
 import Admin.View.Pembelian;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -58,7 +59,7 @@ public int insertPembelian (Beli beli) throws SQLException{
     stmt.setInt(2, idSupplier);
     stmt.setDate(3, new java.sql.Date(beli.getDate().getTime()));
     stmt.setInt(4, beli.getQty());
-    stmt.setFloat(5, beli.getTotalPrice());
+    stmt.setBigDecimal(5, beli.getTotalPrice());
     stmt.executeUpdate();   
     return 1;
     } catch (SQLException e) {
@@ -87,7 +88,7 @@ try {
           Date tglBeli = rs.getDate("purchase_date");
           int qtyBeli = rs.getInt("purchase_qty");
           String unitProduct = rs.getString("product_unit");
-          float totalHarga = rs.getFloat("total_price");
+          BigDecimal totalHarga = rs.getBigDecimal("total_price");
         membeli.add(new Beli(idBeli, nameProduct, nameSupplier, tglBeli, qtyBeli, unitProduct, totalHarga));
     }
     
@@ -182,7 +183,7 @@ public int updatePembelian (Beli beli) throws SQLException{
     stmt.setInt(2, idProduct);
     stmt.setDate(3, new java.sql.Date(beli.getDate().getTime()));
     stmt.setInt(4, beli.getQty());
-    stmt.setFloat(5, beli.getTotalPrice());
+    stmt.setBigDecimal(5, beli.getTotalPrice());
     stmt.setInt(6, beli.getId());
     stmt.executeUpdate();  
     return 1;
@@ -266,7 +267,7 @@ public List<Beli> searchPembelian(String text, String column) {
           Date tglBeli = rs.getDate("purchase_date");
           int qtyBeli = rs.getInt("purchase_qty");
           String unitProduct = rs.getString("product_unit");
-          float totalHarga = rs.getFloat("total_price");    
+          BigDecimal totalHarga = rs.getBigDecimal("total_price");    
           
           Pembelian.add(new Beli(idBeli, nameProduct, nameSupplier, tglBeli, qtyBeli, unitProduct, totalHarga));        
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="800" pageHeight="842" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="643f1cb7-3240-457b-835b-e79b3780c424">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="0.9090909090909091"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -44,6 +44,9 @@ ORDER BY p.product_code;]]>
 	<field name="sale_qty" class="java.math.BigDecimal"/>
 	<field name="stok_rusak" class="java.math.BigDecimal"/>
 	<field name="total" class="java.math.BigDecimal"/>
+	<variable name="totalproduct" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{product_code}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -199,6 +202,15 @@ ORDER BY p.product_code;]]>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="143" y="12" width="101" height="20" uuid="1b429516-2076-43c6-8288-6e6eddc38be0"/>
+				<textFieldExpression><![CDATA[$V{totalproduct}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="12" width="100" height="20" uuid="19c9640f-241a-49ba-9817-e887a2466a1a"/>
+				<text><![CDATA[TOTAL PRODUCT:]]></text>
+			</staticText>
+		</band>
 	</summary>
 </jasperReport>

@@ -46,14 +46,14 @@ public class DetailTransaksiView extends javax.swing.JFrame {
         txTanggal.setText(tanggal);
         txDiskon.setText(String.valueOf(discount));
         txPajak.setText(String.valueOf(tax));
-        txTotalBayar.setText(String.valueOf(totalPrice));
+        txTotalBeli.setText(String.valueOf(totalPrice));
         txKembalian.setText(String.valueOf(kembalian));
         txTotalawal.setText(String.valueOf(Totalawal));
         txIdSale.setEditable(false);
         txTanggal.setEditable(false);
         txDiskon.setEditable(false);
         txPajak.setEditable(false);
-        txTotalBayar.setEditable(false);
+        txTotalBeli.setEditable(false);
         
 
         loadDetail();
@@ -97,12 +97,14 @@ public class DetailTransaksiView extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txDiskon = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        txTotalBayar = new javax.swing.JTextField();
+        txTotalBeli = new javax.swing.JTextField();
         btn_cetak = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         txTotalawal = new javax.swing.JTextField();
         txKembalian = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        txTotalBayar = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("History Penjualan");
@@ -182,10 +184,10 @@ public class DetailTransaksiView extends javax.swing.JFrame {
 
         jLabel11.setText("Total");
 
-        txTotalBayar.setEnabled(false);
-        txTotalBayar.addActionListener(new java.awt.event.ActionListener() {
+        txTotalBeli.setEnabled(false);
+        txTotalBeli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txTotalBayarActionPerformed(evt);
+                txTotalBeliActionPerformed(evt);
             }
         });
 
@@ -215,6 +217,15 @@ public class DetailTransaksiView extends javax.swing.JFrame {
 
         jLabel14.setText("Kembalian");
 
+        jLabel15.setText("Total Bayar");
+
+        txTotalBayar.setEnabled(false);
+        txTotalBayar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txTotalBayarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -237,13 +248,15 @@ public class DetailTransaksiView extends javax.swing.JFrame {
                     .addComponent(jLabel12)
                     .addComponent(jLabel13)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel14))
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel15))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txTotalawal)
-                        .addComponent(txTotalBayar)
-                        .addComponent(txKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txTotalBeli)
+                        .addComponent(txKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txTotalBayar))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txPajak, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -290,12 +303,16 @@ public class DetailTransaksiView extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(txTotalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
+                            .addComponent(txTotalBeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14))))
-                .addGap(68, 68, 68))
+                            .addComponent(jLabel15)
+                            .addComponent(txTotalBayar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(txKembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50))
         );
 
         pack();
@@ -317,16 +334,16 @@ public class DetailTransaksiView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txDiskonActionPerformed
 
-    private void txTotalBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txTotalBayarActionPerformed
+    private void txTotalBeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txTotalBeliActionPerformed
 
-    }//GEN-LAST:event_txTotalBayarActionPerformed
+    }//GEN-LAST:event_txTotalBeliActionPerformed
 
     private void btn_cetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakActionPerformed
   try {
         JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Struk.jrxml");
          String sql = "SELECT \n" +
 "    sd.id_sale,\n" +
-"    j.sale_date,\n" +
+"    DATE_FORMAT(j.sale_date, '%e %M %Y') AS sale_date_formatted,\n" +
 "    j.sale_total_price,\n" +
 "    COALESCE(j.discount, 0) AS discount,\n" +
 "    COALESCE(j.tax, 0) AS tax,\n" +
@@ -345,8 +362,8 @@ public class DetailTransaksiView extends javax.swing.JFrame {
 "JOIN \n" +
 "    product p ON sd.id_product = p.id_product\n" +
 "JOIN \n" +
-"    penjualan j ON sd.id_sale = j.id_sale "
-                 + "WHERE sd.id_sale = $P{id_sale}";
+"    penjualan j ON sd.id_sale = j.id_sale \n" +
+                  "WHERE sd.id_sale = $P{id_sale}";
          
          JRDesignQuery newQuery = new JRDesignQuery();
          newQuery.setText(sql);
@@ -356,7 +373,7 @@ public class DetailTransaksiView extends javax.swing.JFrame {
          
         // Koneksi database
         Connection conn = DBConnection.getConnection();
-        JOptionPane.showMessageDialog(null, "Connected!");
+//        JOptionPane.showMessageDialog(null, "Connected!");
         
         System.out.println(idSale);
         Map<String, Object> param = new HashMap<>();
@@ -378,6 +395,10 @@ public class DetailTransaksiView extends javax.swing.JFrame {
     private void txKembalianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txKembalianActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txKembalianActionPerformed
+
+    private void txTotalBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txTotalBayarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txTotalBayarActionPerformed
 
     static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -418,6 +439,7 @@ public class DetailTransaksiView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -431,6 +453,7 @@ public class DetailTransaksiView extends javax.swing.JFrame {
     private javax.swing.JTextField txPajak;
     private javax.swing.JTextField txTanggal;
     private javax.swing.JTextField txTotalBayar;
+    private javax.swing.JTextField txTotalBeli;
     private javax.swing.JTextField txTotalawal;
     // End of variables declaration//GEN-END:variables
 }

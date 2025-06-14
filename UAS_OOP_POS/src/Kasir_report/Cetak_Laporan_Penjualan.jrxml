@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a4b964f-6794-49a1-ad9e-f33bc278e1fd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="month" class="java.lang.Integer"/>
+	<parameter name="year" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 
+      id_sale,
+      sale_date,
+      DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted,
+      sale_total_price,
+      FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted,
+      total_bayar,
+      FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted
+    FROM penjualan
+    WHERE ($P{filterMode} = 'Semua')
+       OR ($P{filterMode} = 'Bulan' AND MONTH(sale_date) = $P{month} AND YEAR(sale_date) = $P{year})
+       OR ($P{filterMode} = 'Tahun' AND YEAR(sale_date) = $P{year})]]>
+	</queryString>
+	<field name="id_sale" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sale_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sale_date_formatted" class="java.lang.String"/>
+	<field name="sale_total_price" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sale_total_price_formatted" class="java.lang.String"/>
+	<field name="total_bayar" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_bayar_formatted" class="java.lang.String"/>
+	<variable name="TotalPembelian" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{sale_total_price}]]></variableExpression>
+	</variable>
+	<variable name="JumlahTransaksi" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{id_sale}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Transparent" x="168" y="20" width="218" height="38" uuid="7ebe59a9-ab32-48a9-ae42-61a3e3d4897d"/>
+				<textElement>
+					<font size="28" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[SUPERMARKET]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="7" width="168" height="20" uuid="67ab19d0-717b-4f01-a8c3-61ffc8abe731"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Penjualan Product]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="7" width="14" height="20" uuid="e5e68c3f-da7c-4719-bd12-9df14edd8d76"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="7" width="47" height="20" uuid="d9095b88-9154-4e43-af67-aca8c46bcac7"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="7" width="61" height="20" uuid="3f2a5afe-a4e1-4d53-a1dd-699b9bd76bbd"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Beli]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="421" y="7" width="68" height="20" uuid="787c5dea-ace8-4718-8aa1-97432ae8146a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Bayar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="11" width="70" height="20" uuid="51edd486-d1ef-4534-8ebd-94d70789ce6d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TR-" + $F{id_sale}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="96" y="11" width="134" height="20" uuid="1362a046-e215-4178-9c23-6edc3eba14cc"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sale_date_formatted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="271" y="11" width="134" height="20" uuid="efddc157-d94b-4a05-9ce9-e7bf9d3fc327"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp, " + $F{sale_total_price_formatted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="421" y="11" width="134" height="20" uuid="eb4ee3fa-7113-4367-9664-69b2c41eaf8a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp, " + $F{total_bayar_formatted}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement mode="Transparent" x="0" y="10" width="555" height="1" uuid="d76d80c8-51d8-42f7-88c5-0b95229d60ac"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="435" y="11" width="80" height="20" uuid="1656e69b-3053-448f-875f-2e011530b29b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="11" width="40" height="20" uuid="a782f04b-d8da-4f0f-931d-0bee8a727d7f"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="158" y="49" width="100" height="20" uuid="99b69b81-34ea-49b7-9d0c-434b913abecf"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total Pembelian :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="271" y="49" width="100" height="20" uuid="ed496f81-79fd-46e8-8888-a38502f68637"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp, " + $V{TotalPembelian}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="49" width="96" height="20" uuid="b37ac674-f2f9-41eb-b443-da047793fc1c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Total Transaksi :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="101" y="49" width="47" height="20" uuid="b8dc1301-45b5-41ca-b0a7-7d77ee42c5b3"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{JumlahTransaksi}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Transparent" x="0" y="14" width="555" height="1" uuid="6cc996de-c119-4af7-96b1-9f81d25498a0"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement mode="Transparent" x="0" y="26" width="555" height="1" uuid="7f593f19-52ef-4c42-b834-a51d85e55290"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

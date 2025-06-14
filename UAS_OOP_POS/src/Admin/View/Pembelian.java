@@ -7,10 +7,12 @@ import Admin.Model.Beli;
 import Admin.Controller.BeliDAO;
 import Admin.Controller.autoBox;
 import Admin.Model.comboBox;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
@@ -414,29 +416,30 @@ public class Pembelian extends javax.swing.JPanel {
         }
     }
         
-    private void loadPembelianData() throws SQLException{
-        BeliDAO suppDAO = new BeliDAO();
-        List<Beli> beli = suppDAO.getBeli();
-        String[][] data = new String[beli.size()][7];
-        
-        SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy");
-        
-        for(int i = 0; i < beli.size(); i++) {
+   private void loadPembelianData() throws SQLException {
+    BeliDAO suppDAO = new BeliDAO();
+    List<Beli> beli = suppDAO.getBeli();
+    String[][] data = new String[beli.size()][7];
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy");
+    DecimalFormat decimalFormat = new DecimalFormat("#,###"); // Tambahkan ini
+
+    for (int i = 0; i < beli.size(); i++) {
         data[i][0] = String.valueOf(beli.get(i).getId());
         data[i][1] = beli.get(i).getProduct();
         data[i][2] = beli.get(i).getSupplier();
-        
+
         Date tanggal = beli.get(i).getDate();
         data[i][3] = dateFormat.format(tanggal);
-        
+
         data[i][4] = String.valueOf(beli.get(i).getQty());
         data[i][5] = beli.get(i).getUnit();
-        data[i][6] = String.valueOf(beli.get(i).getTotalPrice());
+        data[i][6] = decimalFormat.format(beli.get(i).getTotalPrice()); // Gunakan formatter
     }
-        String[] columnName = {"ID", "Nama Product", "Nama Supplier", "Tanggal Beli", "Jumlah Product", "Satuan", "Total Harga"};
-        table_pembelian.setModel(new javax.swing.table.DefaultTableModel(data, columnName));
-    }
-    
+
+    String[] columnName = {"ID", "Nama Product", "Nama Supplier", "Tanggal Beli", "Jumlah Product", "Satuan", "Total Harga"};
+    table_pembelian.setModel(new javax.swing.table.DefaultTableModel(data, columnName));
+}
     private void clearForm() {
     jumlah_pembelian.setText("");
     date_pembelian.setDate(null);
@@ -465,7 +468,7 @@ public class Pembelian extends javax.swing.JPanel {
            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
        } else {
             int qtyPembelian = Integer.parseInt(qtyPembelianStr);
-            float totalPembelian = Float.parseFloat(totalPembelianStr);
+           BigDecimal totalPembelian = new BigDecimal(totalPembelianStr.replaceAll("[^\\d.]", ""));
            
            Beli addBeli = new Beli(0, namaProduct, namaSupplier, tanggalPembelian, qtyPembelian, totalPembelian);
            BeliDAO beliDAO;
@@ -503,7 +506,8 @@ public class Pembelian extends javax.swing.JPanel {
            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
        } else {
             int qtyPembelian = Integer.parseInt(qtyPembelianStr);
-            float totalPembelian = Float.parseFloat(totalPembelianStr);
+           BigDecimal totalPembelian = new BigDecimal(totalPembelianStr.replaceAll("[^\\d.]", ""));
+
        if(selectedPembelianId != -1) {
            Beli updateBeli = new Beli(selectedPembelianId, namaProduct, namaSupplier, tanggalPembelian, qtyPembelian, totalPembelian);
            BeliDAO beliDAO;
@@ -530,22 +534,25 @@ public class Pembelian extends javax.swing.JPanel {
 
     private void table_pembelianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_pembelianMouseClicked
     int selectedRow = table_pembelian.getSelectedRow();
-    if(selectedRow != -1){
+    if (selectedRow != -1) {
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy"); 
         String dateString = table_pembelian.getValueAt(selectedRow, 3).toString();
         
-        float hargaFloat = Float.parseFloat(table_pembelian.getValueAt(selectedRow, 6).toString());
-        int hargaInteger = (int) hargaFloat; 
-        
+        String hargaStr = table_pembelian.getValueAt(selectedRow, 6).toString();
+        hargaStr = hargaStr.replaceAll("[^\\d]", ""); // Hapus karakter non-digit
+        long hargaInteger = Long.parseLong(hargaStr);
+
         selectedPembelianId = Integer.parseInt(table_pembelian.getValueAt(selectedRow, 0).toString());
         product_pembelian.setSelectedItem(table_pembelian.getValueAt(selectedRow, 1).toString());
         supp_pembelian.setSelectedItem(table_pembelian.getValueAt(selectedRow, 2).toString());
+        
         try {
             date_pembelian.setDate(dateFormat.parse(dateString));
         } catch (ParseException ex) {
             System.out.println("Error Date!");
         }
+        
         jumlah_pembelian.setText(table_pembelian.getValueAt(selectedRow, 4).toString());
         satuan_pembelian.setText(table_pembelian.getValueAt(selectedRow, 5).toString());
         harga_pembelian.setText(String.valueOf(hargaInteger));

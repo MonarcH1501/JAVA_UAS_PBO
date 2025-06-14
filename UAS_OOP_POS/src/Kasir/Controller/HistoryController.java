@@ -127,12 +127,12 @@ public class HistoryController {
 
     String sql = switch (filter) {
         case "Bulan" -> """
-            SELECT id_sale, sale_date, discount, tax, sale_total_price, total_bayar 
+            SELECT id_sale, sale_date, sale_total_price, total_bayar 
               FROM penjualan 
              WHERE MONTH(sale_date) = ? AND YEAR(sale_date) = ?
             """;
         case "Tahun" -> """
-            SELECT id_sale, sale_date, discount, tax, sale_total_price, total_bayar 
+            SELECT id_sale, sale_date, sale_total_price, total_bayar 
               FROM penjualan 
              WHERE YEAR(sale_date) = ?
             """;
@@ -152,12 +152,10 @@ public class HistoryController {
             while (rs.next()) {
                 String id = rs.getString("id_sale");
                 Date date = rs.getDate("sale_date");
-                double discount = rs.getDouble("discount");
-                double tax = rs.getDouble("tax");
                 double totalPrice = rs.getDouble("sale_total_price");
                 double totalBayar = rs.getDouble("total_bayar");
 
-                Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, 0, 0,null);
+                Sale sale = new Sale(id, date, totalPrice, 0, 0, totalBayar, 0, 0,null);
                 list.add(sale);
             }
         }
