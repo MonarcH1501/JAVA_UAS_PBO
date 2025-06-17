@@ -1,14 +1,29 @@
 package Kasir.View;
 
+import Assets.DBConnection;
 import Kasir.Controller.SaleController;
 import Kasir.Model.Sale;
 import Kasir.Model.SaleDetail;
+import java.sql.Connection;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class PenjualanView extends javax.swing.JFrame {
 
@@ -126,8 +141,10 @@ public class PenjualanView extends javax.swing.JFrame {
     }
             private void hitungKembalian() {
             try {
-                double totalBayar = Double.parseDouble(txTotalBayar.getText());
-                double bayar = Double.parseDouble(txBayar.getText());
+//                double totalBayar = Double.parseDouble(txTotalBayar.getText());
+//                double bayar = Double.parseDouble(txBayar.getText());
+              double totalBayar = parseDoubleLocale(txTotalBayar.getText());
+              double bayar = parseDoubleLocale(txBayar.getText());
 
                 if (bayar < totalBayar) {
                     txKembalian.setText("0");
@@ -135,7 +152,7 @@ public class PenjualanView extends javax.swing.JFrame {
                     double kembalian = bayar - totalBayar;
                     txKembalian.setText(String.format("%.2f", kembalian));
                 }
-            } catch (NumberFormatException e) {
+            } catch (ParseException e) {
                 txKembalian.setText("0");
             }
         }
@@ -492,6 +509,11 @@ public class PenjualanView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
+    private double parseDoubleLocale(String text) throws ParseException {
+    NumberFormat nf = NumberFormat.getInstance(new Locale("id", "ID"));
+    return nf.parse(text).doubleValue();
+}
+    
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
        if (saleDetails.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tidak ada data transaksi untuk disimpan.");
@@ -499,27 +521,42 @@ public class PenjualanView extends javax.swing.JFrame {
         }
 
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Date tanggal = sdf.parse(txTanggal.getText());
-            double discount = Double.parseDouble(txDiskon.getText());
-            double tax = Double.parseDouble(txPajak.getText());
-            double totalPay = Double.parseDouble(txBayar.getText());
-            double kembalian = Double.parseDouble(txKembalian.getText());
-            double Totalawal = Double.parseDouble(txTotalawal.getText());
+//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//            Date tanggal = sdf.parse(txTanggal.getText());
+//            double discount = Double.parseDouble(txDiskon.getText());
+//            double tax = Double.parseDouble(txPajak.getText());
+//            double totalPay = Double.parseDouble(txBayar.getText());
+//            double kembalian = Double.parseDouble(txKembalian.getText());
+//            double Totalawal = Double.parseDouble(txTotalawal.getText());
+//
+//            double totalBayar = Double.parseDouble(txTotalBayar.getText());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date tanggal = sdf.parse(txTanggal.getText());
 
-            double totalBayar = Double.parseDouble(txTotalBayar.getText());
+        double discount   = parseDoubleLocale(txDiskon.getText());
+        double tax        = parseDoubleLocale(txPajak.getText());
+        double totalPay   = parseDoubleLocale(txBayar.getText());
+        double kembalian  = parseDoubleLocale(txKembalian.getText());
+        double totalAwal  = parseDoubleLocale(txTotalawal.getText());
+        double totalBayar = parseDoubleLocale(txTotalBayar.getText());
 
-            Sale sale = new Sale(txNoTransaksi.getText(), tanggal, totalBayar,discount, tax, totalPay, kembalian,Totalawal , saleDetails);
-            saleController.saveSale(sale);
 
-            JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan!");
-
-            // Reset form
+            Sale sale = new Sale(txNoTransaksi.getText(), tanggal, totalBayar,discount, tax, totalPay, kembalian, totalAwal , saleDetails);
+            int generatedId = saleController.saveSale(sale);
+            System.out.println(generatedId);
             saleDetails.clear();
             loadTable();
             initForm();
 
+             if (generatedId > 0) {
+            JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan!\nID Sale: " + generatedId);
+
+            loadReport(generatedId);
+
+        } 
+
         } catch (Exception e) {
+            e.printStackTrace(); 
             JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + e.getMessage());
         }
     }//GEN-LAST:event_btnSimpanActionPerformed
@@ -540,8 +577,10 @@ public class PenjualanView extends javax.swing.JFrame {
 
     private void txTotalBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txTotalBayarActionPerformed
          try {
-                double totalBayar = Double.parseDouble(txTotalBayar.getText());
-                double bayar = Double.parseDouble(txBayar.getText());
+//                double totalBayar = Double.parseDouble(txTotalBayar.getText());
+//                double bayar = Double.parseDouble(txBayar.getText());
+                double totalBayar = parseDoubleLocale(txTotalBayar.getText());
+                double bayar = parseDoubleLocale(txBayar.getText());
 
                 if (bayar < totalBayar) {
                     JOptionPane.showMessageDialog(this, "Uang tidak cukup untuk melakukan pembayaran");
@@ -549,7 +588,7 @@ public class PenjualanView extends javax.swing.JFrame {
                     double kembalian = bayar - totalBayar;
                     txKembalian.setText(String.format("%.2f", kembalian));
                 }
-            } catch (NumberFormatException e) {
+            } catch (ParseException e) {
                 JOptionPane.showMessageDialog(this, "Masukkan nilai yang valid untuk pembayaran.");
             }
     }//GEN-LAST:event_txTotalBayarActionPerformed
@@ -565,7 +604,57 @@ public class PenjualanView extends javax.swing.JFrame {
     private void txTotalawalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txTotalawalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txTotalawalActionPerformed
+    
+    public void loadReport(int id){
+        try {
+        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Struk.jrxml");
+         String sql = "SELECT \n" +
+"    sd.id_sale,\n" +
+"    DATE_FORMAT(j.sale_date, '%e %M %Y') AS sale_date_formatted,\n" +
+"    j.sale_total_price,\n" +
+"    COALESCE(j.discount, 0) AS discount,\n" +
+"    COALESCE(j.tax, 0) AS tax,\n" +
+"    j.total_bayar,\n" +
+"    j.kembalian,\n" +
+"    sd.id_product,\n" +
+"    p.product_name,\n" +
+"    sd.sale_qty,\n" +
+"    sd.sale_price,\n" +
+"    sd.sale_qty * sd.sale_price AS total_price_produk,\n" +
+"    (sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100) AS total_discount,\n" +
+"    ((sd.sale_qty * sd.sale_price) - ((sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100))) \n" +
+"    * (COALESCE(j.tax, 0) / 100) AS total_tax\n" +
+"FROM \n" +
+"    sale_details sd\n" +
+"JOIN \n" +
+"    product p ON sd.id_product = p.id_product\n" +
+"JOIN \n" +
+"    penjualan j ON sd.id_sale = j.id_sale \n" +
+                  "WHERE sd.id_sale = $P{id_sale}";
+         
+         JRDesignQuery newQuery = new JRDesignQuery();
+         newQuery.setText(sql);
+         jd.setQuery(newQuery);
+         
+         JasperReport js = JasperCompileManager.compileReport(jd);
+         
+        // Koneksi database
+        Connection conn = DBConnection.getConnection();
+//        JOptionPane.showMessageDialog(null, "Connected!");
+        
+        System.out.println(id);
+        Map<String, Object> param = new HashMap<>();
+        param.put("id_sale", id);
 
+        JasperPrint jp = JasperFillManager.fillReport(js, param, conn);
+        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
+         
+     } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form tambah data.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+    
     /**
      * @param args the command line arguments
      */
