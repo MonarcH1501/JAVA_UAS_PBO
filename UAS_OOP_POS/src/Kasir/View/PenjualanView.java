@@ -1,144 +1,146 @@
-package Kasir.View;
+    package Kasir.View;
 
-import Assets.DBConnection;
-import Kasir.Controller.SaleController;
-import Kasir.Model.Sale;
-import Kasir.Model.SaleDetail;
-import java.sql.Connection;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
+    import Assets.DBConnection;
+    import Kasir.Controller.SaleController;
+    import Kasir.Model.Sale;
+    import Kasir.Model.SaleDetail;
+    import java.sql.Connection;
+    import java.text.NumberFormat;
+    import java.text.ParseException;
+    import java.text.SimpleDateFormat;
+    import java.util.ArrayList;
+    import java.util.Date;
+    import java.util.HashMap;
+    import java.util.List;
+    import java.util.Locale;
+    import java.util.Map;
+    import javax.swing.JOptionPane;
+    import javax.swing.table.DefaultTableModel;
+    import net.sf.jasperreports.engine.JasperCompileManager;
+    import net.sf.jasperreports.engine.JasperFillManager;
+    import net.sf.jasperreports.engine.JasperPrint;
+    import net.sf.jasperreports.engine.JasperReport;
+    import net.sf.jasperreports.engine.design.JRDesignQuery;
+    import net.sf.jasperreports.engine.design.JasperDesign;
+    import net.sf.jasperreports.engine.xml.JRXmlLoader;
+    import net.sf.jasperreports.view.JasperViewer;
 
-public class PenjualanView extends javax.swing.JFrame {
+    public class PenjualanView extends javax.swing.JFrame {
 
-     private DefaultTableModel model;
-    private SaleController saleController;
-    private List<SaleDetail> saleDetails;
+         private DefaultTableModel model;
+        private SaleController saleController;
+        private List<SaleDetail> saleDetails;
 
-  public PenjualanView() {
-        initComponents();
+      public PenjualanView() {
+            initComponents();
 
-        model = new DefaultTableModel();
-        jTable1.setModel(model);
+            model = new DefaultTableModel();
+            jTable1.setModel(model);
 
-        model.addColumn("No Transaksi");
-        model.addColumn("ID Barang");
-        model.addColumn("Nama Barang");
-        model.addColumn("Jumlah");
-        model.addColumn("Harga");
-        model.addColumn("Total");
+            model.addColumn("No Transaksi");
+            model.addColumn("ID Barang");
+            model.addColumn("Nama Barang");
+            model.addColumn("Jumlah");
+            model.addColumn("Harga");
+            model.addColumn("Total");
 
-        saleController = new SaleController();
-        saleDetails = new ArrayList<>();
-        txPajak.setText("11");
-        txDiskon.setText("0");
+            saleController = new SaleController();
+            saleDetails = new ArrayList<>();
+            txPajak.setText("11");
+            txDiskon.setText("0");
 
-        initForm();
-    }
-
-    private void initForm() {
-
-        txDiskon.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                updateTotalBayar();
-            }
-        });
-
-        txPajak.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                updateTotalBayar();
-            }
-        });
-
-        txBayar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                hitungKembalian();
-            }
-        });
-
-        try {
-            txNoTransaksi.setText(saleController.generateTransactionNo());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal generate nomor transaksi");
+            initForm();
         }
-        Date now = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        txTanggal.setText(sdf.format(now));
 
-        clearPaymentFields();
-        clearInputFields();
-        updateTotalBayar();
-    }
+        private void initForm() {
 
-    private void clearInputFields() {
-        txIDBarang.setText("");
-        txNamaBarang.setText("");
-        txHarga.setText("");
-        txJumlah.setText("");
-    }
+            txDiskon.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    updateTotalBayar();
+                }
+            });
 
-    private void clearPaymentFields() {
-        txTotalBayar.setText("0");
-        txBayar.setText("0");
-        txKembalian.setText("0");
-        txTampil.setText("Rp. 0");
-    }
+            txPajak.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    updateTotalBayar();
+                }
+            });
 
-   private void updateTotalBayar() {
-            double total = 0;
-            for (SaleDetail detail : saleDetails) {
-                total += detail.getTotal();
-            }
-            txTotalawal.setText(String.format("%.2f", total));
-            
-            double discount = 0;
-            double tax = 0;
+            txBayar.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    hitungKembalian();
+                }
+            });
 
             try {
-                discount = Double.parseDouble(txDiskon.getText());
-                tax = Double.parseDouble(txPajak.getText());
-            } catch (NumberFormatException e) {
-                // dibiarkan 0 jika input salah
+                txNoTransaksi.setText(saleController.generateTransactionNo());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal generate nomor transaksi");
+            }
+            Date now = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            txTanggal.setText(sdf.format(now));
+
+            clearPaymentFields();
+            clearInputFields();
+            updateTotalBayar();
+        }
+
+        private void clearInputFields() {
+            txIDBarang.setText("");
+            txNamaBarang.setText("");
+            txHarga.setText("");
+            txJumlah.setText("");
+        }
+
+        private void clearPaymentFields() {
+            txTotalBayar.setText("0");
+            txBayar.setText("0");
+            txKembalian.setText("0");
+            txTampil.setText("Rp. 0");
+        }
+
+       private void updateTotalBayar() {
+                double total = 0;
+                for (SaleDetail detail : saleDetails) {
+                    total += detail.getTotal();
+                }
+                txTotalawal.setText(String.format("%.2f", total));
+
+                double discount = 0;
+                double tax = 0;
+
+                try {
+                    discount = Double.parseDouble(txDiskon.getText());
+                    tax = Double.parseDouble(txPajak.getText());
+                } catch (NumberFormatException e) {
+                    // dibiarkan 0 jika input salah
+                }
+
+                double afterDiscount = total - (total * discount / 100);
+
+                double afterTax = afterDiscount + (afterDiscount * tax / 100);
+
+                NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH   );
+                txTotalBayar.setText(nf.format(afterTax));
+                txTampil.setText("Rp " + nf.format(afterTax));
+
             }
 
-            double afterDiscount = total - (total * discount / 100);
 
-            double afterTax = afterDiscount + (afterDiscount * tax / 100);
-
-            txTotalBayar.setText(String.format("%.2f", afterTax));
-            txTampil.setText("Rp " + String.format("%.2f", afterTax));
+        private void loadTable() {
+            model.setRowCount(0); // clear existing rows
+            for (SaleDetail detail : saleDetails) {
+                model.addRow(new Object[]{
+                    txNoTransaksi.getText(),
+                    detail.getProductId(),
+                    detail.getProductName(),
+                    detail.getQuantity(),
+                    detail.getPrice(),
+                    detail.getTotal()
+                });
+            }
         }
-
-
-    private void loadTable() {
-        model.setRowCount(0); // clear existing rows
-        for (SaleDetail detail : saleDetails) {
-            model.addRow(new Object[]{
-                txNoTransaksi.getText(),
-                detail.getProductId(),
-                detail.getProductName(),
-                detail.getQuantity(),
-                detail.getPrice(),
-                detail.getTotal()
-            });
-        }
-    }
             private void hitungKembalian() {
             try {
 //                double totalBayar = Double.parseDouble(txTotalBayar.getText());
@@ -478,23 +480,49 @@ public class PenjualanView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-         try {
-            int idBarang = Integer.parseInt(txIDBarang.getText());
-            String namaBarang = txNamaBarang.getText();
-            double harga = Double.parseDouble(txHarga.getText());
-            double jumlah = Double.parseDouble(txJumlah.getText());
+        try {
+        int idBarang = Integer.parseInt(txIDBarang.getText());
+        String namaBarang = txNamaBarang.getText();
+        double harga = Double.parseDouble(txHarga.getText());
+        double jumlah = Double.parseDouble(txJumlah.getText());
 
-            SaleDetail detail = new SaleDetail(0,idBarang, namaBarang, jumlah, harga);
-            saleDetails.add(detail);
-
-            loadTable();
-            updateTotalBayar();
-            clearInputFields();
-            txIDBarang.requestFocus();
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Masukkan jumlah dan harga yang valid!");
+        if (jumlah <= 0 || harga <= 0) {
+            JOptionPane.showMessageDialog(this, "Jumlah dan harga harus lebih dari 0!");
+            return;
         }
+
+        boolean found = false;
+
+        for (SaleDetail detail : saleDetails) {
+            if (detail.getProductId() == idBarang) {
+                double newQuantity = detail.getQuantity() + jumlah;
+                detail.setQuantity(newQuantity);
+
+                // Opsional: update harga jika berubah
+                if (detail.getPrice() != harga) {
+                    detail.setPrice(harga);
+                }
+
+                found = true;
+                break;
+            }
+        }
+
+        // Jika belum ada, tambahkan sebagai item baru
+        if (!found) {
+            SaleDetail detail = new SaleDetail(0, idBarang, namaBarang, jumlah, harga);
+            saleDetails.add(detail);
+        }
+
+        loadTable();        
+        updateTotalBayar();  
+        clearInputFields(); 
+        txIDBarang.requestFocus();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Masukkan jumlah dan harga yang valid!");
+    }
+
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
@@ -503,14 +531,15 @@ public class PenjualanView extends javax.swing.JFrame {
             saleDetails.remove(row);
             loadTable();
             updateTotalBayar();
-            clearPaymentFields();
+            hitungKembalian();
+//            clearPaymentFields();
         } else {
             JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus");
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private double parseDoubleLocale(String text) throws ParseException {
-    NumberFormat nf = NumberFormat.getInstance(new Locale("id", "ID"));
+     NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
     return nf.parse(text).doubleValue();
 }
     

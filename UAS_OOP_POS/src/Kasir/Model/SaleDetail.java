@@ -18,12 +18,33 @@ public class SaleDetail {
     public double getTotal() {
         return quantity * price;
     }
-    
-    public int getIdSale()        { return idSale; }
-    public int getProductId() { return productId; }
-    public String getProductName() { return productName; }
-    public double getQuantity() { return quantity; }
-    public double getPrice() { return price; }
-    
-    
+
+    public int getIdSale() {
+        return idSale;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    // Setter yang ditambahkan
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

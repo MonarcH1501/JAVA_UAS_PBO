@@ -1,4 +1,4 @@
-package Kasir.Model;
+    package Kasir.Model;
 
 import java.util.Date;
 import java.util.List;
