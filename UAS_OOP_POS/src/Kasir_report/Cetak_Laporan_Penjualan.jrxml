@@ -34,7 +34,7 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="total_bayar_formatted" class="java.lang.String"/>
-	<variable name="TotalPembelian" class="java.lang.Long" calculation="Sum">
+	<variable name="TotalPembelian" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{sale_total_price}]]></variableExpression>
 	</variable>
 	<variable name="JumlahTransaksi" class="java.lang.Integer" calculation="Count">
@@ -161,12 +161,12 @@
 				</textElement>
 				<text><![CDATA[Total Pembelian :]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="&apos;Rp,&apos; #,##0">
 				<reportElement x="271" y="49" width="100" height="20" uuid="ed496f81-79fd-46e8-8888-a38502f68637"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Rp, " + $V{TotalPembelian}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{TotalPembelian}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="49" width="96" height="20" uuid="b37ac674-f2f9-41eb-b443-da047793fc1c"/>

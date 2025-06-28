@@ -6,7 +6,9 @@ package Admin.Controller;
 import Admin.Model.*;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTable;
 import javax.swing.JOptionPane;
@@ -39,15 +41,22 @@ public class TableProduct {
         
         tb.setRowCount(0);
         
-         DecimalFormat formatHarga = new DecimalFormat("#,###");
+//         DecimalFormat formatHarga = new DecimalFormat("#,###");
+        NumberFormat formatHarga = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         
         try {
             List<Product> products = productDB.getProduct();
             
             
             for(Product p : products) {
-            String hargaBeli = formatHarga.format(p.getPrice_buy());
-            String hargaJual = formatHarga.format(p.getPrice_sell());
+//            String hargaBeli = formatHarga.format(p.getPrice_buy());
+//            String hargaJual = formatHarga.format(p.getPrice_sell());
+            String hargaBeli = formatHarga.format(p.getPrice_buy())
+                                           .replace("Rp", "Rp ")
+                                           .replace(",00", "");
+            String hargaJual = formatHarga.format(p.getPrice_sell())
+                                           .replace("Rp", "Rp ")
+                                           .replace(",00", "");
                 tb.addRow(new Object[] {
                     p.getId_product(),
 //                    p.getId_supplier() + " - " + 

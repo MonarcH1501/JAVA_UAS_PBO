@@ -4,11 +4,13 @@ import Kasir.Controller.HistoryController;
 import Kasir.Model.Sale;
 import Kasir.Model.SaleDetail;
 import java.sql.Connection;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -30,8 +32,9 @@ public class DetailTransaksiView extends javax.swing.JFrame {
     private final double totalPrice;
     private final double kembalian;
     private final double Totalawal;
+    private final double Totalpay;
     
-    public DetailTransaksiView(int idSale, String tanggal, double discount, double tax,double totalPrice, double kembalian , double Totalawal) {
+    public DetailTransaksiView(int idSale, String tanggal, double discount, double tax,double totalPrice, double kembalian , double Totalawal, double Totalpay) {
         this.idSale = idSale;
         this.tanggal = tanggal;
         this.discount = discount;
@@ -39,16 +42,20 @@ public class DetailTransaksiView extends javax.swing.JFrame {
         this.totalPrice = totalPrice;
         this.kembalian = kembalian;
         this.Totalawal = Totalawal;
+        this.Totalpay = Totalpay;
         controller = new HistoryController();
         initComponents();
-
+        
+        NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
         txIdSale.setText(String.valueOf(idSale));
         txTanggal.setText(tanggal);
-        txDiskon.setText(String.valueOf(discount));
-        txPajak.setText(String.valueOf(tax));
-        txTotalBeli.setText(String.valueOf(totalPrice));
-        txKembalian.setText(String.valueOf(kembalian));
-        txTotalawal.setText(String.valueOf(Totalawal));
+        txDiskon.setText(discount + "%");
+        txPajak.setText(tax + "%");
+        txTotalBeli.setText(rupiah.format(totalPrice).replace("Rp", "Rp ").replace(",00", ""));
+        txKembalian.setText(rupiah.format(kembalian).replace("Rp", "Rp ").replace(",00", ""));
+        txTotalawal.setText(rupiah.format(Totalawal).replace("Rp", "Rp ").replace(",00", ""));
+        txTotalBayar.setText(rupiah.format(Totalpay).replace("Rp", "Rp ").replace(",00", ""));
         txIdSale.setEditable(false);
         txTanggal.setEditable(false);
         txDiskon.setEditable(false);
@@ -67,9 +74,14 @@ public class DetailTransaksiView extends javax.swing.JFrame {
         try {
             List<SaleDetail> details = controller.getSaleDetailByTransactionId(idSale);
             int no = 1;
+            
+             NumberFormat rupiahFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+            
             for (SaleDetail d : details) {
                 double total = d.getQuantity() * d.getPrice();
-                model.addRow(new Object[]{no++, d.getProductName(), d.getQuantity(), d.getPrice(), total});
+                String hargaFormatted = rupiahFormat.format(d.getPrice()).replace(",00", "").replace("Rp", "Rp ");
+                String totalFormatted = rupiahFormat.format(total).replace(",00", "").replace("Rp", "Rp ");
+                model.addRow(new Object[]{no++, d.getProductName(), d.getQuantity(), hargaFormatted, totalFormatted});
             }
             tbl_detailtransaksi.setModel(model);
         } catch (Exception e) {

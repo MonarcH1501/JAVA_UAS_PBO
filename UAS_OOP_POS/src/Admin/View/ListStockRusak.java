@@ -7,11 +7,15 @@ package Admin.View;
 import Admin.Model.StockRusak;
 import Admin.Controller.ProductCRUD;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -44,6 +48,7 @@ private int total, totalStockRusak, id;
         txtfield_satuan.setEditable(false);
         txtfield_stock.setEditable(false);
         txtfield_totalstockrusak.setEditable(false);
+        jdate_tanggal.setEditable(false);
     }
     
     public ListStockRusak(ProductStockFrame productStockFrame) throws SQLException {
@@ -77,9 +82,9 @@ private int total, totalStockRusak, id;
         txtfield_stockrusak = new javax.swing.JTextField();
         btn_update = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jdate_tanggal = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
         txtfield_totalstockrusak = new javax.swing.JTextField();
+        jdate_tanggal = new javax.swing.JTextField();
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Stock :");
@@ -182,12 +187,11 @@ private int total, totalStockRusak, id;
                                 .addGap(26, 26, 26)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jdate_tanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                                .addComponent(txtfield_stockrusak))
+                            .addComponent(txtfield_stockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_update, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(txtfield_totalstockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtfield_totalstockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdate_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -215,8 +219,8 @@ private int total, totalStockRusak, id;
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addComponent(jdate_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jdate_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(txtfield_stockrusak, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,8 +270,11 @@ private int total, totalStockRusak, id;
             Date tanggal = (Date) tabel_stockrusak.getValueAt(selectedRow, 1); // Get TANGGAL
             int stokRusak = Integer.parseInt(tabel_stockrusak.getValueAt(selectedRow, 2).toString()); // Get STOK_RUSAK
 
-            // Populate the fields with the selected row's data
-            jdate_tanggal.setDate(tanggal);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", new Locale("id", "ID"));
+            String formattedDate = sdf.format(tanggal);
+            
+               // Populate the fields with the selected row's data
+            jdate_tanggal.setText(formattedDate);
             txtfield_stockrusak.setText(String.valueOf(stokRusak));
         }
         
@@ -278,8 +285,11 @@ private int total, totalStockRusak, id;
     }//GEN-LAST:event_btn_updateMouseClicked
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-   try {
-    Date updatedTanggal = jdate_tanggal.getDate();
+    String tanggalStr = jdate_tanggal.getText();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", new Locale("id", "ID"));
+    Date updatedTanggal = null;
+        try {
+    updatedTanggal = sdf.parse(tanggalStr);
     int updatedStockRusak = Integer.parseInt(txtfield_stockrusak.getText());
 
     int selectedRow = tabel_stockrusak.getSelectedRow();
@@ -325,10 +335,13 @@ private int total, totalStockRusak, id;
     } else {
         JOptionPane.showMessageDialog(this, "Tidak ada perubahan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
     }
-} catch (NumberFormatException | SQLException ex) {
-    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-}
-
+} 
+    catch (ParseException ex) {
+        JOptionPane.showMessageDialog(this, "Format tanggal tidak valid! Gunakan format: dd-MMM-yyyy (misal: 23-Apr-2025)", "Format Salah", JOptionPane.ERROR_MESSAGE);
+    } 
+    catch (NumberFormatException | SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void txtfield_stockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_stockActionPerformed
@@ -388,7 +401,7 @@ private int total, totalStockRusak, id;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private com.toedter.calendar.JDateChooser jdate_tanggal;
+    private javax.swing.JTextField jdate_tanggal;
     private javax.swing.JTable tabel_stockrusak;
     private javax.swing.JTextField txtfield_product;
     private javax.swing.JTextField txtfield_satuan;

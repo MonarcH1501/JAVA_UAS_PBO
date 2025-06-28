@@ -106,7 +106,9 @@
                 for (SaleDetail detail : saleDetails) {
                     total += detail.getTotal();
                 }
-                txTotalawal.setText(String.format("%.2f", total));
+                NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                String formattedTotal = rupiah.format(total).replace(",00", "").replace("Rp", "Rp ");
+                txTotalawal.setText(formattedTotal);
 
                 double discount = 0;
                 double tax = 0;
@@ -122,44 +124,46 @@
 
                 double afterTax = afterDiscount + (afterDiscount * tax / 100);
 
-                NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH   );
-                txTotalBayar.setText(nf.format(afterTax));
-                txTampil.setText("Rp " + nf.format(afterTax));
+                String formatted = rupiah.format(afterTax).replace(",00", "").replace("Rp", "Rp ");
+                txTotalBayar.setText(formatted);
+                txTampil.setText(formatted);
 
             }
 
 
-        private void loadTable() {
+       private void loadTable() {
             model.setRowCount(0); // clear existing rows
+            NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
             for (SaleDetail detail : saleDetails) {
+            String formattedPrice = rupiah.format(detail.getPrice()).replace(",00", "").replace("Rp", "Rp ");
+            String formattedTotal = rupiah.format(detail.getTotal()).replace(",00", "").replace("Rp", "Rp ");
                 model.addRow(new Object[]{
                     txNoTransaksi.getText(),
                     detail.getProductId(),
                     detail.getProductName(),
                     detail.getQuantity(),
-                    detail.getPrice(),
-                    detail.getTotal()
+                    formattedPrice,
+                    formattedTotal
                 });
             }
         }
-            private void hitungKembalian() {
+           private void hitungKembalian() {
             try {
-//                double totalBayar = Double.parseDouble(txTotalBayar.getText());
-//                double bayar = Double.parseDouble(txBayar.getText());
-              double totalBayar = parseDoubleLocale(txTotalBayar.getText());
-              double bayar = parseDoubleLocale(txBayar.getText());
+                double totalBayar = parseHargaToDouble(txTotalBayar.getText());
+                double bayar = parseHargaToDouble(txBayar.getText());
 
                 if (bayar < totalBayar) {
                     txKembalian.setText("0");
                 } else {
-                    double kembalian = bayar - totalBayar;
-                    txKembalian.setText(String.format("%.2f", kembalian));
+                     double kembalian = bayar - totalBayar;
+                     NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                     String formatted = rupiah.format(kembalian).replace(",00", "").replace("Rp", "Rp ");
+                     txKembalian.setText(formatted);
                 }
-            } catch (ParseException e) {
+            } catch (NumberFormatException e) {
                 txKembalian.setText("0");
             }
         }
-
     
 
 
@@ -479,13 +483,24 @@
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    
+   private double parseHargaToDouble(String hargaText) {
+    if (hargaText == null || hargaText.trim().isEmpty()) return 0;
+    String clean = hargaText.replace("Rp", "")
+                            .replace(" ", "")
+                            .replace(".", "")       // Hapus pemisah ribuan
+                            .replace(",", ".")      // Ubah koma jadi titik (untuk desimal)
+                            .trim();
+    return Double.parseDouble(clean);
+}
 
+    
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
          
         try {
         int idBarang = Integer.parseInt(txIDBarang.getText());
         String namaBarang = txNamaBarang.getText();
-        double harga = Double.parseDouble(txHarga.getText());
+        double harga = parseHargaToDouble(txHarga.getText());
         double jumlah = Double.parseDouble(txJumlah.getText());
 
         if (jumlah <= 0 || harga <= 0) {
@@ -570,24 +585,15 @@
         }
 
         try {
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//            Date tanggal = sdf.parse(txTanggal.getText());
-//            double discount = Double.parseDouble(txDiskon.getText());
-//            double tax = Double.parseDouble(txPajak.getText());
-//            double totalPay = Double.parseDouble(txBayar.getText());
-//            double kembalian = Double.parseDouble(txKembalian.getText());
-//            double Totalawal = Double.parseDouble(txTotalawal.getText());
-//
-//            double totalBayar = Double.parseDouble(txTotalBayar.getText());
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Date tanggal = sdf.parse(txTanggal.getText());
 
-        double discount   = parseDoubleLocale(txDiskon.getText());
-        double tax        = parseDoubleLocale(txPajak.getText());
-        double totalPay   = parseDoubleLocale(txBayar.getText());
-        double kembalian  = parseDoubleLocale(txKembalian.getText());
-        double totalAwal  = parseDoubleLocale(txTotalawal.getText());
-        double totalBayar = parseDoubleLocale(txTotalBayar.getText());
+        double discount   = parseHargaToDouble(txDiskon.getText());
+        double tax        = parseHargaToDouble(txPajak.getText());
+        double totalPay   = parseHargaToDouble(txBayar.getText());
+        double kembalian  = parseHargaToDouble(txKembalian.getText());
+        double totalAwal  = parseHargaToDouble(txTotalawal.getText());
+        double totalBayar = parseHargaToDouble(txTotalBayar.getText());
 
 
             Sale sale = new Sale(txNoTransaksi.getText(), tanggal, totalBayar,discount, tax, totalPay, kembalian, totalAwal , saleDetails);

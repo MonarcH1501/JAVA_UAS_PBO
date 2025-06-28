@@ -2,11 +2,13 @@ package Kasir.View;
 
 import Kasir.Controller.HistoryController;
 import Kasir.Model.Sale;
+import java.text.NumberFormat;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryPenjualan extends javax.swing.JFrame {
 
@@ -46,13 +48,17 @@ public class HistoryPenjualan extends javax.swing.JFrame {
         model.addColumn("Total Bayar");
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
         for (Sale s : sales) {
+        String formattedHarga = nf.format(s.getTotalPrice()).replace(",00", "").replace("Rp", "Rp ");
+        String formattedBayar = nf.format(s.getTotalPay()).replace(",00", "").replace("Rp", "Rp ");
+
             model.addRow(new Object[]{
                 s.getTransactionNo(),
                 sdf.format(s.getDate()),
-                s.getTotalPrice(),
-                s.getTotalPay()
+                formattedHarga,
+                formattedBayar
             });
         }
 
@@ -209,8 +215,8 @@ public class HistoryPenjualan extends javax.swing.JFrame {
                     selectedSale.getTax(),
                     selectedSale.getTotalPrice(),
                      selectedSale.getkembalian(),
-                     selectedSale.getTotalAwal()
-                        
+                     selectedSale.getTotalAwal(),
+                    selectedSale.getTotalPay()
                 ).setVisible(true);
             }
         } catch (Exception e) {

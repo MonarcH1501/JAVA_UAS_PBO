@@ -13,12 +13,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -422,7 +424,8 @@ public class Pembelian extends javax.swing.JPanel {
     String[][] data = new String[beli.size()][7];
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy");
-    DecimalFormat decimalFormat = new DecimalFormat("#,###"); // Tambahkan ini
+//  DecimalFormat decimalFormat = new DecimalFormat("#,###"); // Tambahkan ini
+    NumberFormat rupiahFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
     for (int i = 0; i < beli.size(); i++) {
         data[i][0] = String.valueOf(beli.get(i).getId());
@@ -434,7 +437,12 @@ public class Pembelian extends javax.swing.JPanel {
 
         data[i][4] = String.valueOf(beli.get(i).getQty());
         data[i][5] = beli.get(i).getUnit();
-        data[i][6] = decimalFormat.format(beli.get(i).getTotalPrice()); // Gunakan formatter
+        
+        String hargaFormatted = rupiahFormat.format(beli.get(i).getTotalPrice())
+                                             .replace("Rp", "Rp ")
+                                             .replace(",00", "");
+        
+        data[i][6] = hargaFormatted;
     }
 
     String[] columnName = {"ID", "Nama Product", "Nama Supplier", "Tanggal Beli", "Jumlah Product", "Satuan", "Total Harga"};

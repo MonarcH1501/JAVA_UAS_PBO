@@ -1,7 +1,10 @@
 package Kasir.View;
 
 import Assets.DBConnection;
+import java.math.BigDecimal;
 import java.sql.*;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,18 +31,22 @@ public class ListBarang extends javax.swing.JFrame {
     private void loadData() {
         model.setRowCount(0); // Clear table
         String sql = "SELECT * FROM product";
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
 
         try (Connection c = DBConnection.getConnection();
              Statement s = c.createStatement();
              ResultSet r = s.executeQuery(sql)) {
 
             while (r.next()) {
+                BigDecimal price = r.getBigDecimal("price_sell");
+                String formattedPrice = nf.format(price).replace(",00", "").replace("Rp", "Rp ");
                 model.addRow(new Object[]{
                     r.getString("id_product"),
                     r.getString("id_supplier"),
                     r.getString("product_code"),
                     r.getString("product_name"),
-                    r.getString("price_sell")
+                    formattedPrice
                 });
             }
 
