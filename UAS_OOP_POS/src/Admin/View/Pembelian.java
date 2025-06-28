@@ -39,10 +39,11 @@ public class Pembelian extends javax.swing.JPanel {
     public Pembelian() throws SQLException {
         initComponents();
        loadPembelianData();
-       loadComboBox(supp_pembelian, "Supplier");
        loadComboBox(product_pembelian, "Product");
        satuan_pembelian.setEditable(false);
        loadAutoBox();
+       supp_pembelian.setEditable(false);
+       loadSupplier();
     }
 
     /**
@@ -73,12 +74,12 @@ public class Pembelian extends javax.swing.JPanel {
         jumlah_pembelian = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         product_pembelian = new javax.swing.JComboBox<>();
-        supp_pembelian = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         harga_pembelian = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         table_supp1 = new javax.swing.JTable();
         date_pembelian = new com.toedter.calendar.JDateChooser();
+        supp_pembelian = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1270, 700));
@@ -225,11 +226,9 @@ public class Pembelian extends javax.swing.JPanel {
                 product_pembelianItemStateChanged(evt);
             }
         });
-
-        supp_pembelian.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        supp_pembelian.addActionListener(new java.awt.event.ActionListener() {
+        product_pembelian.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supp_pembelianActionPerformed(evt);
+                product_pembelianActionPerformed(evt);
             }
         });
 
@@ -273,6 +272,12 @@ public class Pembelian extends javax.swing.JPanel {
 
         date_pembelian.setBackground(new java.awt.Color(255, 255, 255));
 
+        supp_pembelian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supp_pembelianActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout main_suppLayout = new javax.swing.GroupLayout(main_supp);
         main_supp.setLayout(main_suppLayout);
         main_suppLayout.setHorizontalGroup(
@@ -282,87 +287,88 @@ public class Pembelian extends javax.swing.JPanel {
                 .addGap(591, 591, 591)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(main_suppLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2))
                 .addGap(28, 28, 28)
-                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(supp_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(product_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59)
-                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(date_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jumlah_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(main_suppLayout.createSequentialGroup()
-                        .addComponent(harga_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(348, 348, 348)
+                        .addComponent(add_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(upd_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(del_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(main_suppLayout.createSequentialGroup()
-                        .addComponent(satuan_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(product_pembelian, 0, 230, Short.MAX_VALUE)
+                            .addComponent(supp_pembelian))
+                        .addGap(59, 59, 59)
+                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(date_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jumlah_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
                         .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(main_suppLayout.createSequentialGroup()
-                                .addComponent(search_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cBox_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(57, 57, 57))))
-            .addGroup(main_suppLayout.createSequentialGroup()
-                .addGap(444, 444, 444)
-                .addComponent(add_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(upd_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(del_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(harga_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(main_suppLayout.createSequentialGroup()
+                                .addComponent(satuan_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(main_suppLayout.createSequentialGroup()
+                                        .addComponent(search_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cBox_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(57, 57, 57))))))
         );
         main_suppLayout.setVerticalGroup(
             main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_suppLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(25, 25, 25)
                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(main_suppLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(main_suppLayout.createSequentialGroup()
-                                    .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel3)
-                                        .addComponent(product_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel5))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel2)
-                                        .addComponent(supp_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(main_suppLayout.createSequentialGroup()
-                                    .addComponent(date_pembelian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGap(18, 18, 18)
-                                    .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jumlah_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel6))))
-                            .addGroup(main_suppLayout.createSequentialGroup()
+                        .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, main_suppLayout.createSequentialGroup()
                                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel4)
                                     .addComponent(satuan_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel8)
-                                    .addComponent(harga_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(harga_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(main_suppLayout.createSequentialGroup()
+                                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(date_pembelian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel3)
+                                        .addComponent(product_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(supp_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jumlah_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel6))))))
                     .addGroup(main_suppLayout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -370,15 +376,15 @@ public class Pembelian extends javax.swing.JPanel {
                             .addComponent(cBox_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(search_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(52, 52, 52)))
-                .addGap(26, 26, 26)
+                .addGap(23, 23, 23)
                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(add_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(upd_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(del_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -467,7 +473,7 @@ public class Pembelian extends javax.swing.JPanel {
     
     private void add_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_pembelianActionPerformed
        String namaProduct = (String) product_pembelian.getSelectedItem();
-       String namaSupplier = (String) supp_pembelian.getSelectedItem();
+       String namaSupplier = (String) supp_pembelian.getText();
        Date tanggalPembelian = date_pembelian.getDate();
        String qtyPembelianStr = jumlah_pembelian.getText();
        String totalPembelianStr = harga_pembelian.getText();
@@ -505,7 +511,7 @@ public class Pembelian extends javax.swing.JPanel {
 
     private void upd_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upd_pembelianActionPerformed
        String namaProduct = (String) product_pembelian.getSelectedItem();
-       String namaSupplier = (String) supp_pembelian.getSelectedItem();
+       String namaSupplier = supp_pembelian.getText();
        Date tanggalPembelian = date_pembelian.getDate();
        String qtyPembelianStr = jumlah_pembelian.getText();
        String totalPembelianStr = harga_pembelian.getText();
@@ -553,7 +559,7 @@ public class Pembelian extends javax.swing.JPanel {
 
         selectedPembelianId = Integer.parseInt(table_pembelian.getValueAt(selectedRow, 0).toString());
         product_pembelian.setSelectedItem(table_pembelian.getValueAt(selectedRow, 1).toString());
-        supp_pembelian.setSelectedItem(table_pembelian.getValueAt(selectedRow, 2).toString());
+        supp_pembelian.setText(table_pembelian.getValueAt(selectedRow, 2).toString());
         
         try {
             date_pembelian.setDate(dateFormat.parse(dateString));
@@ -668,10 +674,6 @@ public class Pembelian extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jumlah_pembelianActionPerformed
 
-    private void supp_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supp_pembelianActionPerformed
-     
-    }//GEN-LAST:event_supp_pembelianActionPerformed
-
     private void harga_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_harga_pembelianActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_harga_pembelianActionPerformed
@@ -697,6 +699,34 @@ public class Pembelian extends javax.swing.JPanel {
     private void search_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_pembelianActionPerformed
 
     }//GEN-LAST:event_search_pembelianActionPerformed
+
+    private void supp_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supp_pembelianActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_supp_pembelianActionPerformed
+    
+    private void loadSupplier(){
+    try {
+    BeliDAO beliDAO = new BeliDAO();
+    String namaProduct = (String) product_pembelian.getSelectedItem();
+    String namaSupp = beliDAO.getSupplier(namaProduct); 
+    
+    if (namaSupp != null){
+            supp_pembelian.setText(namaSupp);
+//            System.out.println("Supp yang diatur: " + namaSupp); 
+            }
+            else {
+            supp_pembelian.setText("-");
+//            System.out.println("Supp tidak ditemukan untuk produk: " + selectedProduct);
+    }
+    
+    } catch (SQLException ex){
+        JOptionPane.showMessageDialog(this, "Error occurred while searching", "Error", JOptionPane.ERROR_MESSAGE);
+    }    
+    }
+    
+    private void product_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_pembelianActionPerformed
+   loadSupplier();
+    }//GEN-LAST:event_product_pembelianActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -721,7 +751,7 @@ public class Pembelian extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> product_pembelian;
     private javax.swing.JTextField satuan_pembelian;
     private javax.swing.JTextField search_pembelian;
-    private javax.swing.JComboBox<String> supp_pembelian;
+    private javax.swing.JTextField supp_pembelian;
     private javax.swing.JTable table_pembelian;
     private javax.swing.JTable table_supp1;
     private javax.swing.JButton upd_pembelian;

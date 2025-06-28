@@ -152,6 +152,25 @@ public String getSatuanProduct (String namaProduct) {
 } 
     return satuanProduct; }
 
+
+// select supplier
+public String getSupplier (String namaProduct) {
+   String suppProduct = null;
+    try {
+        String sql = "SELECT supp_name FROM product LEFT JOIN supplier ON product.id_supplier = supplier.id_supplier WHERE product.product_name=?";
+        PreparedStatement stmt =connection.prepareStatement(sql); 
+        stmt.setString(1, namaProduct);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()){
+         suppProduct = rs.getString("supp_name");
+        } else {
+         System.out.println("Supplier tidak ditemukan atas nama product: " + namaProduct);
+        }
+    } catch (SQLException e) {
+    e.printStackTrace();
+} 
+    return suppProduct; }
+
 // Update Pembelian
 public int updatePembelian (Beli beli) throws SQLException{
     int idProduct = 0;
