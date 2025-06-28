@@ -272,6 +272,7 @@ public class Pembelian extends javax.swing.JPanel {
 
         date_pembelian.setBackground(new java.awt.Color(255, 255, 255));
 
+        supp_pembelian.setBackground(new java.awt.Color(204, 204, 204));
         supp_pembelian.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supp_pembelianActionPerformed(evt);
