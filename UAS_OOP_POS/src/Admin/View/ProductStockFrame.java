@@ -7,6 +7,7 @@ import Admin.Controller.TableStockSearch;
 import Admin.Controller.TableStock;
 import Admin.Model.StockRusak;
 import Admin.Controller.ProductCRUD;
+import Admin.Model.Product;
 import Assets.DBConnection;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -37,7 +38,6 @@ public class ProductStockFrame extends javax.swing.JPanel {
     private TableStockSearch tableStockSearch;
     private int selectedProductId = -1;
     private String namaproduct, satuanproduct, totalstock = "";
-    
     public ProductStockFrame() {
         initComponents();
         searchHint();
@@ -363,41 +363,65 @@ public class ProductStockFrame extends javax.swing.JPanel {
     }//GEN-LAST:event_productStockTableMouseClicked
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
-        try {
-            String sR = txt_stokRusak.getText().trim();
-            Date tgl = jdate_tgl.getDate();
-            
-            if(selectedProductId == -1) {
-                JOptionPane.showMessageDialog(jPanel1, "Silahkan pilih produk dari tabel yang ingin ditambahkan stok rusaknya", "Peringatan", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            if(sR.isEmpty()) {
-                JOptionPane.showMessageDialog(jPanel1, "Masukkan jumlah stok yang rusak!", "Input Kosong", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            int stokRusak = Integer.parseInt(sR);
-            StockRusak newStockRusak = StockRusak.forAdd(selectedProductId, stokRusak, tgl) ;
-            ProductCRUD stockDB = new ProductCRUD();
-            
-            try{
-                int stock_rusak = stockDB.inputStokRusak(newStockRusak);
-                if(stock_rusak > 0) {
-                    JOptionPane.showMessageDialog(jPanel1, "Stock Produk yang rusak berhasil ditambahkan dengan ID Produk: " + newStockRusak.getId_product());
-                    tableStock.LoadTableProductStock(productStockTable);
-                    clearForm();
-                } else {
-                    JOptionPane.showMessageDialog(jPanel1, "Stock Produk yang rusak gagal ditambahkan", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(jPanel1, "Kesalahan Database: " + e.getMessage(), "Kesalahan SQL", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch(NumberFormatException e) {
-            JOptionPane.showMessageDialog(jPanel1, "Harap masukkan angka yang valid untuk input stok yang rusak", "Kesalahan Format", JOptionPane.ERROR_MESSAGE);
-        } catch(Exception ex) {
-            JOptionPane.showMessageDialog(jPanel1, "Terjadi kesalahan: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+         try {
+        String sR = txt_stokRusak.getText().trim();
+        Date tgl = jdate_tgl.getDate();
+
+        if (selectedProductId == -1) {
+            JOptionPane.showMessageDialog(jPanel1, "Silakan pilih produk dari tabel terlebih dahulu.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        if (sR.isEmpty()) {
+            JOptionPane.showMessageDialog(jPanel1, "Masukkan jumlah stok rusak!", "Input Kosong", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int stokRusakBaru = Integer.parseInt(sR);
+        ProductCRUD stockDB = new ProductCRUD();
+        Product produkTerpilih = stockDB.getProductStockById(selectedProductId);
+
+        if (produkTerpilih == null) {
+            JOptionPane.showMessageDialog(jPanel1, "Data produk tidak ditemukan di database!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int purchaseQty = produkTerpilih.getPurchase_qty();
+        int saleQty = produkTerpilih.getSale_qty();
+        int stokRusakLama = produkTerpilih.getStok_rusak();
+
+        int stokWajar = purchaseQty - saleQty - stokRusakLama;
+
+        // Validasi apakah input melebihi stok wajar
+        if (stokWajar - stokRusakBaru < 0) {
+            JOptionPane.showMessageDialog(jPanel1, 
+                "Jumlah pemutihan melebihi stok !\n" +
+                "Stok Saat Ini: " + stokWajar + "\n" +
+                "Stok Rusak Baru yang Diinput: " + stokRusakBaru,
+                "Stok Tidak Cukup", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Insert jika valid
+        StockRusak newStockRusak = StockRusak.forAdd(selectedProductId, stokRusakBaru, tgl);
+        int hasil = stockDB.inputStokRusak(newStockRusak);
+
+        if (hasil > 0) {
+            JOptionPane.showMessageDialog(jPanel1, "Stok rusak berhasil ditambahkan.");
+            tableStock.LoadTableProductStock(productStockTable); // Refresh table
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(jPanel1, "Gagal menambahkan stok rusak.", "Gagal", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(jPanel1, "Input stok rusak harus berupa angka!", "Kesalahan Format", JOptionPane.ERROR_MESSAGE);
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(jPanel1, "Kesalahan database: " + e.getMessage(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(jPanel1, "Terjadi kesalahan: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_viewActionPerformed

@@ -278,41 +278,57 @@ private int total, totalStockRusak, id;
     }//GEN-LAST:event_btn_updateMouseClicked
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-   if (selectedId == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih baris terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-   
-    if (jdate_tanggal.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Tanggal belum dipilih!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-    
-     try {
-            Date updatedTanggal = jdate_tanggal.getDate();
-            int updatedStockRusak = Integer.parseInt(txtfield_stockrusak.getText());
+   try {
+    Date updatedTanggal = jdate_tanggal.getDate();
+    int updatedStockRusak = Integer.parseInt(txtfield_stockrusak.getText());
 
-            StockRusak stockToUpdate = new StockRusak();
-            stockToUpdate.setId_Stock(selectedId);
-            stockToUpdate.setTanggal(updatedTanggal);
-            stockToUpdate.setStock_rusak(updatedStockRusak);
-            
+    int selectedRow = tabel_stockrusak.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih data terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+
+    int stokRusakLama = Integer.parseInt(tabel_stockrusak.getValueAt(selectedRow, 2).toString());
+
+    // Hitung stok tersedia saat ini (sebelum update)
+    int stokTersedia = total - totalStockRusak;
+
+    // Hitung stok tersisa setelah update
+    int stokSetelahUpdate = stokTersedia + stokRusakLama - updatedStockRusak;
+
+    if (stokSetelahUpdate < 0) {
+        JOptionPane.showMessageDialog(this,
+            "Update gagal! Jumlah stock rusak melebihi stok yang tersedia.\n\n" +
+            "Stok tersedia: " + stokTersedia + "\n" +
+            "jumlah stock rusak lama: " + stokRusakLama + "\n" +
+            "jumlah input baru: " + updatedStockRusak,
+            "Stok Tidak Cukup", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Validasi lolos, lanjut update
+    StockRusak stockToUpdate = new StockRusak();
+    stockToUpdate.setId_Stock(selectedId);
+    stockToUpdate.setTanggal(updatedTanggal);
+    stockToUpdate.setStock_rusak(updatedStockRusak);
+
     int affectedRows = productDB.updateStokRusak(stockToUpdate);
-            if (affectedRows > 0) {
-                JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
-                LoadTableStockRusak(); // Refresh tabel
-                
-                // REFRESH TABEL DI ProductStockFrame
-            if (ProductStock != null) {
-                ProductStock.refreshData(); // <-- INI YANG DITAMBAHKAN
-            }
-                
-            } else {
-                JOptionPane.showMessageDialog(this, "Tidak ada perubahan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            }
-     } catch (NumberFormatException | SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    if (affectedRows > 0) {
+        JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+        LoadTableStockRusak(); // Refresh tabel
+
+        if (ProductStock != null) {
+            ProductStock.refreshData();
         }
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Tidak ada perubahan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+    }
+} catch (NumberFormatException | SQLException ex) {
+    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
+
     }//GEN-LAST:event_btn_updateActionPerformed
 
     private void txtfield_stockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfield_stockActionPerformed

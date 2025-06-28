@@ -112,4 +112,9 @@ public class Product {
     
     public int getTotal_stok() { return total_stok; }
     public void setTotal_stok(int total_stok) { this.total_stok = total_stok; }
+    
+    
+    public boolean isStokTersedia(int qtyDibutuhkan) {
+    return total_stok - qtyDibutuhkan >= 0;
+}
 }

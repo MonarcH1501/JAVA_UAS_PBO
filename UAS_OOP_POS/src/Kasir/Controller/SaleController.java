@@ -2,12 +2,23 @@ package Kasir.Controller;
 
 import Assets.DBConnection;
 import Kasir.Model.*;
-
+import Admin.Model.Product;
+import Admin.Controller.ProductCRUD;
 import java.sql.*;
 import java.util.List;
 
 public class SaleController {
-
+    
+    private ProductCRUD productCrud;
+     public SaleController() {
+        try {
+            productCrud = new ProductCRUD();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Gagal inisialisasi ProductCRUD", e);
+        }
+    }
+    
     public String generateTransactionNo() throws SQLException {
     Connection c = DBConnection.getConnection();
     Statement s = c.createStatement();
@@ -27,6 +38,7 @@ public class SaleController {
 }
 
     public int saveSale(Sale sale) throws Exception {
+ 
         Connection c = DBConnection.getConnection();
         String sql = "INSERT INTO penjualan (sale_date, discount, tax,sale_total_price, total_bayar,kembalian,total_price_produk) VALUES (?, ?, ?, ?,?,?,?)";
         PreparedStatement pst = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -60,5 +72,14 @@ public class SaleController {
             p.close();
         }
         return lastSaleId;
+    }
+    
+     public Product getProductStockById(int id) throws SQLException {
+        for (Product p : productCrud.getProductStock()) {
+            if (p.getId_product() == id) {
+                return p;
+            }
+        }
+        return null;
     }
 }

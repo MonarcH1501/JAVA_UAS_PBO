@@ -109,7 +109,7 @@ public class ProductCRUD {
                 int idSupplier = rs.getInt("id_supplier");
                 String suppName = rs.getString("supp_name");
                 String code = rs.getString("product_code");
-                String name = rs.getString("product_name");
+                String name = rs.getString("product_name");                 
                 String unit = rs.getString("product_unit");
                 int totalPurchase = rs.getInt("total_purchase");
                 int totalSale = rs.getInt("total_sale");
@@ -261,6 +261,44 @@ public boolean resetProductStock(int productId) throws SQLException {
     public void updateStock(int initialStock, int selectedProductId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public Product getProductStockById(int idBarang) throws SQLException {
+        String query = "SELECT pr.id_product, pr.id_supplier, sp.supp_name, pr.product_code, pr.product_name, pr.product_unit, " +
+                       "COALESCE(pb.total_purchase, 0) as total_purchase, " +
+                       "COALESCE(sd.total_sale, 0) as total_sale, " +
+                       "COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, " +
+                       "(COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0)) as total_stok " +
+                       "FROM product pr " +
+                       "JOIN supplier sp ON pr.id_supplier = sp.id_supplier " +
+                       "LEFT JOIN (SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product " +
+                       "LEFT JOIN (SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product " +
+                       "LEFT JOIN (SELECT id_product, SUM(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product " +
+                       "WHERE pr.id_product = ?";
+
+        try (PreparedStatement ps = c.prepareStatement(query)) {
+            ps.setInt(1, idBarang);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Product(
+                        rs.getInt("id_product"),
+                        rs.getInt("id_supplier"),
+                        rs.getString("supp_name"),
+                        rs.getString("product_code"),
+                        rs.getString("product_name"),
+                        rs.getString("product_unit"),
+                        rs.getInt("total_purchase"),
+                        rs.getInt("total_sale"),
+                        rs.getInt("total_stok_rusak"),
+                        rs.getInt("total_stok")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    
+    
 }
 
     

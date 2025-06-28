@@ -2,6 +2,8 @@
 
     import Assets.DBConnection;
     import Kasir.Controller.SaleController;
+    import Admin.Model.Product;
+    import Admin.Controller.ProductCRUD;
     import Kasir.Model.Sale;
     import Kasir.Model.SaleDetail;
     import java.sql.Connection;
@@ -26,7 +28,6 @@
     import net.sf.jasperreports.view.JasperViewer;
 
     public class PenjualanView extends javax.swing.JFrame {
-
          private DefaultTableModel model;
         private SaleController saleController;
         private List<SaleDetail> saleDetails;
@@ -480,6 +481,7 @@
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+         
         try {
         int idBarang = Integer.parseInt(txIDBarang.getText());
         String namaBarang = txNamaBarang.getText();
@@ -491,38 +493,56 @@
             return;
         }
 
-        boolean found = false;
+        // ✅ Ambil stok dari SaleController (bukan ProductCRUD)
+        Product stokProduk = saleController.getProductStockById(idBarang);
+        if (stokProduk == null) {
+            JOptionPane.showMessageDialog(this, "Produk tidak ditemukan!");
+            return;
+        }
+
+        int stokTersedia = stokProduk.getTotal_stok();
+        double totalQtyDiTabel = jumlah;
 
         for (SaleDetail detail : saleDetails) {
             if (detail.getProductId() == idBarang) {
-                double newQuantity = detail.getQuantity() + jumlah;
-                detail.setQuantity(newQuantity);
+                totalQtyDiTabel += detail.getQuantity();
+            }
+        }
 
-                // Opsional: update harga jika berubah
-                if (detail.getPrice() != harga) {
-                    detail.setPrice(harga);
-                }
+        if (totalQtyDiTabel > stokTersedia) {
+            JOptionPane.showMessageDialog(this,
+                "Stok tidak cukup!\nStok tersedia: " + stokTersedia,
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        // 🔧 Update atau tambah item ke list saleDetails
+        boolean found = false;
+        for (SaleDetail detail : saleDetails) {
+            if (detail.getProductId() == idBarang) {
+                detail.setQuantity(detail.getQuantity() + jumlah);
+                detail.setPrice(harga); // update harga jika berubah
                 found = true;
                 break;
             }
         }
 
-        // Jika belum ada, tambahkan sebagai item baru
         if (!found) {
             SaleDetail detail = new SaleDetail(0, idBarang, namaBarang, jumlah, harga);
             saleDetails.add(detail);
         }
 
-        loadTable();        
-        updateTotalBayar();  
-        clearInputFields(); 
+        loadTable();
+        updateTotalBayar();
+        clearInputFields();
         txIDBarang.requestFocus();
 
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Masukkan jumlah dan harga yang valid!");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage());
     }
-
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
