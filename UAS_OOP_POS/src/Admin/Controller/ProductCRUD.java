@@ -297,8 +297,45 @@ public boolean resetProductStock(int productId) throws SQLException {
         return null;
     }
 
+    public List<Product> getAllProductStock() throws SQLException {
+            List<Product> list = new ArrayList<>();
+            Connection c = DBConnection.getConnection();
+            String query = "SELECT pr.id_product, pr.product_name, " +
+                           "COALESCE(pb.total_purchase, 0) as total_purchase, " +
+                           "COALESCE(sd.total_sale, 0) as total_sale, " +
+                           "COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, " +
+                           "(COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0)) as total_stok " +
+                           "FROM product pr " +
+                           "LEFT JOIN (SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product " +
+                           "LEFT JOIN (SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product " +
+                           "LEFT JOIN (SELECT id_product, SUM(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product";
+
+            PreparedStatement ps = c.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product p = new Product(
+                    rs.getInt("id_product"),
+                    0,
+                    null,
+                    null,
+                    rs.getString("product_name"),
+                    null,
+                    0,
+                    0,
+                    0,
+                    rs.getInt("total_stok")
+                );
+                list.add(p);
+            }
+
+            rs.close();
+            ps.close();
+            return list;
+        }
     
     
+
+
 }
 
     

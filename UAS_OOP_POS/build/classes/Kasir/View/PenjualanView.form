@@ -59,7 +59,7 @@
                                   <Component id="jScrollPane1" min="-2" pref="668" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnTambah1" max="32767" attributes="0"/>
+                                      <Component id="btncheckstok" max="32767" attributes="0"/>
                                       <Component id="btnTambah" alignment="0" max="32767" attributes="0"/>
                                       <Component id="btnHapus" alignment="0" max="32767" attributes="0"/>
                                   </Group>
@@ -152,7 +152,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" min="-2" pref="236" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="btnTambah1" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="btncheckstok" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnTambah" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -258,6 +258,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txTanggal">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -432,12 +435,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txTotalawalActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnTambah1">
+    <Component class="javax.swing.JButton" name="btncheckstok">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cek Stock"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambah1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncheckstokActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -7,6 +7,7 @@
     import Kasir.Model.Sale;
     import Kasir.Model.SaleDetail;
     import java.sql.Connection;
+import java.sql.SQLException;
     import java.text.NumberFormat;
     import java.text.ParseException;
     import java.text.SimpleDateFormat;
@@ -16,6 +17,8 @@
     import java.util.List;
     import java.util.Locale;
     import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
     import javax.swing.JOptionPane;
     import javax.swing.table.DefaultTableModel;
     import net.sf.jasperreports.engine.JasperCompileManager;
@@ -204,7 +207,7 @@
         jLabel11 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         txTotalawal = new javax.swing.JTextField();
-        btnTambah1 = new javax.swing.JButton();
+        btncheckstok = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -235,6 +238,8 @@
         txNoTransaksi.setEnabled(false);
 
         jLabel5.setText("Tanggal");
+
+        txTanggal.setEnabled(false);
 
         jLabel6.setText("ID Barang");
 
@@ -341,10 +346,10 @@
             }
         });
 
-        btnTambah1.setText("Cek Stock");
-        btnTambah1.addActionListener(new java.awt.event.ActionListener() {
+        btncheckstok.setText("Cek Stock");
+        btncheckstok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTambah1ActionPerformed(evt);
+                btncheckstokActionPerformed(evt);
             }
         });
 
@@ -382,7 +387,7 @@
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnTambah1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btncheckstok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnTambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
@@ -453,7 +458,7 @@
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnTambah1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btncheckstok, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -671,9 +676,15 @@
         // TODO add your handling code here:
     }//GEN-LAST:event_txTotalawalActionPerformed
 
-    private void btnTambah1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambah1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTambah1ActionPerformed
+    private void btncheckstokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncheckstokActionPerformed
+       ListJumlahStock b = null;
+             try {
+                 b = new ListJumlahStock();
+             } catch (SQLException ex) {
+                 Logger.getLogger(PenjualanView.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        b.setVisible(true);
+    }//GEN-LAST:event_btncheckstokActionPerformed
     
     public void loadReport(int id){
         try {
@@ -772,7 +783,7 @@
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
-    private javax.swing.JButton btnTambah1;
+    private javax.swing.JButton btncheckstok;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
