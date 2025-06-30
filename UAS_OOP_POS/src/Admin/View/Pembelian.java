@@ -479,6 +479,14 @@ public class Pembelian extends javax.swing.JPanel {
        String qtyPembelianStr = jumlah_pembelian.getText();
        String totalPembelianStr = harga_pembelian.getText();
        
+        if (!product_pembelian.isEnabled() || namaProduct.contains("(non-aktif)")) {
+        JOptionPane.showMessageDialog(this, 
+            "Produk yang dipilih sudah tidak aktif.\nTidak bisa digunakan untuk pembelian baru.", 
+            "Peringatan", 
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+       
        if(namaProduct.isEmpty() || namaSupplier.isEmpty() || tanggalPembelian == null || qtyPembelianStr.isEmpty() || totalPembelianStr.isEmpty()) {
            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
        } else {
@@ -516,6 +524,14 @@ public class Pembelian extends javax.swing.JPanel {
        Date tanggalPembelian = date_pembelian.getDate();
        String qtyPembelianStr = jumlah_pembelian.getText();
        String totalPembelianStr = harga_pembelian.getText();
+       
+        if (!product_pembelian.isEnabled() || namaProduct.contains("(non-aktif)")) {
+        JOptionPane.showMessageDialog(this, 
+            "Produk yang dipilih sudah tidak aktif.\nTidak bisa digunakan untuk pembelian baru.", 
+            "Peringatan", 
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
        
        if(namaProduct.isEmpty() || namaSupplier.isEmpty() || tanggalPembelian == null || qtyPembelianStr.isEmpty() || totalPembelianStr.isEmpty()) {
            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
