@@ -559,7 +559,34 @@ public class Pembelian extends javax.swing.JPanel {
         long hargaInteger = Long.parseLong(hargaStr);
 
         selectedPembelianId = Integer.parseInt(table_pembelian.getValueAt(selectedRow, 0).toString());
-        product_pembelian.setSelectedItem(table_pembelian.getValueAt(selectedRow, 1).toString());
+        String produkDariTabel = table_pembelian.getValueAt(selectedRow, 1).toString();
+        
+         boolean produkMasihAktif = false;
+        for (int i = 0; i < product_pembelian.getItemCount(); i++) {
+            if (product_pembelian.getItemAt(i).toString().equals(produkDariTabel)) {
+                produkMasihAktif = true;
+                break;
+            }
+        }
+        
+         if (produkMasihAktif) {
+            product_pembelian.setSelectedItem(produkDariTabel);
+            product_pembelian.setEnabled(true); // pastikan aktif
+        } else {
+            // Tambahkan sementara ke ComboBox dan tandai sebagai non-aktif
+            product_pembelian.addItem(produkDariTabel + " (non-aktif)");
+            product_pembelian.setSelectedItem(produkDariTabel + " (non-aktif)");
+            product_pembelian.setEnabled(false); // nonaktifkan agar tidak bisa diubah
+
+            JOptionPane.showMessageDialog(
+                null, 
+                "Produk ini sudah tidak aktif dan tidak boleh digunakan kembali.",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
+
+        
         supp_pembelian.setText(table_pembelian.getValueAt(selectedRow, 2).toString());
         
         try {
