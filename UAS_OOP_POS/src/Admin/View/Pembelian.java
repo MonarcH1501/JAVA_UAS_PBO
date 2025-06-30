@@ -576,13 +576,13 @@ public class Pembelian extends javax.swing.JPanel {
 
     private void del_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_del_pembelianActionPerformed
    if(selectedPembelianId != -1){
-        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this Supplier?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this Pembelian?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
         if(confirmation == JOptionPane.YES_OPTION) {
         BeliDAO beliDAO;
          try {
          beliDAO = new BeliDAO();
          beliDAO.deletePembelian(selectedPembelianId);
-         JOptionPane.showMessageDialog(this, "Supplier Deleted successfully ", "Success", JOptionPane.INFORMATION_MESSAGE);
+         JOptionPane.showMessageDialog(this, "Pembelian Deleted successfully ", "Success", JOptionPane.INFORMATION_MESSAGE);
          this.clearForm();
          loadPembelianData();
          selectedPembelianId = -1;
@@ -591,7 +591,7 @@ public class Pembelian extends javax.swing.JPanel {
     }
         }
    }else {
-            JOptionPane.showMessageDialog(this, "No Supplier Selected for Delete ", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No Pembelian Selected for Delete ", "Error", JOptionPane.ERROR_MESSAGE);
        }
     }//GEN-LAST:event_del_pembelianActionPerformed
 

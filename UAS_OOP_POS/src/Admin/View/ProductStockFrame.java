@@ -484,6 +484,7 @@ public class ProductStockFrame extends javax.swing.JPanel {
 "    FROM stock \n" +
 "    GROUP BY id_product\n" +
 ") s ON p.id_product = s.id_product\n" +
+"WHERE p.status = 'Y'\n" +
 "ORDER BY p.product_code;";
          JRDesignQuery newQuery = new JRDesignQuery();
          newQuery.setText(sql);

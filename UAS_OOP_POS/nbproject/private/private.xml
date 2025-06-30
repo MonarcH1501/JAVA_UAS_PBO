@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Kasir/View/PenjualanView.java</file>
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Admin/Model/Product.java</file>
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Admin/View/Home.java</file>
@@ -11,6 +12,12 @@
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Admin/Controller/ProductCRUD.java</file>
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Kasir/Controller/ProductController.java</file>
             <file>file:/C:/Users/user/Desktop/JAVA_UAS_PBO_2/UAS_OOP_POS/src/Kasir/View/MenuView.java</file>
+=======
+            <file>file:/C:/Users/User/Desktop/JAVA_UAS_PBO/UAS_OOP_POS/src/Admin/Model/Beli.java</file>
+            <file>file:/C:/Users/User/Desktop/JAVA_UAS_PBO/UAS_OOP_POS/src/Admin/View/Home.java</file>
+            <file>file:/C:/Users/User/Desktop/JAVA_UAS_PBO/UAS_OOP_POS/src/Admin/View/DataProduct.java</file>
+            <file>file:/C:/Users/User/Desktop/JAVA_UAS_PBO/UAS_OOP_POS/src/Admin/View/Pembelian.java</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>

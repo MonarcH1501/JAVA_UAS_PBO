@@ -112,7 +112,7 @@ public List<comboBox> getComboBox(String name) {
         case "Product":
         a = "product.product_name";
         b = "product";
-        c = "product.id_product = product.id_product";
+        c = "product.id_product = product.id_product WHERE product.status ='Y'";
         break;
         default:
         a = "supplier.supp_name";
@@ -157,7 +157,7 @@ public String getSatuanProduct (String namaProduct) {
 public String getSupplier (String namaProduct) {
    String suppProduct = null;
     try {
-        String sql = "SELECT supp_name FROM product LEFT JOIN supplier ON product.id_supplier = supplier.id_supplier WHERE product.product_name=?";
+        String sql = "SELECT supp_name FROM product LEFT JOIN supplier ON product.id_supplier = supplier.id_supplier WHERE product.product_name=? AND product.status = 'Y'";
         PreparedStatement stmt =connection.prepareStatement(sql); 
         stmt.setString(1, namaProduct);
         ResultSet rs = stmt.executeQuery();

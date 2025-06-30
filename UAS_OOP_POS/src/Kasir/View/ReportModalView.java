@@ -279,7 +279,7 @@ public class ReportModalView extends javax.swing.JFrame {
 
         // Koneksi database
         Connection conn = DBConnection.getConnection();
-        JOptionPane.showMessageDialog(null, "Connected!");
+//        JOptionPane.showMessageDialog(null, "Connected!");
 
         JasperPrint jp = JasperFillManager.fillReport(js, param, conn);
         JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup

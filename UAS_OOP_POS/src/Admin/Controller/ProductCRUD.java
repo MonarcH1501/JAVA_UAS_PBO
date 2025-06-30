@@ -65,7 +65,8 @@ public class ProductCRUD {
     
     // Untuk Menghapus Product
     public int deleteProduct(Product product) throws SQLException {
-        String deleteQuery = "DELETE FROM product WHERE id_product = ?";
+//        String deleteQuery = "DELETE FROM product WHERE id_product = ?";
+        String deleteQuery = "UPDATE product SET status = 'N' WHERE id_product = ?";
         try(PreparedStatement ps = c.prepareStatement(deleteQuery)) {
             ps.setInt(1, product.getId_product());
             
@@ -77,7 +78,7 @@ public class ProductCRUD {
     // Menampilkan Data Produk ke tabel
     public List<Product> getProduct() throws SQLException {
         List<Product> products = new ArrayList<>();
-        String queryProduct = "SELECT pr.id_product AS id_product, pr.id_supplier AS id_supplier, sp.supp_name AS supp_name, pr.product_code AS product_code, pr.product_name AS product_name, pr.price_buy AS price_buy, pr.price_sell AS price_sell, pr.product_unit AS product_unit FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier ORDER BY pr.id_product";
+        String queryProduct = "SELECT pr.id_product AS id_product, pr.id_supplier AS id_supplier, sp.supp_name AS supp_name, pr.product_code AS product_code, pr.product_name AS product_name, pr.price_buy AS price_buy, pr.price_sell AS price_sell, pr.product_unit AS product_unit FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier WHERE pr.status = 'Y' ORDER BY pr.id_product";
         
         try(PreparedStatement ps = c.prepareStatement(queryProduct);
             ResultSet rs = ps.executeQuery();) {
@@ -100,7 +101,7 @@ public class ProductCRUD {
     // Menampilkan Produk dan Stok Produk Melalui Perhitungan ke tabel
     public List<Product> getProductStock() throws SQLException {
         List<Product> productStock = new ArrayList<>();
-        String queryProductStock = "SELECT pr.id_product AS id_product, pr.id_supplier AS id_supplier, sp.supp_name AS supp_name, pr.product_code AS product_code, pr.product_name AS product_name, pr.product_unit AS product_unit, COALESCE(pb.total_purchase, 0) as total_purchase, COALESCE(sd.total_sale, 0) as total_sale, COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0) as total_stok FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier LEFT JOIN(SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product LEFT JOIN(SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product LEFT JOIN(SELECT id_product, sum(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product ORDER BY pr.id_product";
+        String queryProductStock = "SELECT pr.id_product AS id_product, pr.id_supplier AS id_supplier, sp.supp_name AS supp_name, pr.product_code AS product_code, pr.product_name AS product_name, pr.product_unit AS product_unit, COALESCE(pb.total_purchase, 0) as total_purchase, COALESCE(sd.total_sale, 0) as total_sale, COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0) as total_stok FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier LEFT JOIN(SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product LEFT JOIN(SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product LEFT JOIN(SELECT id_product, sum(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product WHERE pr.status = 'Y' ORDER BY pr.id_product";
         
         try(PreparedStatement ps = c.prepareStatement(queryProductStock); 
             ResultSet rs = ps.executeQuery();) {
@@ -166,7 +167,7 @@ public boolean resetProductStock(int productId) throws SQLException {
     
     public List<String> getSupplierList() throws SQLException {
         List<String> supplierList = new ArrayList<>();
-        String querySupplier = "SELECT id_supplier, supp_name FROM supplier";
+        String querySupplier = "SELECT id_supplier, supp_name FROM supplier WHERE status = 'Y'";
         
         try(PreparedStatement ps = c.prepareStatement(querySupplier);
             ResultSet rs = ps.executeQuery()) {
@@ -233,7 +234,7 @@ public boolean resetProductStock(int productId) throws SQLException {
     
     public List<Product> searchStockProduct(String text, String filter) throws SQLException {
         List<Product> productStock = new ArrayList<>();
-        String queryProductStock = "SELECT pr.id_product, pr.id_supplier, sp.supp_name, pr.product_code, pr.product_name, pr.product_unit, COALESCE(pb.total_purchase, 0) as total_purchase, COALESCE(sd.total_sale, 0) as total_sale, COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0) as total_stok FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier LEFT JOIN(SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product LEFT JOIN(SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product LEFT JOIN(SELECT id_product, sum(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product WHERE " + filter + " LIKE ?";
+        String queryProductStock = "SELECT pr.id_product, pr.id_supplier, sp.supp_name, pr.product_code, pr.product_name, pr.product_unit, COALESCE(pb.total_purchase, 0) as total_purchase, COALESCE(sd.total_sale, 0) as total_sale, COALESCE(s.total_stok_rusak, 0) as total_stok_rusak, COALESCE(pb.total_purchase, 0) - COALESCE(sd.total_sale, 0) - COALESCE(s.total_stok_rusak, 0) as total_stok FROM product pr JOIN supplier sp ON pr.id_supplier = sp.id_supplier LEFT JOIN(SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product LEFT JOIN(SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product LEFT JOIN(SELECT id_product, sum(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product WHERE pr.status = 'Y' AND " + filter + " LIKE ?";
         
         try(PreparedStatement ps = c.prepareStatement(queryProductStock)) {
                 ps.setString(1, "%" + text + "%");
@@ -308,7 +309,8 @@ public boolean resetProductStock(int productId) throws SQLException {
                            "FROM product pr " +
                            "LEFT JOIN (SELECT id_product, SUM(purchase_qty) as total_purchase FROM pembelian GROUP BY id_product) pb ON pr.id_product = pb.id_product " +
                            "LEFT JOIN (SELECT id_product, SUM(sale_qty) as total_sale FROM sale_details GROUP BY id_product) sd ON pr.id_product = sd.id_product " +
-                           "LEFT JOIN (SELECT id_product, SUM(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product";
+                           "LEFT JOIN (SELECT id_product, SUM(stok_rusak) as total_stok_rusak FROM stock GROUP BY id_product) s ON pr.id_product = s.id_product "
+                           + "WHERE pr.status = 'Y'";
 
             PreparedStatement ps = c.prepareStatement(query);
             ResultSet rs = ps.executeQuery();

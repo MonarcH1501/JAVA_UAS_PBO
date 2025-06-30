@@ -29,6 +29,7 @@ LEFT JOIN (
     FROM stock 
     GROUP BY id_product
 ) s ON p.id_product = s.id_product
+WHERE p.status = 'Y'
 ORDER BY p.product_code;]]>
 	</queryString>
 	<field name="product_code" class="java.lang.String">

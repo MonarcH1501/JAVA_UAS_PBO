@@ -30,7 +30,7 @@ public class ListBarang extends javax.swing.JFrame {
 
     private void loadData() {
         model.setRowCount(0); // Clear table
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT * FROM product WHERE status = 'Y'";
         NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         
 

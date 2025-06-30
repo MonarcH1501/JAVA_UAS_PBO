@@ -40,7 +40,7 @@ public List<Supp> getSuppliers() {
 List<Supp> suppliers = new ArrayList<>();
 
 try {
-    String sql = "SELECT * FROM supplier";
+    String sql = "SELECT * FROM supplier WHERE status ='Y'";
     PreparedStatement stmt =connection.prepareStatement(sql);
     
     ResultSet rs = stmt.executeQuery();
@@ -81,7 +81,8 @@ stmt.executeUpdate();
 // Delete Supplier
 public void deleteSupplier(int id) {
     try {
-        String sql = "DELETE FROM supplier WHERE id_supplier=?";
+//        String sql = "DELETE FROM supplier WHERE id_supplier=?";
+        String sql = "UPDATE supplier SET status='N' WHERE id_supplier=?";
         PreparedStatement stmt =connection.prepareStatement(sql);
         stmt.setInt(1, id);
         stmt.executeUpdate();
