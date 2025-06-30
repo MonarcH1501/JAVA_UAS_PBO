@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 14, 2025 at 06:32 PM
+-- Generation Time: Jun 30, 2025 at 01:18 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -65,18 +65,17 @@ CREATE TABLE `pembelian` (
 
 INSERT INTO `pembelian` (`id_purchase`, `id_supplier`, `id_product`, `purchase_date`, `purchase_qty`, `total_price`) VALUES
 (1, 1, 4, '2024-01-07', 50, 987000000),
-(2, 1, 5, '2024-01-07', 10, 5000000000),
 (3, 1, 6, '2024-01-07', 15, 25000000),
 (4, 2, 7, '2024-01-08', 30, 17500000),
 (5, 2, 7, '2024-01-10', 50, 1500000),
-(6, 2, 4, '2024-01-10', 50, 2500000),
-(7, 2, 4, '2024-01-10', 50, 1000000),
-(8, 1, 11, '2025-01-23', 50, 50000),
+(6, 1, 4, '2024-01-10', 50, 2500000),
+(7, 1, 4, '2024-01-10', 50, 1000000),
+(8, 3, 11, '2025-01-23', 50, 500000),
 (9, 1, 5, '2025-06-01', 70, 45000000000),
-(11, 1, 8, '2025-05-19', 100, 7500000000),
-(12, 2, 9, '2025-05-01', 150, 780000000),
+(11, 2, 8, '2025-05-19', 100, 759),
+(12, 1, 9, '2025-05-01', 150, 788),
 (13, 2, 7, '2025-06-02', 45, 3000000),
-(14, 1, 10, '2025-06-04', 55, 48000000);
+(14, 2, 10, '2025-06-04', 55, 487);
 
 -- --------------------------------------------------------
 
@@ -139,7 +138,11 @@ INSERT INTO `penjualan` (`id_sale`, `sale_date`, `discount`, `tax`, `sale_total_
 (37, '2025-06-10', '5.00', '11.00', '37962.00', '50000.00', '11238.80', '36000.00'),
 (38, '2025-06-12', '5.00', '11.00', '173992.50', '200000.00', '26007.50', '165000.00'),
 (39, '2025-06-14', '5.00', '11.00', '84360.00', '100000.00', '15640.00', '80000.00'),
-(40, '2025-06-14', '5.00', '11.00', '319513.50', '400000.00', '80486.50', '303000.00');
+(40, '2025-06-14', '5.00', '11.00', '319513.50', '400000.00', '80486.50', '303000.00'),
+(41, '2025-06-17', '0.00', '11.00', '138750.00', '1500000.00', '0.00', '125000.00'),
+(42, '2025-06-17', '0.00', '11.00', '166500.00', '1800000.00', '1633500.00', '150000.00'),
+(43, '2025-06-28', '0.00', '11.00', '222000.00', '250000.00', '28000.00', '200000.00'),
+(44, '2025-06-28', '0.00', '11.00', '88800.00', '100000.00', '11200.00', '80000.00');
 
 -- --------------------------------------------------------
 
@@ -154,22 +157,24 @@ CREATE TABLE `product` (
   `product_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `price_buy` decimal(10,2) NOT NULL,
   `price_sell` decimal(10,2) NOT NULL,
-  `product_unit` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+  `product_unit` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` enum('Y','N') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Y'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id_product`, `id_supplier`, `product_code`, `product_name`, `price_buy`, `price_sell`, `product_unit`) VALUES
-(4, 1, '23110003', 'Susu Diarycrown', '21000.00', '25000.00', 'pcs'),
-(5, 1, '23110004', 'Blue9 600ml', '35000.00', '40000.00', 'dus'),
-(6, 1, '23110005', 'Nestle 600ml', '39000.00', '44000.00', 'dus'),
-(7, 2, '23110006', 'Passy 600ml', '32000.00', '36000.00', 'dus'),
-(8, 2, '23110007', 'Aqua 600ml', '35000.00', '40000.00', 'dus'),
-(9, 1, '23110008', 'Mie Indomie Kaldu', '40000.00', '44000.00', 'dus'),
-(10, 2, '23110009', 'Passy 300ml', '25000.00', '29000.00', 'dus'),
-(11, 2, '23110010', 'Susu Dancow', '50000.00', '55000.00', 'pcs');
+INSERT INTO `product` (`id_product`, `id_supplier`, `product_code`, `product_name`, `price_buy`, `price_sell`, `product_unit`, `status`) VALUES
+(4, 1, '23110003', 'Susu Diarycrown', '21000.00', '25000.00', 'pcs', 'Y'),
+(5, 1, '23110004', 'Blue9 600ml', '35000.00', '40000.00', 'dus', 'Y'),
+(6, 1, '23110005', 'Nestle 600ml', '39000.00', '44000.00', 'dus', 'Y'),
+(7, 2, '23110006', 'Passy 600ml', '32000.00', '36000.00', 'dus', 'Y'),
+(8, 2, '23110007', 'Aqua 600ml', '35000.00', '40000.00', 'dus', 'Y'),
+(9, 1, '23110008', 'Mie Indomie Kaldu', '40000.00', '44000.00', 'dus', 'Y'),
+(10, 2, '23110009', 'Passy 300ml', '25000.00', '29000.00', 'dus', 'Y'),
+(11, 3, '23110010', 'Susu Dancow', '50000.00', '55000.00', 'pcs', 'N'),
+(12, 1, '23110011', 'Susu Indomilk', '60000.00', '70000.00', 'pcs', 'N');
 
 -- --------------------------------------------------------
 
@@ -274,7 +279,11 @@ INSERT INTO `sale_details` (`id_sale_detail`, `id_sale`, `id_product`, `sale_qty
 (63, 39, 5, 2, '40000.00'),
 (64, 40, 6, 2, '44000.00'),
 (65, 40, 11, 3, '55000.00'),
-(66, 40, 4, 2, '25000.00');
+(66, 40, 4, 2, '25000.00'),
+(67, 41, 4, 5, '25000.00'),
+(68, 42, 4, 6, '25000.00'),
+(69, 43, 8, 5, '40000.00'),
+(70, 44, 5, 2, '40000.00');
 
 -- --------------------------------------------------------
 
@@ -295,7 +304,10 @@ CREATE TABLE `stock` (
 
 INSERT INTO `stock` (`id_stock`, `id_product`, `tanggal`, `stok_rusak`) VALUES
 (1, 4, '2025-06-02', 12),
-(2, 11, '2025-06-04', 2);
+(2, 11, '2025-06-05', 2),
+(3, 7, '2025-06-04', 9),
+(4, 7, '2025-06-03', 10),
+(5, 7, '2025-06-11', 8);
 
 -- --------------------------------------------------------
 
@@ -308,16 +320,18 @@ CREATE TABLE `supplier` (
   `supp_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `supp_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `contact` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `address` text COLLATE utf8mb4_general_ci NOT NULL
+  `address` text COLLATE utf8mb4_general_ci NOT NULL,
+  `status` enum('Y','N') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Y'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`id_supplier`, `supp_code`, `supp_name`, `contact`, `address`) VALUES
-(1, '001', 'Hendri', '0895-9932-0983', 'Jl Gajahmada No 15'),
-(2, '002', 'Pedro', '0895-9911-0363', 'Jl Tanjungpura No 20');
+INSERT INTO `supplier` (`id_supplier`, `supp_code`, `supp_name`, `contact`, `address`, `status`) VALUES
+(1, '001', 'Hendri', '0895-9932-0983', 'Jl Gajahmada No 15', 'Y'),
+(2, '002', 'Pedro', '0895-9911-0363', 'Jl Tanjungpura No 20', 'Y'),
+(3, '003', 'Ryan', '085345005955', 'Jl. Purnama 2', 'N');
 
 --
 -- Indexes for dumped tables
@@ -392,19 +406,19 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `pembelian`
 --
 ALTER TABLE `pembelian`
-  MODIFY `id_purchase` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_purchase` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `penjualan`
 --
 ALTER TABLE `penjualan`
-  MODIFY `id_sale` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_sale` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id_product` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_product` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -416,19 +430,19 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `sale_details`
 --
 ALTER TABLE `sale_details`
-  MODIFY `id_sale_detail` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id_sale_detail` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id_stock` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_stock` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `id_supplier` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_supplier` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
