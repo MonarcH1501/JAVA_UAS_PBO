@@ -152,6 +152,24 @@ public String getSatuanProduct (String namaProduct) {
 } 
     return satuanProduct; }
 
+// select price_buy
+public BigDecimal getPriceProduct (String namaProduct) {
+   BigDecimal priceProduct = null;
+    try {
+        String sql = "SELECT price_buy FROM product WHERE product_name=?";
+        PreparedStatement stmt =connection.prepareStatement(sql); 
+        stmt.setString(1, namaProduct);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()){
+         priceProduct = rs.getBigDecimal("price_buy");
+        } else {
+         System.out.println("Price not found: " + namaProduct);
+        }
+    } catch (SQLException e) {
+    e.printStackTrace();
+} 
+    return priceProduct; }
+
 
 // select supplier
 public String getSupplier (String namaProduct) {

@@ -215,6 +215,14 @@ public class Pembelian extends javax.swing.JPanel {
                 jumlah_pembelianActionPerformed(evt);
             }
         });
+        jumlah_pembelian.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jumlah_pembelianKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jumlah_pembelianKeyReleased(evt);
+            }
+        });
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -771,6 +779,53 @@ public class Pembelian extends javax.swing.JPanel {
     private void product_pembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_pembelianActionPerformed
    loadSupplier();
     }//GEN-LAST:event_product_pembelianActionPerformed
+    
+    private void loadPrice(int jumlah){
+    try {
+    BeliDAO beliDAO = new BeliDAO();
+    String namaProduct = (String) product_pembelian.getSelectedItem();
+    BigDecimal price = beliDAO.getPriceProduct(namaProduct);
+    
+    if (price != null){
+            BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(jumlah));
+            harga_pembelian.setText(String.valueOf(totalPrice));
+//            System.out.println("Supp yang diatur: " + namaSupp); 
+            }
+            else {
+            harga_pembelian.setText("-");
+//            System.out.println("Supp tidak ditemukan untuk produk: " + selectedProduct);
+    }
+    
+    } catch (SQLException ex){
+        JOptionPane.showMessageDialog(this, "Error occurred while searching", "Error", JOptionPane.ERROR_MESSAGE);
+    }    
+    }
+    
+    
+    
+    private void jumlah_pembelianKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jumlah_pembelianKeyPressed
+   
+    }//GEN-LAST:event_jumlah_pembelianKeyPressed
+
+    private void jumlah_pembelianKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jumlah_pembelianKeyReleased
+      String inputJumlah = jumlah_pembelian.getText().trim();
+
+    if (inputJumlah.isEmpty()) {
+        harga_pembelian.setText("-");
+        return; // keluar agar tidak lanjut ke parsing
+    }
+
+    try {
+        int jumlah = Integer.parseInt(inputJumlah);
+        if (jumlah <= 0) {
+            harga_pembelian.setText("-");
+            return;
+        }
+        loadPrice(jumlah);
+    } catch (NumberFormatException e) {
+        harga_pembelian.setText("-");
+    }
+    }//GEN-LAST:event_jumlah_pembelianKeyReleased
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
