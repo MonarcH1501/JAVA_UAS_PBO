@@ -32,6 +32,24 @@ public int insertUser(Login_Model login) throws SQLException {
 }
 }
 
+/// Create Admin
+public int insertAdmin(Login_Model login) throws SQLException {
+    try {
+        String sql = "INSERT INTO login (id_role, username, passwords, full_name)  "
+            + "VALUES (1, ?, ?, ?)";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    stmt.setString(1, login.getUsername());
+    stmt.setString(2, login.getPass());
+    stmt.setString(3, login.getFullname());
+    stmt.executeUpdate();
+    return 1;
+    }
+    catch (SQLException e) {
+    return 0;
+}
+}
+
+
 // select/read login
 public List<Login_Model> getLogin (String username) {
 List<Login_Model> login = new ArrayList<>();

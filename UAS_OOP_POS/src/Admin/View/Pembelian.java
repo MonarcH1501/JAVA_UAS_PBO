@@ -35,6 +35,7 @@ public class Pembelian extends javax.swing.JPanel {
      * Creates new form Supplier
      */
     private int selectedPembelianId = -1;
+    private BigDecimal totalHarga;
      
     public Pembelian() throws SQLException {
         initComponents();
@@ -508,6 +509,10 @@ public class Pembelian extends javax.swing.JPanel {
                int res = beliDAO.insertPembelian(addBeli);
                if (res == 1) {
                JOptionPane.showMessageDialog(this, "Pembelian created successfully ", "Success", JOptionPane.INFORMATION_MESSAGE);
+               BigDecimal total = new BigDecimal(harga_pembelian.getText());
+               if (totalHarga != total){
+               JOptionPane.showMessageDialog(this, "Data Harga Jual Product Tersebut Perlu Diupdate", "Alert", JOptionPane.INFORMATION_MESSAGE);
+               }
                this.clearForm();
                loadPembelianData();
            } else {
@@ -789,6 +794,7 @@ public class Pembelian extends javax.swing.JPanel {
     if (price != null){
             BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(jumlah));
             harga_pembelian.setText(String.valueOf(totalPrice));
+            totalHarga = totalPrice;
 //            System.out.println("Supp yang diatur: " + namaSupp); 
             }
             else {

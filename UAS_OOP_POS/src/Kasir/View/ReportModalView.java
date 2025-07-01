@@ -10,8 +10,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.event.*;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -214,13 +216,19 @@ public class ReportModalView extends javax.swing.JFrame {
     model.addColumn("Tanggal");
     model.addColumn("Total Harga");
     model.addColumn("Total Bayar");
+    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
     for (Sale s : sales) {
+        
+    String formattedHarga = nf.format(s.getTotalPrice()).replace(",00", "").replace("Rp", "Rp ");
+    String formattedBayar = nf.format(s.getTotalPay()).replace(",00", "").replace("Rp", "Rp ");
+        
         model.addRow(new Object[]{
             s.getTransactionNo(),
             s.getDate(),
-            s.getTotalPrice(),
-            s.getTotalPay()
+            formattedHarga,
+            formattedBayar
         });
     }
 

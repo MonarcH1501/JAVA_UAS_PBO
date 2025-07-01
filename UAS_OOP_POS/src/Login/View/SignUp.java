@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
 import java.sql.SQLException;
+import javax.swing.JPasswordField;
 /**
  *
  * @author Ryan F
@@ -52,6 +53,8 @@ public class SignUp extends javax.swing.JFrame {
         pass = new javax.swing.JPasswordField();
         jLabel7 = new javax.swing.JLabel();
         userAddress = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        combo_role = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LOGIN");
@@ -174,38 +177,52 @@ public class SignUp extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel8.setText("Role :");
+
+        combo_role.setBackground(new java.awt.Color(204, 204, 204));
+        combo_role.setForeground(new java.awt.Color(0, 0, 0));
+        combo_role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "Admin" }));
+
         javax.swing.GroupLayout LeftLayout = new javax.swing.GroupLayout(Left);
         Left.setLayout(LeftLayout);
         LeftLayout.setHorizontalGroup(
             LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LeftLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
                 .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
-                        .addComponent(fname)
-                        .addComponent(jLabel3)
-                        .addComponent(pass, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addComponent(userAddress))
                     .addGroup(LeftLayout.createSequentialGroup()
-                        .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(SignUpBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(31, 31, 31)
+                        .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel2)
+                                .addComponent(fname)
+                                .addComponent(jLabel3)
+                                .addComponent(pass, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                                .addComponent(jLabel7)
+                                .addComponent(userAddress))
+                            .addGroup(LeftLayout.createSequentialGroup()
+                                .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(SignUpBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(LeftLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(combo_role, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(LeftLayout.createSequentialGroup()
+                        .addGap(131, 131, 131)
+                        .addComponent(jLabel1)))
                 .addContainerGap(42, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LeftLayout.createSequentialGroup()
-                .addContainerGap(134, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(132, 132, 132))
         );
         LeftLayout.setVerticalGroup(
             LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LeftLayout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,13 +234,17 @@ public class SignUp extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(combo_role, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(SignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24))
+                .addGap(16, 16, 16))
         );
 
         jPanel1.add(Left);
@@ -254,9 +275,10 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_fnameActionPerformed
 
     private void SignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpBtnActionPerformed
-      String fullName = fname.getText().trim();
+    String fullName = fname.getText().trim();
     String username = userAddress.getText().trim();
     String password = pass.getText().trim();
+    String role = (String) combo_role.getSelectedItem();
 
     // Validasi input
     if (fullName.isEmpty()) {
@@ -271,26 +293,65 @@ public class SignUp extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
-
-    try {
+    
+    if("Admin".equals(role)){
+         JPasswordField pwdField = new JPasswordField();
+        int action = JOptionPane.showConfirmDialog(
+            this,
+            pwdField,
+            "Masukkan Password Admin untuk Konfirmasi",
+            JOptionPane.OK_CANCEL_OPTION
+        );
+        
+             if (action == JOptionPane.OK_OPTION) {
+            String confirmPass = new String(pwdField.getPassword());
+            if (!confirmPass.equals("123")) {
+                JOptionPane.showMessageDialog(this, "Password konfirmasi salah! Tidak diizinkan membuat akun Admin.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            return; // user klik cancel
+        }
+    }
+     insertLogin(fullName, username, password, role);
+    }//GEN-LAST:event_SignUpBtnActionPerformed
+    
+    private void insertLogin (String fullName, String username, String password, String role) {
+     try {
         // Buat objek Login
         Login_Model newUser = new Login_Model(0, "", username, password, fullName); // id dan role bisa default dulu
 
         // Gunakan DAO untuk insert
         LoginDAO loginDAO = new LoginDAO();
-        int result = loginDAO.insertUser(newUser);
+        int result;
+        
+          if ("Admin".equalsIgnoreCase(role)) {
+            result = loginDAO.insertAdmin(newUser);
+        } else {
+            result = loginDAO.insertUser(newUser);
+        }
 
         if (result > 0) {
             JOptionPane.showMessageDialog(this, "Akun berhasil dibuat!");
             fname.setText("");
             userAddress.setText("");
             pass.setText("");
+        if ("Admin".equalsIgnoreCase(role)) {
+            Home homeFrame = new Home();
+            homeFrame.setName(username);
+            homeFrame.setVisible(true);
+            homeFrame.pack();
+            homeFrame.setLocationRelativeTo(null);
+            homeFrame.setExtendedState(Home.MAXIMIZED_BOTH);
+            this.dispose(); // Tutup form login
+        } else {
             MenuView menuUtama = new MenuView();
             menuUtama.setVisible(true);
             menuUtama.pack();
             menuUtama.setLocationRelativeTo(null);
             menuUtama.setExtendedState(MenuView.MAXIMIZED_BOTH);
             this.dispose(); // Tutup form login
+        }
         } else {
             JOptionPane.showMessageDialog(this, "Gagal membuat akun.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -299,9 +360,9 @@ public class SignUp extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         ex.printStackTrace();
     }
+       
+    }
     
-    }//GEN-LAST:event_SignUpBtnActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
          Login LoginFrame = new Login();
          LoginFrame.setVisible(true);
@@ -388,6 +449,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JPanel Left;
     private javax.swing.JPanel Right;
     private javax.swing.JButton SignUpBtn;
+    private javax.swing.JComboBox<String> combo_role;
     private javax.swing.JTextField fname;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -397,6 +459,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField pass;
     private javax.swing.JTextField userAddress;
