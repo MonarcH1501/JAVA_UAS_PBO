@@ -299,14 +299,14 @@ public class SignUp extends javax.swing.JFrame {
         int action = JOptionPane.showConfirmDialog(
             this,
             pwdField,
-            "Masukkan Password Admin untuk Konfirmasi",
+            "Masukkan Key untuk Konfirmasi",
             JOptionPane.OK_CANCEL_OPTION
         );
         
              if (action == JOptionPane.OK_OPTION) {
             String confirmPass = new String(pwdField.getPassword());
             if (!confirmPass.equals("123")) {
-                JOptionPane.showMessageDialog(this, "Password konfirmasi salah! Tidak diizinkan membuat akun Admin.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Key konfirmasi salah! Tidak diizinkan membuat akun Admin.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         } else {
