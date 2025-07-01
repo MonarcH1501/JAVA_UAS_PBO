@@ -4,6 +4,7 @@
  */
 package Login.View;
 import Admin.View.*;
+import Kasir.View.MenuView;
 import Login.Controller.LoginDAO;
 import Login.Model.Login_Model;
 import java.sql.Connection;
@@ -284,6 +285,12 @@ public class SignUp extends javax.swing.JFrame {
             fname.setText("");
             userAddress.setText("");
             pass.setText("");
+            MenuView menuUtama = new MenuView();
+            menuUtama.setVisible(true);
+            menuUtama.pack();
+            menuUtama.setLocationRelativeTo(null);
+            menuUtama.setExtendedState(MenuView.MAXIMIZED_BOTH);
+            this.dispose(); // Tutup form login
         } else {
             JOptionPane.showMessageDialog(this, "Gagal membuat akun.", "Error", JOptionPane.ERROR_MESSAGE);
         }
