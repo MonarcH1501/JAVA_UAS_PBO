@@ -24,6 +24,16 @@ public class ProductCRUD {
     
     // untuk Menambah Product
     public int insertProduct(Product product) throws SQLException {
+        String checkQuery = "SELECT COUNT(*) FROM product WHERE product_code = ?";
+        try (PreparedStatement checkStmt = c.prepareStatement(checkQuery)) {
+            checkStmt.setString(1, product.getProduct_code());
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return -1; 
+                }
+            }
+        }
+        
         String insertQuery = "INSERT INTO product (id_supplier, product_code, product_name, price_buy, price_sell, product_unit) VALUES (?, ?, ?, ?, ?, ?)";
         try(PreparedStatement ps = c.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, product.getId_supplier());
