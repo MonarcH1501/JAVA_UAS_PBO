@@ -92,12 +92,102 @@ try {
         membeli.add(new Beli(idBeli, nameProduct, nameSupplier, tglBeli, qtyBeli, unitProduct, totalHarga));
     }
     
-} catch (SQLException e) {
-    e.printStackTrace();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return membeli;
 }
 
-return membeli;
-}
+public List<Beli> loadAllPembelian() throws SQLException {
+        List<Beli> list = new ArrayList<>();
+
+        String query = "SELECT id_purchase, product.product_name, supplier.supp_name, purchase_date, " +
+                       "purchase_qty, product.product_unit, total_price " +
+                       "FROM pembelian " +
+                       "LEFT JOIN product ON pembelian.id_product = product.id_product " +
+                       "LEFT JOIN supplier ON pembelian.id_supplier = supplier.id_supplier";
+        Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Beli beli = new Beli(
+                rs.getInt("id_purchase"),
+                rs.getString("product_name"),
+                rs.getString("supp_name"),
+                rs.getDate("purchase_date"),
+                rs.getInt("purchase_qty"),
+                rs.getString("product_unit"),
+                rs.getBigDecimal("total_price")
+            );
+            list.add(beli);
+        }
+
+        return list;
+    }
+
+    public List<Beli> getFilteredPembelian(String filter, int month, int year) throws SQLException {
+        List<Beli> list = new ArrayList<>();
+        String sql = "";
+
+        if ("Bulan".equals(filter)) {
+            sql = "SELECT ... FROM pembelian ... WHERE MONTH(purchase_date) = ? AND YEAR(purchase_date) = ?";
+        } else if ("Tahun".equals(filter)) {
+            sql = "SELECT ... FROM pembelian ... WHERE YEAR(purchase_date) = ?";
+        }
+
+        Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+
+        if ("Bulan".equals(filter)) {
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+        } else if ("Tahun".equals(filter)) {
+            stmt.setInt(1, year);
+        }
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Beli beli = new Beli(
+                rs.getInt("id_purchase"),
+                rs.getString("product_name"),
+                rs.getString("supp_name"),
+                rs.getDate("purchase_date"),
+                rs.getInt("purchase_qty"),
+                rs.getString("product_unit"),
+                rs.getBigDecimal("total_price")
+            );
+            list.add(beli);
+        }
+
+        return list;
+    }
+
+    public List<Beli> getPembelianByDay(java.util.Date day) throws SQLException {
+        List<Beli> list = new ArrayList<>();
+        java.sql.Date sqlDate = new java.sql.Date(day.getTime());
+
+        String sql = "SELECT ... FROM pembelian ... WHERE purchase_date = ?";
+        Connection conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setDate(1, sqlDate);
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            list.add(new Beli(
+                rs.getInt("id_purchase"),
+                rs.getString("product_name"),
+                rs.getString("supp_name"),
+                rs.getDate("purchase_date"),
+                rs.getInt("purchase_qty"),
+                rs.getString("product_unit"),
+                rs.getBigDecimal("total_price")
+            ));
+        }
+
+        return list;
+    }
 
 // Select/read Combo Box
 public List<comboBox> getComboBox(String name) {

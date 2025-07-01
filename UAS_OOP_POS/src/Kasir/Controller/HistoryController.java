@@ -164,5 +164,33 @@ public class HistoryController {
     return list;
 }
 
+        public List<Sale> getSalesByDay(Date date) throws SQLException {
+    List<Sale> list = new ArrayList<>();
+    String sql = """
+        SELECT id_sale, sale_date, sale_total_price, total_bayar 
+          FROM penjualan 
+         WHERE DATE(sale_date) = ?
+    """;
+
+    try (Connection c = DBConnection.getConnection();
+         PreparedStatement pst = c.prepareStatement(sql)) {
+        pst.setDate(1, new java.sql.Date(date.getTime()));
+
+        try (ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                String id = rs.getString("id_sale");
+                Date saleDate = rs.getDate("sale_date");
+                double totalPrice = rs.getDouble("sale_total_price");
+                double totalBayar = rs.getDouble("total_bayar");
+
+                Sale sale = new Sale(id, saleDate, totalPrice, 0, 0, totalBayar, 0, 0, null);
+                list.add(sale);
+            }
+        }
+    }
+
+    return list;
+}
+
 
 }

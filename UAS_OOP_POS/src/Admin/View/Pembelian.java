@@ -81,6 +81,7 @@ public class Pembelian extends javax.swing.JPanel {
         table_supp1 = new javax.swing.JTable();
         date_pembelian = new com.toedter.calendar.JDateChooser();
         supp_pembelian = new javax.swing.JTextField();
+        btn_laporan = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1270, 700));
@@ -288,6 +289,15 @@ public class Pembelian extends javax.swing.JPanel {
             }
         });
 
+        btn_laporan.setBackground(new java.awt.Color(153, 153, 153));
+        btn_laporan.setForeground(new java.awt.Color(255, 255, 255));
+        btn_laporan.setText("Laporan");
+        btn_laporan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_laporanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout main_suppLayout = new javax.swing.GroupLayout(main_supp);
         main_supp.setLayout(main_suppLayout);
         main_suppLayout.setHorizontalGroup(
@@ -314,6 +324,8 @@ public class Pembelian extends javax.swing.JPanel {
                         .addComponent(del_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(main_suppLayout.createSequentialGroup()
                         .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -327,7 +339,7 @@ public class Pembelian extends javax.swing.JPanel {
                         .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(date_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jumlah_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                         .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel4))
@@ -338,7 +350,7 @@ public class Pembelian extends javax.swing.JPanel {
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(main_suppLayout.createSequentialGroup()
                                 .addComponent(satuan_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                                 .addGroup(main_suppLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(main_suppLayout.createSequentialGroup()
                                         .addComponent(search_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,7 +403,8 @@ public class Pembelian extends javax.swing.JPanel {
                     .addComponent(add_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(upd_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(del_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(clear_pembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_laporan, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
@@ -832,10 +845,15 @@ public class Pembelian extends javax.swing.JPanel {
         harga_pembelian.setText("-");
     }
     }//GEN-LAST:event_jumlah_pembelianKeyReleased
+
+    private void btn_laporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_laporanActionPerformed
+         new ReportPembelianModalView().setVisible(true);
+    }//GEN-LAST:event_btn_laporanActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_pembelian;
+    private javax.swing.JButton btn_laporan;
     private javax.swing.JComboBox<String> cBox_pembelian;
     private javax.swing.JButton clear_pembelian;
     private com.toedter.calendar.JDateChooser date_pembelian;

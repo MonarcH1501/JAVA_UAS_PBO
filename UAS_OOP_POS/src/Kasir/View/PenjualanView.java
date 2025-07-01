@@ -525,7 +525,7 @@ import java.util.logging.Logger;
             return;
         }
 
-        // ✅ Ambil stok dari SaleController (bukan ProductCRUD)
+        // ✅ Ambil stok dari SaleController 
         Product stokProduk = saleController.getProductStockById(idBarang);
         if (stokProduk == null) {
             JOptionPane.showMessageDialog(this, "Produk tidak ditemukan!");

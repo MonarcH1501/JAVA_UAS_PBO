@@ -7,17 +7,19 @@
 	<parameter name="year" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT 
-      id_sale,
-      sale_date,
-      DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted,
-      sale_total_price,
-      FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted,
-      total_bayar,
-      FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted
-    FROM penjualan
-    WHERE ($P{filterMode} = 'Semua')
-       OR ($P{filterMode} = 'Bulan' AND MONTH(sale_date) = $P{month} AND YEAR(sale_date) = $P{year})
-       OR ($P{filterMode} = 'Tahun' AND YEAR(sale_date) = $P{year})]]>
+    id_sale,
+    sale_date,
+    DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted,
+    sale_total_price,
+    FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted,
+    total_bayar,
+    FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted
+FROM penjualan
+WHERE ($P{filterMode} = 'Semua')
+   OR ($P{filterMode} = 'Bulan' AND MONTH(sale_date) = $P{month} AND YEAR(sale_date) = $P{year})
+   OR ($P{filterMode} = 'Tahun' AND YEAR(sale_date) = $P{year})
+   OR ($P{filterMode} = 'Hari' AND DATE(sale_date) = $P{day})
+]]>
 	</queryString>
 	<field name="id_sale" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

@@ -24,21 +24,20 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class ReportModalView extends javax.swing.JFrame {
+public class ReportModalView_backup extends javax.swing.JFrame {
     
-    public ReportModalView() {
+    public ReportModalView_backup() {
         initComponents();
         setLocationRelativeTo(null);
         initCustomLogic();
     }
     
     private void initCustomLogic() {
-        cb_filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Semua","Hari" ,"Bulan", "Tahun"}));
+        cb_filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Semua", "Bulan", "Tahun"}));
 
         // Default disable
         jcalender_month.setEnabled(false);
         jcalendar_year.setEnabled(false);
-        jcalendar_day.setEnabled(false);
 
         cb_filter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -46,19 +45,12 @@ public class ReportModalView extends javax.swing.JFrame {
                 if ("Semua".equals(selected)) {
                     jcalender_month.setEnabled(false);
                     jcalendar_year.setEnabled(false);
-                    jcalendar_day.setEnabled(false);
                 } else if ("Bulan".equals(selected)) {
                     jcalender_month.setEnabled(true);
                     jcalendar_year.setEnabled(true);
-                    jcalendar_day.setEnabled(false);
                 } else if ("Tahun".equals(selected)) {
                     jcalender_month.setEnabled(false);
                     jcalendar_year.setEnabled(true);
-                    jcalendar_day.setEnabled(false);
-                }else if ("Hari".equals(selected)) {
-                    jcalender_month.setEnabled(false);
-                    jcalendar_year.setEnabled(false);
-                    jcalendar_day.setEnabled(true);
                 }
             }
         });
@@ -84,10 +76,6 @@ public class ReportModalView extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btn_cetakPenjualan = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jcalendar_day = new com.toedter.calendar.JDateChooser();
-        jLabel6 = new javax.swing.JLabel();
-        cb_filter1 = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -105,11 +93,6 @@ public class ReportModalView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cb_filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_filter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_filterActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Filter");
 
@@ -151,17 +134,6 @@ public class ReportModalView extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Tanggal");
-
-        jLabel6.setText("User");
-
-        cb_filter1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_filter1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_filter1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,60 +141,44 @@ public class ReportModalView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cb_filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcalendar_day, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jcalender_month, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcalendar_year, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btn_cetakListPenjualan)
                                 .addGap(26, 26, 26)
-                                .addComponent(btn_cetakPenjualan)))
-                        .addGap(17, 17, 17))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_filter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(btn_cetakPenjualan))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cb_filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcalender_month, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jcalendar_year, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jcalender_month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cb_filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
-                        .addComponent(jLabel5))
-                    .addComponent(jcalendar_year, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                        .addComponent(jLabel2))
                     .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jcalendar_day, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jcalender_month, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(cb_filter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                    .addComponent(jcalendar_year, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_cetakListPenjualan)
                     .addComponent(btn_cetakPenjualan))
@@ -237,29 +193,18 @@ public class ReportModalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cetakListPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakListPenjualanActionPerformed
-         String selectedFilter = (String) cb_filter.getSelectedItem();
-    int month = jcalender_month.getMonth() + 1;
+        String selectedFilter = (String) cb_filter.getSelectedItem();
+    int month = jcalender_month.getMonth() + 1; 
     int year = jcalendar_year.getYear();
-        java.util.Date day = jcalendar_day.getDate();
 
     HistoryController controller = new HistoryController();
     List<Sale> sales = new ArrayList<>();
 
     try {
-        switch (selectedFilter) {
-            case "Semua":
-                sales = controller.loadAllSales();
-                break;
-            case "Bulan":
-            case "Tahun":
-                sales = controller.getFilteredSales(selectedFilter, month, year);
-                break;
-            case "Hari":
-                sales = controller.getSalesByDay(day);
-                break;
-            default:
-                JOptionPane.showMessageDialog(this, "Filter tidak dikenali.");
-                return;
+        if ("Semua".equals(selectedFilter)) {
+            sales = controller.loadAllSales();
+        } else {
+            sales = controller.getFilteredSales(selectedFilter, month, year);
         }
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -271,13 +216,14 @@ public class ReportModalView extends javax.swing.JFrame {
     model.addColumn("Tanggal");
     model.addColumn("Total Harga");
     model.addColumn("Total Bayar");
-
+    
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
     for (Sale s : sales) {
-        String formattedHarga = nf.format(s.getTotalPrice()).replace(",00", "").replace("Rp", "Rp ");
-        String formattedBayar = nf.format(s.getTotalPay()).replace(",00", "").replace("Rp", "Rp ");
-
+        
+    String formattedHarga = nf.format(s.getTotalPrice()).replace(",00", "").replace("Rp", "Rp ");
+    String formattedBayar = nf.format(s.getTotalPay()).replace(",00", "").replace("Rp", "Rp ");
+        
         model.addRow(new Object[]{
             s.getTransactionNo(),
             s.getDate(),
@@ -297,7 +243,7 @@ public class ReportModalView extends javax.swing.JFrame {
     String selectedFilter = (String) cb_filter.getSelectedItem();
     int month = jcalender_month.getMonth() + 1; 
     int year = jcalendar_year.getYear();
-    java.util.Date day = jcalendar_day.getDate();
+    
     String sql = "";
     Map<String, Object> param = new HashMap<>();
 
@@ -319,17 +265,6 @@ public class ReportModalView extends javax.swing.JFrame {
                   "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
                   "FROM penjualan " +
                   "WHERE YEAR(sale_date) = $P{year}";
-            param.put("year", year);
-            break;
-            
-             case "Hari":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE DATE(sale_date) = $P{day}";
-            param.put("day", new java.sql.Date(day.getTime()));
-             param.put("month", month);
             param.put("year", year);
             break;
 
@@ -367,14 +302,6 @@ public class ReportModalView extends javax.swing.JFrame {
         loadReport();
     }//GEN-LAST:event_btn_cetakPenjualanMouseClicked
 
-    private void cb_filterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_filterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_filterActionPerformed
-
-    private void cb_filter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_filter1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_filter1ActionPerformed
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -389,22 +316,14 @@ public class ReportModalView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ReportModalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportModalView_backup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ReportModalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportModalView_backup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ReportModalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportModalView_backup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ReportModalView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ReportModalView_backup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -417,7 +336,7 @@ public class ReportModalView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ReportModalView().setVisible(true);
+                new ReportModalView_backup().setVisible(true);
             }
         });
     }
@@ -426,22 +345,18 @@ public class ReportModalView extends javax.swing.JFrame {
     private javax.swing.JButton btn_cetakListPenjualan;
     private javax.swing.JButton btn_cetakPenjualan;
     private javax.swing.JComboBox<String> cb_filter;
-    private javax.swing.JComboBox<String> cb_filter1;
     private com.toedter.calendar.JCalendar jCalendar1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private com.toedter.components.JLocaleChooser jLocaleChooser1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private com.toedter.calendar.JYearChooser jYearChooser1;
-    private com.toedter.calendar.JDateChooser jcalendar_day;
     private com.toedter.calendar.JYearChooser jcalendar_year;
     private com.toedter.calendar.JMonthChooser jcalender_month;
     // End of variables declaration//GEN-END:variables
