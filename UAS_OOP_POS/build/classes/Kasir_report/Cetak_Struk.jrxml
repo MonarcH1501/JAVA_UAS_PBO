@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="400" pageHeight="842" columnWidth="360" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="afc3fb3c-782d-43fa-9afb-7c11ab955fcf">
 	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="115"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id_sale" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT 
@@ -192,12 +192,12 @@ Berikut adalah rincian pembelian Anda:]]></text>
 	<summary>
 		<band height="153" splitType="Stretch">
 			<staticText>
-				<reportElement x="181" y="41" width="49" height="18" uuid="0a6ed795-834f-4709-a0de-22523d13d053"/>
+				<reportElement x="138" y="39" width="49" height="18" uuid="0a6ed795-834f-4709-a0de-22523d13d053"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Discount :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="181" y="64" width="49" height="18" uuid="db360211-fd67-43e5-ba82-41f95d6b0dc3"/>
+				<reportElement x="138" y="64" width="49" height="18" uuid="db360211-fd67-43e5-ba82-41f95d6b0dc3"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Tax :]]></text>
 			</staticText>
@@ -232,7 +232,7 @@ Berikut adalah rincian pembelian Anda:]]></text>
 				<textFieldExpression><![CDATA[$F{kembalian}]]></textFieldExpression>
 			</textField>
 			<textField pattern="&apos;Rp,&apos; #,##0" isBlankWhenNull="true">
-				<reportElement x="239" y="41" width="120" height="18" uuid="4cfa98aa-8d46-4690-b4e2-12b5cb08da02"/>
+				<reportElement x="239" y="40" width="120" height="18" uuid="4cfa98aa-8d46-4690-b4e2-12b5cb08da02"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{discount}]]></textFieldExpression>
 			</textField>
@@ -256,6 +256,14 @@ Berikut adalah rincian pembelian Anda:]]></text>
 				<reportElement x="240" y="64" width="120" height="18" uuid="94f3290c-ee3f-4da9-b792-66242b47b3cf"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{tax}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0&apos;%&apos;">
+				<reportElement x="198" y="39" width="32" height="20" uuid="c5a77399-db8b-412a-b5b7-9f3a54977d57"/>
+				<textFieldExpression><![CDATA[$F{discount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0&apos;%&apos;">
+				<reportElement x="198" y="64" width="32" height="20" uuid="b2e72502-8e68-4483-9728-4559dd7642e3"/>
+				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

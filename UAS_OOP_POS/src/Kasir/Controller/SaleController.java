@@ -4,6 +4,7 @@ import Assets.DBConnection;
 import Kasir.Model.*;
 import Admin.Model.Product;
 import Admin.Controller.ProductCRUD;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 
@@ -82,4 +83,22 @@ public class SaleController {
         }
         return null;
     }
+     
+     
+     public BigDecimal getdiscoundSale(int id) throws SQLException{
+     BigDecimal discount = null;
+     Connection c = DBConnection.getConnection();;
+     String sql = "SELECT discount FROM penjualan WHERE id_sale = ?";
+     PreparedStatement p = c.prepareStatement(sql);
+     p.setInt(1, id);
+     ResultSet rs = p.executeQuery();
+     if (rs.next()){
+         discount = rs.getBigDecimal("discount");
+        } else {
+         System.out.println("Discount not found: " + discount);
+        }
+     
+     return discount;
+     }
+     
 }

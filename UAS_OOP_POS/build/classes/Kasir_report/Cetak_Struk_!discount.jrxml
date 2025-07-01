@@ -67,6 +67,7 @@ JOIN
 	<variable name="tax" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{total_tax}]]></variableExpression>
 	</variable>
+	<variable name="kembalian" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -190,51 +191,41 @@ Berikut adalah rincian pembelian Anda:]]></text>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="153" splitType="Stretch">
+		<band height="137" splitType="Stretch">
 			<staticText>
-				<reportElement x="138" y="39" width="49" height="18" uuid="0a6ed795-834f-4709-a0de-22523d13d053"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Discount :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="138" y="64" width="49" height="18" uuid="db360211-fd67-43e5-ba82-41f95d6b0dc3"/>
+				<reportElement x="138" y="39" width="49" height="18" uuid="db360211-fd67-43e5-ba82-41f95d6b0dc3"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Tax :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="161" y="86" width="69" height="18" uuid="f61dc447-738c-4dc9-a194-7ff7b9ff4045"/>
+				<reportElement x="161" y="64" width="69" height="18" uuid="f61dc447-738c-4dc9-a194-7ff7b9ff4045"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total Harga :]]></text>
 			</staticText>
 			<textField pattern="&apos;Rp,&apos; #,##0">
-				<reportElement x="238" y="86" width="121" height="18" uuid="3d2a1ae0-9655-4dd0-ae06-3a7892281008"/>
+				<reportElement x="238" y="64" width="121" height="18" uuid="3d2a1ae0-9655-4dd0-ae06-3a7892281008"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{sale_total_price}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="161" y="110" width="69" height="18" uuid="133bdc7c-12c2-46f2-b0c1-10b1d4349a47"/>
+				<reportElement x="161" y="88" width="69" height="18" uuid="133bdc7c-12c2-46f2-b0c1-10b1d4349a47"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total Bayar :]]></text>
 			</staticText>
 			<textField pattern="&apos;Rp,&apos; #,##0">
-				<reportElement x="238" y="110" width="121" height="18" uuid="458a882c-63ba-45c1-a244-fee0992afc07"/>
+				<reportElement x="238" y="88" width="121" height="18" uuid="458a882c-63ba-45c1-a244-fee0992afc07"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{total_bayar}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="161" y="134" width="69" height="18" uuid="a441515d-5cce-48df-8827-7a5394d1180e"/>
+				<reportElement x="161" y="112" width="69" height="18" uuid="a441515d-5cce-48df-8827-7a5394d1180e"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Kembalian :]]></text>
 			</staticText>
 			<textField pattern="&apos;Rp,&apos; #,##0">
-				<reportElement x="239" y="134" width="120" height="18" uuid="2ceb7518-5899-46a1-9a0f-7079c1027c23"/>
+				<reportElement x="239" y="112" width="120" height="18" uuid="2ceb7518-5899-46a1-9a0f-7079c1027c23"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{kembalian}]]></textFieldExpression>
-			</textField>
-			<textField pattern="&apos;Rp,&apos; #,##0" isBlankWhenNull="true">
-				<reportElement x="239" y="40" width="120" height="18" uuid="4cfa98aa-8d46-4690-b4e2-12b5cb08da02"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{discount}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="181" y="15" width="49" height="18" uuid="fc801fdf-01fe-4406-af8e-02dbfa59f0da"/>
@@ -253,16 +244,12 @@ Berikut adalah rincian pembelian Anda:]]></text>
 				</graphicElement>
 			</line>
 			<textField pattern="&apos;Rp,&apos; #,##0" isBlankWhenNull="true">
-				<reportElement x="240" y="64" width="120" height="18" uuid="94f3290c-ee3f-4da9-b792-66242b47b3cf"/>
+				<reportElement x="240" y="39" width="120" height="18" uuid="94f3290c-ee3f-4da9-b792-66242b47b3cf"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{tax}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.0&apos;%&apos;">
-				<reportElement x="198" y="39" width="32" height="20" uuid="c5a77399-db8b-412a-b5b7-9f3a54977d57"/>
-				<textFieldExpression><![CDATA[$F{discount}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.0&apos;%&apos;">
-				<reportElement x="198" y="64" width="32" height="20" uuid="b2e72502-8e68-4483-9728-4559dd7642e3"/>
+				<reportElement x="198" y="39" width="32" height="20" uuid="b2e72502-8e68-4483-9728-4559dd7642e3"/>
 				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
 			</textField>
 		</band>

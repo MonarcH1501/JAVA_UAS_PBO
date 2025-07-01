@@ -6,6 +6,7 @@
     import Admin.Controller.ProductCRUD;
     import Kasir.Model.Sale;
     import Kasir.Model.SaleDetail;
+import java.math.BigDecimal;
     import java.sql.Connection;
 import java.sql.SQLException;
     import java.text.NumberFormat;
@@ -322,7 +323,7 @@ import java.util.logging.Logger;
             }
         });
 
-        jLabel10.setText("Diskon ");
+        jLabel10.setText("Diskon (%)");
 
         txTotalBayar.setEnabled(false);
         txTotalBayar.addActionListener(new java.awt.event.ActionListener() {
@@ -688,51 +689,67 @@ import java.util.logging.Logger;
     
     public void loadReport(int id){
         try {
+     // Load kedua desain laporan
         JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Struk.jrxml");
-         String sql = "SELECT \n" +
-"    sd.id_sale,\n" +
-"    DATE_FORMAT(j.sale_date, '%e %M %Y') AS sale_date_formatted,\n" +
-"    j.sale_total_price,\n" +
-"    COALESCE(j.discount, 0) AS discount,\n" +
-"    COALESCE(j.tax, 0) AS tax,\n" +
-"    j.total_bayar,\n" +
-"    j.kembalian,\n" +
-"    sd.id_product,\n" +
-"    p.product_name,\n" +
-"    sd.sale_qty,\n" +
-"    sd.sale_price,\n" +
-"    sd.sale_qty * sd.sale_price AS total_price_produk,\n" +
-"    (sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100) AS total_discount,\n" +
-"    ((sd.sale_qty * sd.sale_price) - ((sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100))) \n" +
-"    * (COALESCE(j.tax, 0) / 100) AS total_tax\n" +
-"FROM \n" +
-"    sale_details sd\n" +
-"JOIN \n" +
-"    product p ON sd.id_product = p.id_product\n" +
-"JOIN \n" +
-"    penjualan j ON sd.id_sale = j.id_sale \n" +
-                  "WHERE sd.id_sale = $P{id_sale}";
-         
-         JRDesignQuery newQuery = new JRDesignQuery();
-         newQuery.setText(sql);
-         jd.setQuery(newQuery);
-         
-         JasperReport js = JasperCompileManager.compileReport(jd);
-         
-        // Koneksi database
+        JasperDesign jd2 = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Struk_!discount.jrxml");
+
+        // SQL query yang digunakan di kedua laporan
+        String sql = "SELECT \n" +
+                "    sd.id_sale,\n" +
+                "    DATE_FORMAT(j.sale_date, '%e %M %Y') AS sale_date_formatted,\n" +
+                "    j.sale_total_price,\n" +
+                "    COALESCE(j.discount, 0) AS discount,\n" +
+                "    COALESCE(j.tax, 0) AS tax,\n" +
+                "    j.total_bayar,\n" +
+                "    j.kembalian,\n" +
+                "    sd.id_product,\n" +
+                "    p.product_name,\n" +
+                "    sd.sale_qty,\n" +
+                "    sd.sale_price,\n" +
+                "    sd.sale_qty * sd.sale_price AS total_price_produk,\n" +
+                "    (sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100) AS total_discount,\n" +
+                "    ((sd.sale_qty * sd.sale_price) - ((sd.sale_qty * sd.sale_price) * (COALESCE(j.discount, 0) / 100))) \n" +
+                "    * (COALESCE(j.tax, 0) / 100) AS total_tax\n" +
+                "FROM \n" +
+                "    sale_details sd\n" +
+                "JOIN \n" +
+                "    product p ON sd.id_product = p.id_product\n" +
+                "JOIN \n" +
+                "    penjualan j ON sd.id_sale = j.id_sale \n" +
+                "WHERE sd.id_sale = $P{id_sale}";
+
+        // Ambil nilai discount dari database
+        SaleController sale = new SaleController();
+        BigDecimal discount = sale.getdiscoundSale(id); // pastikan metode ini return BigDecimal
+
+        // Set query untuk kedua desain
+        JRDesignQuery newQuery = new JRDesignQuery();
+        newQuery.setText(sql);
+        jd.setQuery(newQuery);
+        jd2.setQuery(newQuery);
+
+        // Kompilasi sesuai kondisi discount
+        JasperReport js;
+        if (discount.compareTo(BigDecimal.ZERO) == 0) {
+            js = JasperCompileManager.compileReport(jd2); // tanpa discount
+        } else {
+            js = JasperCompileManager.compileReport(jd); // dengan discount
+        }
+
+        // Koneksi ke database
         Connection conn = DBConnection.getConnection();
-//        JOptionPane.showMessageDialog(null, "Connected!");
-        
-        System.out.println(id);
+
+        // Parameter ke report
         Map<String, Object> param = new HashMap<>();
         param.put("id_sale", id);
 
+        // Cetak laporan
         JasperPrint jp = JasperFillManager.fillReport(js, param, conn);
-        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
-         
-     } catch (Exception e) {
+        JasperViewer.viewReport(jp, false);
+
+    } catch (Exception e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form tambah data.", "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form cetak struk.", "Error", JOptionPane.ERROR_MESSAGE);
     }
     }
     
