@@ -600,37 +600,39 @@ import java.util.logging.Logger;
             JOptionPane.showMessageDialog(this, "Tidak ada data transaksi untuk disimpan.");
             return;
         }
+             try {
+                   SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                   Date tanggal = sdf.parse(txTanggal.getText());
 
-        try {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Date tanggal = sdf.parse(txTanggal.getText());
+                   double discount   = parseHargaToDouble(txDiskon.getText());
+                   double tax        = parseHargaToDouble(txPajak.getText());
+                   double totalPay   = parseHargaToDouble(txBayar.getText());
+                   double kembalian  = parseHargaToDouble(txKembalian.getText());
+                   double totalAwal  = parseHargaToDouble(txTotalawal.getText());
+                   double totalBayar = parseHargaToDouble(txTotalBayar.getText());
 
-        double discount   = parseHargaToDouble(txDiskon.getText());
-        double tax        = parseHargaToDouble(txPajak.getText());
-        double totalPay   = parseHargaToDouble(txBayar.getText());
-        double kembalian  = parseHargaToDouble(txKembalian.getText());
-        double totalAwal  = parseHargaToDouble(txTotalawal.getText());
-        double totalBayar = parseHargaToDouble(txTotalBayar.getText());
+                   // Ambil user dari mana pun kamu simpan (misalnya session user, atau yang login)
+                   String user = "ryan";  // atau: LoginSession.getCurrentUser(); dsb
 
+                   Sale sale = new Sale(txNoTransaksi.getText(), tanggal, totalBayar,
+                                        discount, tax, totalPay, kembalian, totalAwal, saleDetails, user);
 
-            Sale sale = new Sale(txNoTransaksi.getText(), tanggal, totalBayar,discount, tax, totalPay, kembalian, totalAwal , saleDetails);
-            int generatedId = saleController.saveSale(sale);
-            System.out.println(generatedId);
-            saleDetails.clear();
-            loadTable();
-            initForm();
+                   int generatedId = saleController.saveSale(sale);
+                   System.out.println(generatedId);
+                   saleDetails.clear();
+                   loadTable();
+                   initForm();
 
-             if (generatedId > 0) {
-            JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan!\nID Sale: " + generatedId);
+                   if (generatedId > 0) {
+                       JOptionPane.showMessageDialog(this, "Transaksi berhasil disimpan!\nID Sale: " + generatedId);
+                       loadReport(generatedId);
+                   }
 
-            loadReport(generatedId);
+               } catch (Exception e) {
+                   e.printStackTrace(); 
+                   JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + e.getMessage());
+               }
 
-        } 
-
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + e.getMessage());
-        }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed

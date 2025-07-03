@@ -12,9 +12,11 @@ public class Sale {
     private double totalPay;
     private double kembalian;
     private double totalAwal;
+    private String user; 
     private List<SaleDetail> saleDetails;
 
-    public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,double totalPay, double kembalian,double totalAwal,List<SaleDetail> saleDetails) {
+   public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,
+                double totalPay, double kembalian, double totalAwal, List<SaleDetail> saleDetails, String user) {
         this.transactionNo = transactionNo;
         this.date = date;
         this.totalPrice = totalPrice;
@@ -24,8 +26,15 @@ public class Sale {
         this.totalPay = totalPay;
         this.kembalian = kembalian;
         this.totalAwal = totalAwal;
-    }
-
+        this.user = user;
+    }   
+    
+    
+    public String getUser() { return user; }
+    
+     public void setUser(String user) { this.user = user; }
+     
+     
     public double getTotalPay() {
         return totalPay;
     }

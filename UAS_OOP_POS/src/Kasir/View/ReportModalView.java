@@ -32,6 +32,25 @@ public class ReportModalView extends javax.swing.JFrame {
         initCustomLogic();
     }
     
+   private void loadUsersToComboBox() {
+    try {
+        Connection conn = DBConnection.getConnection();
+        Statement stmt = conn.createStatement();
+        // Ambil username unik dari data penjualan saja
+        ResultSet rs = stmt.executeQuery("SELECT DISTINCT user FROM penjualan");
+
+        cb_filteruser.removeAllItems();
+        cb_filteruser.addItem("Semua"); // Pilihan default
+
+        while (rs.next()) {
+            cb_filteruser.addItem(rs.getString("user"));
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Gagal load user: " + e.getMessage());
+    }
+}
+    
     private void initCustomLogic() {
         cb_filter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Semua","Hari" ,"Bulan", "Tahun"}));
 
@@ -39,7 +58,7 @@ public class ReportModalView extends javax.swing.JFrame {
         jcalender_month.setEnabled(false);
         jcalendar_year.setEnabled(false);
         jcalendar_day.setEnabled(false);
-
+        
         cb_filter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selected = (String) cb_filter.getSelectedItem();
@@ -62,6 +81,7 @@ public class ReportModalView extends javax.swing.JFrame {
                 }
             }
         });
+        loadUsersToComboBox();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -87,7 +107,7 @@ public class ReportModalView extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jcalendar_day = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
-        cb_filter1 = new javax.swing.JComboBox<>();
+        cb_filteruser = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,10 +175,10 @@ public class ReportModalView extends javax.swing.JFrame {
 
         jLabel6.setText("User");
 
-        cb_filter1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_filter1.addActionListener(new java.awt.event.ActionListener() {
+        cb_filteruser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_filteruser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_filter1ActionPerformed(evt);
+                cb_filteruserActionPerformed(evt);
             }
         });
 
@@ -201,7 +221,7 @@ public class ReportModalView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_filter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cb_filteruser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -221,7 +241,7 @@ public class ReportModalView extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(cb_filter1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_filteruser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_cetakListPenjualan)
@@ -237,7 +257,9 @@ public class ReportModalView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cetakListPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakListPenjualanActionPerformed
-         String selectedFilter = (String) cb_filter.getSelectedItem();
+        
+        String selectedUser = (String) cb_filteruser.getSelectedItem(); 
+        String selectedFilter = (String) cb_filter.getSelectedItem();
     int month = jcalender_month.getMonth() + 1;
     int year = jcalendar_year.getYear();
         java.util.Date day = jcalendar_day.getDate();
@@ -247,20 +269,20 @@ public class ReportModalView extends javax.swing.JFrame {
 
     try {
         switch (selectedFilter) {
-            case "Semua":
-                sales = controller.loadAllSales();
-                break;
-            case "Bulan":
-            case "Tahun":
-                sales = controller.getFilteredSales(selectedFilter, month, year);
-                break;
-            case "Hari":
-                sales = controller.getSalesByDay(day);
-                break;
-            default:
-                JOptionPane.showMessageDialog(this, "Filter tidak dikenali.");
-                return;
-        }
+        case "Semua":
+            sales = controller.loadAllSales(selectedUser);
+            break;
+        case "Bulan":
+        case "Tahun":
+            sales = controller.getFilteredSales(selectedFilter, month, year, selectedUser);
+            break;
+        case "Hari":
+            sales = controller.getSalesByDay(day, selectedUser);
+            break;
+        default:
+            JOptionPane.showMessageDialog(this, "Filter tidak dikenali.");
+            return;
+    }
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         return;
@@ -271,6 +293,7 @@ public class ReportModalView extends javax.swing.JFrame {
     model.addColumn("Tanggal");
     model.addColumn("Total Harga");
     model.addColumn("Total Bayar");
+    model.addColumn("user");
 
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
@@ -282,7 +305,8 @@ public class ReportModalView extends javax.swing.JFrame {
             s.getTransactionNo(),
             s.getDate(),
             formattedHarga,
-            formattedBayar
+            formattedBayar,
+            s.getUser()
         });
     }
 
@@ -371,9 +395,9 @@ public class ReportModalView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cb_filterActionPerformed
 
-    private void cb_filter1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_filter1ActionPerformed
+    private void cb_filteruserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_filteruserActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cb_filter1ActionPerformed
+    }//GEN-LAST:event_cb_filteruserActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -426,7 +450,7 @@ public class ReportModalView extends javax.swing.JFrame {
     private javax.swing.JButton btn_cetakListPenjualan;
     private javax.swing.JButton btn_cetakPenjualan;
     private javax.swing.JComboBox<String> cb_filter;
-    private javax.swing.JComboBox<String> cb_filter1;
+    private javax.swing.JComboBox<String> cb_filteruser;
     private com.toedter.calendar.JCalendar jCalendar1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
