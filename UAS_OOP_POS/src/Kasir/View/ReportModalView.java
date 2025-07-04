@@ -319,67 +319,33 @@ public class ReportModalView extends javax.swing.JFrame {
 
     private void loadReport() {
     String selectedFilter = (String) cb_filter.getSelectedItem();
-    int month = jcalender_month.getMonth() + 1; 
+    String selectedUser = (String) cb_filteruser.getSelectedItem();
+    int month = jcalender_month.getMonth() + 1;
     int year = jcalendar_year.getYear();
     java.util.Date day = jcalendar_day.getDate();
-    String sql = "";
+
     Map<String, Object> param = new HashMap<>();
+    param.put("filterMode", selectedFilter);
+    param.put("user", selectedUser);
 
-    // Menentukan query berdasarkan filter yang dipilih
-    switch (selectedFilter) {
-        case "Bulan":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE MONTH(sale_date) = $P{month} AND YEAR(sale_date) = $P{year}";
-            param.put("month", month);
-            param.put("year", year);
-            break;
-
-        case "Tahun":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE YEAR(sale_date) = $P{year}";
-            param.put("year", year);
-            break;
-            
-             case "Hari":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE DATE(sale_date) = $P{day}";
-            param.put("day", new java.sql.Date(day.getTime()));
-             param.put("month", month);
-            param.put("year", year);
-            break;
-
-        default: // All data / tanpa filter
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan";
-            break;
+    if (selectedFilter.equals("Bulan")) {
+        param.put("month", month);
+        param.put("year", year);
+    } else if (selectedFilter.equals("Tahun")) {
+        param.put("year", year);
+    } else if (selectedFilter.equals("Hari")) {
+        param.put("day", new java.sql.Date(day.getTime()));
     }
 
     try {
         JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Laporan_Penjualan.jrxml");
 
-        JRDesignQuery newQuery = new JRDesignQuery();
-        newQuery.setText(sql);
-        jd.setQuery(newQuery);
-
         JasperReport js = JasperCompileManager.compileReport(jd);
 
-        // Koneksi database
         Connection conn = DBConnection.getConnection();
-//        JOptionPane.showMessageDialog(null, "Connected!");
 
         JasperPrint jp = JasperFillManager.fillReport(js, param, conn);
-        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
+        JasperViewer.viewReport(jp, false);
     } catch (Exception e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka laporan.", "Error", JOptionPane.ERROR_MESSAGE);

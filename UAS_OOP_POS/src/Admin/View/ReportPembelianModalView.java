@@ -290,45 +290,53 @@ public class ReportPembelianModalView extends javax.swing.JFrame {
     // Menentukan query berdasarkan filter yang dipilih
     switch (selectedFilter) {
         case "Bulan":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE MONTH(sale_date) = $P{month} AND YEAR(sale_date) = $P{year}";
+            sql = "SELECT id_purchase, product.product_name, supplier.supp_name, " +
+                  "DATE_FORMAT(purchase_date, '%e %M %Y') AS purchase_date_formatted, " +
+                  "purchase_date, " +
+                  "purchase_qty, product.product_unit, total_price " +
+                  "FROM pembelian " +
+                  "LEFT JOIN product ON pembelian.id_product = product.id_product LEFT JOIN supplier ON pembelian.id_supplier = supplier.id_supplier " +
+                  "WHERE MONTH(pembelian.purchase_date) = $P{month} AND YEAR(pembelian.purchase_date) = $P{year}";
             param.put("month", month);
             param.put("year", year);
             break;
 
         case "Tahun":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE YEAR(sale_date) = $P{year}";
+            sql = "SELECT id_purchase, product.product_name, supplier.supp_name, " +
+                  "DATE_FORMAT(purchase_date, '%e %M %Y') AS purchase_date_formatted, " +
+                  "purchase_date, " +
+                  "purchase_qty, product.product_unit, total_price " +
+                  "FROM pembelian " +
+                  "LEFT JOIN product ON pembelian.id_product = product.id_product LEFT JOIN supplier ON pembelian.id_supplier = supplier.id_supplier " +
+                  "WHERE YEAR(pembelian.purchase_date) = $P{year}";
             param.put("year", year);
             break;
             
              case "Hari":
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan " +
-                  "WHERE DATE(sale_date) = $P{day}";
+            sql = "SELECT id_purchase, product.product_name, supplier.supp_name, " +
+                  "DATE_FORMAT(purchase_date, '%e %M %Y') AS purchase_date_formatted, " +
+                  "purchase_date, " +
+                  "purchase_qty, product.product_unit, total_price " +
+                  "FROM pembelian " +
+                  "LEFT JOIN product ON pembelian.id_product = product.id_product LEFT JOIN supplier ON pembelian.id_supplier = supplier.id_supplier " +
+                  "WHERE pembelian.purchase_date = $P{day}";
             param.put("day", new java.sql.Date(day.getTime()));
              param.put("month", month);
             param.put("year", year);
             break;
 
         default: // All data / tanpa filter
-            sql = "SELECT id_sale, sale_date, DATE_FORMAT(sale_date, '%e %M %Y') AS sale_date_formatted, " +
-                  "sale_total_price, FORMAT(sale_total_price, 0, 'id_ID') AS sale_total_price_formatted, " +
-                  "total_bayar, FORMAT(total_bayar, 0, 'id_ID') AS total_bayar_formatted " +
-                  "FROM penjualan";
+            sql = "SELECT id_purchase, product.product_name, supplier.supp_name, " +
+                  "DATE_FORMAT(purchase_date, '%e %M %Y') AS purchase_date_formatted, " +
+                  "purchase_date, " +
+                  "purchase_qty, product.product_unit, total_price " +
+                  "FROM pembelian " +
+                  "LEFT JOIN product ON pembelian.id_product = product.id_product LEFT JOIN supplier ON pembelian.id_supplier = supplier.id_supplier ";
             break;
     }
 
     try {
-        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Kasir_report\\Cetak_Laporan_Penjualan.jrxml");
+        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Admin_report\\Cetak_Laporan_Pembelian.jrxml");
 
         JRDesignQuery newQuery = new JRDesignQuery();
         newQuery.setText(sql);

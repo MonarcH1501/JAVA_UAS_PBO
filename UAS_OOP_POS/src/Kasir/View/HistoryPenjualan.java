@@ -13,6 +13,7 @@ import java.util.Locale;
 public class HistoryPenjualan extends javax.swing.JFrame {
 
     private final HistoryController controller;
+    private String Username = "Semua";
     private String selectedTransactionId = null;
     private List<Sale> salesList;
     public HistoryPenjualan() {
@@ -23,7 +24,7 @@ public class HistoryPenjualan extends javax.swing.JFrame {
 
     private void loadData() {
         try {
-            salesList = controller.loadAllSales();
+            salesList = controller.loadAllSales(Username);
             populateTable(salesList);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
