@@ -231,6 +231,38 @@ public class HistoryController {
     return list;
 }
 
+   
+   public List<Sale> loadFilteredSales(Date saleDate) throws SQLException {
+        List<Sale> list = new ArrayList<>();
+        String sql = "SELECT id_sale, sale_date, discount, tax , sale_total_price, total_bayar,kembalian,total_price_produk FROM penjualan WHERE sale_date = ? ORDER BY id_sale DESC";
+        
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            
+            ps.setDate(1, new java.sql.Date(saleDate.getTime()));
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String id = rs.getString("id_sale");
+                    Date date = rs.getDate("sale_date");
+                    double discount =rs.getDouble("discount");
+                    double tax =rs.getDouble("tax");
+                    double totalPrice = rs.getDouble("sale_total_price");
+                    double totalBayar = rs.getDouble("total_bayar");
+                    double kembalian = rs.getDouble("kembalian");
+                    double Totalawal = rs.getDouble("total_price_produk");
+                    
+                    List<SaleDetail> saleDetails = new ArrayList<>();
+                    
+                    Sale sale = new Sale(id, date, totalPrice, discount, tax, totalBayar, kembalian,Totalawal, saleDetails);
+                    list.add(sale);
+                }
+                
+            }
+        }
+        return list;
+    }
 
+   
 
 }

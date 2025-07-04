@@ -26,8 +26,7 @@ WHERE
     OR ($P{filterMode} = 'Tahun' AND YEAR(sale_date) = $P{year})
     OR ($P{filterMode} = 'Hari' AND DATE(sale_date) = $P{day})
   )
-  AND ($P{user} = 'Semua' OR user = $P{user})
-]]>
+  AND ($P{user} = 'Semua' OR user = $P{user})]]>
 	</queryString>
 	<field name="id_sale" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -59,7 +58,7 @@ WHERE
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Transparent" x="168" y="20" width="218" height="38" uuid="7ebe59a9-ab32-48a9-ae42-61a3e3d4897d"/>
+				<reportElement mode="Transparent" x="243" y="17" width="218" height="38" uuid="7ebe59a9-ab32-48a9-ae42-61a3e3d4897d"/>
 				<textElement>
 					<font size="28" isBold="true" isUnderline="true"/>
 				</textElement>

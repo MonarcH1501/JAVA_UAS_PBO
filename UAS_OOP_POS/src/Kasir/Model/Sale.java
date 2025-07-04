@@ -14,7 +14,8 @@ public class Sale {
     private double totalAwal;
     private String user; 
     private List<SaleDetail> saleDetails;
-
+    
+    // Catat Transaksi ke Database
    public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,
                 double totalPay, double kembalian, double totalAwal, List<SaleDetail> saleDetails, String user) {
         this.transactionNo = transactionNo;
@@ -29,6 +30,19 @@ public class Sale {
         this.user = user;
     }   
     
+   // Buat History penjualan
+     public Sale(String transactionNo, Date date, double totalPrice, double discount, double tax,
+                double totalPay, double kembalian, double totalAwal, List<SaleDetail> saleDetails) {
+         this.transactionNo = transactionNo;
+        this.date = date;
+        this.totalPrice = totalPrice;
+        this.discount = discount;
+        this.tax = tax;
+        this.saleDetails = saleDetails;
+        this.totalPay = totalPay;
+        this.kembalian = kembalian;
+        this.totalAwal = totalAwal;
+     }
     
     public String getUser() { return user; }
     
