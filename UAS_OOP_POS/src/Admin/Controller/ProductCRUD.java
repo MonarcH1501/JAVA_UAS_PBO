@@ -345,8 +345,64 @@ public boolean resetProductStock(int productId) throws SQLException {
             return list;
         }
     
-    
+     public List<PergerakanStock> getPergerakanStock (String filter, java.util.Date day, int month, int year) throws SQLException {
+        List<PergerakanStock> list = new ArrayList<>();
 
+        String baseQuery = "SELECT DATE_FORMAT(t.tanggal, '%e %M %Y') AS tanggal_formatted, p.product_code, p.product_name, p.product_unit, t.jenis_transaksi, t.jumlah " +
+        "FROM product p JOIN (" +
+        "   SELECT purchase_date AS tanggal, id_product, 'Stok Masuk' AS jenis_transaksi, purchase_qty AS jumlah FROM pembelian" +
+        "   UNION ALL" +
+        "   SELECT pj.sale_date AS tanggal, sd.id_product, 'Stok Keluar' AS jenis_transaksi, sd.sale_qty AS jumlah FROM sale_details sd JOIN penjualan pj ON sd.id_sale = pj.id_sale" +
+        "   UNION ALL" +
+        "   SELECT tanggal, id_product, 'Stok Rusak' AS jenis_transaksi, stok_rusak AS jumlah FROM stock" +
+        ") AS t ON p.id_product = t.id_product WHERE p.status = 'Y' ";
+
+        String dateFilterClause = "";
+        switch (filter) {
+            case "Hari":
+                dateFilterClause = "AND DATE(t.tanggal) = ? ";
+                break;
+            case "Bulan":
+                dateFilterClause = "AND MONTH(t.tanggal) = ? AND YEAR(t.tanggal) = ? ";
+                break;
+            case "Tahun":
+                dateFilterClause = "AND YEAR(t.tanggal) = ? ";
+                break;
+        }
+
+        String finalSql = baseQuery + dateFilterClause + "ORDER BY t.tanggal DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(finalSql)) {
+
+            switch (filter) {
+                case "Hari":
+                    stmt.setDate(1, new java.sql.Date(day.getTime()));
+                    break;
+                case "Bulan":
+                    stmt.setInt(1, month);
+                    stmt.setInt(2, year);
+                    break;
+                case "Tahun":
+                    stmt.setInt(1, year);
+                    break;
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                PergerakanStock ps = new PergerakanStock(
+                    rs.getString("tanggal_formatted"),
+                    rs.getString("product_code"),
+                    rs.getString("product_name"),
+                    rs.getString("product_unit"),
+                    rs.getString("jenis_transaksi"),
+                    rs.getInt("jumlah")
+                );
+                list.add(ps);
+            }
+        }
+        return list;
+    }
 
 }
 

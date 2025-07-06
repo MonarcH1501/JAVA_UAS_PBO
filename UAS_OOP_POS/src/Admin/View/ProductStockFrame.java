@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -456,54 +457,59 @@ public class ProductStockFrame extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_reportActionPerformed
 
     private void btn_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportMouseClicked
-    try {
-        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Admin_Report\\ReportStockProduct.jrxml");
-        
-        String sql = "SELECT \n" +
-"    p.product_code,\n" +
-"    p.product_name,\n" +
-"    p.product_unit,\n" +
-"    COALESCE(pb.total_purchase_qty, 0) AS purchase_qty,\n" +
-"    COALESCE(sd.total_sale_qty, 0) AS sale_qty,\n" +
-"    COALESCE(s.total_stok_rusak, 0) AS stok_rusak,  -- Perhatikan nama kolom di sini\n" +
-"    COALESCE(pb.total_purchase_qty, 0) - COALESCE(sd.total_sale_qty, 0) - COALESCE(s.total_stok_rusak, 0) AS total\n" +
-"FROM \n" +
-"    product p\n" +
-"LEFT JOIN (\n" +
-"    SELECT id_product, SUM(purchase_qty) AS total_purchase_qty \n" +
-"    FROM pembelian \n" +
-"    GROUP BY id_product\n" +
-") pb ON p.id_product = pb.id_product\n" +
-"LEFT JOIN (\n" +
-"    SELECT id_product, SUM(sale_qty) AS total_sale_qty \n" +
-"    FROM sale_details \n" +
-"    GROUP BY id_product\n" +
-") sd ON p.id_product = sd.id_product \n" +
-"LEFT JOIN (\n" +
-"    SELECT id_product, SUM(stok_rusak) AS total_stok_rusak  -- Diperbaiki: total_stok_rusak (bukan total_stock_rusak)\n" +
-"    FROM stock \n" +
-"    GROUP BY id_product\n" +
-") s ON p.id_product = s.id_product\n" +
-"WHERE p.status = 'Y'\n" +
-"ORDER BY p.product_code;";
-         JRDesignQuery newQuery = new JRDesignQuery();
-         newQuery.setText(sql);
-         jd.setQuery(newQuery);
-         
-//         JOptionPane.showMessageDialog(null, "Test"); 
-         JasperReport js = JasperCompileManager.compileReport(jd);
-//         JOptionPane.showMessageDialog(null, "Test"); 
-        // Koneksi database
-        Connection conn = DBConnection.getConnection();
-//        JOptionPane.showMessageDialog(null, "Connected!");
-
-        JasperPrint jp = JasperFillManager.fillReport(js, null, conn);
-        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
-         
-     } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form tambah data.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+    PilihReportStock frame = new PilihReportStock();
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // pakai JFrame
+    frame.pack();
+    frame.setLocationRelativeTo(null);
+    frame.setVisible(true);
+//        try {
+//        JasperDesign jd = JRXmlLoader.load("C:\\Users\\User\\Desktop\\JAVA_UAS_PBO\\UAS_OOP_POS\\src\\Admin_Report\\ReportStockProduct.jrxml");
+//        
+//        String sql = "SELECT \n" +
+//"    p.product_code,\n" +
+//"    p.product_name,\n" +
+//"    p.product_unit,\n" +
+//"    COALESCE(pb.total_purchase_qty, 0) AS purchase_qty,\n" +
+//"    COALESCE(sd.total_sale_qty, 0) AS sale_qty,\n" +
+//"    COALESCE(s.total_stok_rusak, 0) AS stok_rusak,  -- Perhatikan nama kolom di sini\n" +
+//"    COALESCE(pb.total_purchase_qty, 0) - COALESCE(sd.total_sale_qty, 0) - COALESCE(s.total_stok_rusak, 0) AS total\n" +
+//"FROM \n" +
+//"    product p\n" +
+//"LEFT JOIN (\n" +
+//"    SELECT id_product, SUM(purchase_qty) AS total_purchase_qty \n" +
+//"    FROM pembelian \n" +
+//"    GROUP BY id_product\n" +
+//") pb ON p.id_product = pb.id_product\n" +
+//"LEFT JOIN (\n" +
+//"    SELECT id_product, SUM(sale_qty) AS total_sale_qty \n" +
+//"    FROM sale_details \n" +
+//"    GROUP BY id_product\n" +
+//") sd ON p.id_product = sd.id_product \n" +
+//"LEFT JOIN (\n" +
+//"    SELECT id_product, SUM(stok_rusak) AS total_stok_rusak  -- Diperbaiki: total_stok_rusak (bukan total_stock_rusak)\n" +
+//"    FROM stock \n" +
+//"    GROUP BY id_product\n" +
+//") s ON p.id_product = s.id_product\n" +
+//"WHERE p.status = 'Y'\n" +
+//"ORDER BY p.product_code;";
+//         JRDesignQuery newQuery = new JRDesignQuery();
+//         newQuery.setText(sql);
+//         jd.setQuery(newQuery);
+//         
+////         JOptionPane.showMessageDialog(null, "Test"); 
+//         JasperReport js = JasperCompileManager.compileReport(jd);
+////         JOptionPane.showMessageDialog(null, "Test"); 
+//        // Koneksi database
+//        Connection conn = DBConnection.getConnection();
+////        JOptionPane.showMessageDialog(null, "Connected!");
+//
+//        JasperPrint jp = JasperFillManager.fillReport(js, null, conn);
+//        JasperViewer.viewReport(jp, false); // false = tidak exit aplikasi saat viewer ditutup
+//         
+//     } catch (Exception e) {
+//        e.printStackTrace();
+//        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuka form tambah data.", "Error", JOptionPane.ERROR_MESSAGE);
+//    }
     }//GEN-LAST:event_btn_reportMouseClicked
 
 
